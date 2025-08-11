@@ -23,10 +23,11 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'EonUI',
-      fileName: (format) => `index.${format === 'es' ? 'esm' : format}.js`,
+      fileName: (format) => `index.${format === 'es' ? 'esm' : 'js'}`,
+      formats: ['es', 'umd'],
     },
     rollupOptions: {
-      external: ['react', 'react-dom'], // 關鍵：標記為外部依賴
+      external: ['react', 'react-dom'],
       output: {
         globals: {
           react: 'React',
@@ -34,5 +35,6 @@ export default defineConfig({
         },
       },
     },
+    sourcemap: true,
   },
 });

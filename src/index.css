@@ -1,3 +1,98 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    /* 品牌主色 */
+    --color-primary-light: #4F8EF7;
+    --color-primary: #2563EB;
+    --color-primary-dark: #1D4ED8;
+    
+    /* 輔助色 */
+    --color-secondary-light: #A78BFA;
+    --color-secondary: #7C3AED;
+    --color-secondary-dark: #5B21B6;
+    
+    /* 資訊提示色（藍色系） */
+    --color-info-light: #60A5FA;
+    --color-info: #3B82F6;
+    --color-info-dark: #1E40AF;
+    
+    /* 成功狀態色（綠色系） */
+    --color-success-light: #6EE7B7;
+    --color-success: #10B981;
+    --color-success-dark: #047857;
+    
+    /* 警告狀態色（黃色系） */
+    --color-warning-light: #FCD34D;
+    --color-warning: #FBBF24;
+    --color-warning-dark: #B45309;
+    
+    /* 錯誤狀態色（紅色系） */
+    --color-error-light: #F87171;
+    --color-error: #EF4444;
+    --color-error-dark: #B91C1C;
+    
+    /* 中性色系 */
+    --color-gray-50: #f9fafb;
+    --color-gray-100: #f3f4f6;
+    --color-gray-200: #e5e7eb;
+    --color-gray-300: #d1d5db;
+    --color-gray-400: #9ca3af;
+    --color-gray-500: #6b7280;
+    --color-gray-600: #4b5563;
+    --color-gray-700: #374151;
+    --color-gray-800: #1f2937;
+    --color-gray-900: #111827;
+    --color-gray-950: #030712;
+    
+    /* 邊框圓角 */
+    --radius-none: 0;
+    --radius-sm: 0.125rem;
+    --radius: 0.25rem;
+    --radius-md: 0.25rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    --radius-2xl: 1rem;
+    --radius-circle: 50%;
+    
+    /* 陰影 */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --shadow-inner: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+  }
+}
+
+/* 暗色主題支援 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-primary-light: #1D4ED8;
+    --color-primary: #2563EB;
+    --color-primary-dark: #4F8EF7;
+    
+    --color-secondary-light: #5B21B6;
+    --color-secondary: #7C3AED;
+    --color-secondary-dark: #A78BFA;
+    
+    --color-info-light: #1E40AF;
+    --color-info: #3B82F6;
+    --color-info-dark: #60A5FA;
+    
+    --color-success-light: #047857;
+    --color-success: #10B981;
+    --color-success-dark: #6EE7B7;
+    
+    --color-warning-light: #B45309;
+    --color-warning: #FBBF24;
+    --color-warning-dark: #FCD34D;
+    
+    --color-error-light: #B91C1C;
+    --color-error: #EF4444;
+    --color-error-dark: #F87171;
+  }
+}
