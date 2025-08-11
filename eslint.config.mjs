@@ -9,10 +9,8 @@ import reactPlugin from 'eslint-plugin-react';
 import reactHooksPlugin from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
-import { globalIgnores } from 'eslint/config';
 
 export default tseslint.config([
-  globalIgnores(['dist']),
   prettierConfig,
   {
     ignores: [
@@ -31,9 +29,8 @@ export default tseslint.config([
       'public/**',
       '*.d.ts',
       'storybook-static/**',
-      '.storybook/**',
     ],
-    files: ['**/*.{ts,tsx}'],
+    files: ['**/*.{ts,tsx}', '.storybook/**/*.{ts,tsx}'],
     extends: [
       js.configs.recommended,
       tseslint.configs.recommended,
@@ -156,5 +153,8 @@ export default tseslint.config([
     },
   },
   // Storybook 配置
-  ...storybook.configs['flat/recommended'],
+  {
+    files: ['.storybook/**/*.{ts,tsx}'],
+    ...storybook.configs['flat/recommended'][0],
+  },
 ]);
