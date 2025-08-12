@@ -9,6 +9,19 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+    docs: {
+      toc: false,
+    },
+    options: {
+      storySort: {
+        order: ['Introduction', 'Components'],
+        method: 'alphabetical',
+      },
+    },
+    viewMode: 'docs',
+    navigation: {
+      disable: false,
+    },
   },
 };
 

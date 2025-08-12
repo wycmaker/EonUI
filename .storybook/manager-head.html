@@ -1,39 +1,39 @@
 <style>
-/* 隱藏側邊欄中的個別 stories，只保留 docs */
-[data-item-id*="--"] {
-  display: none !important;
-}
+  /* 隱藏側邊欄中的個別 stories，只保留 docs */
+  [data-item-id*='--'] {
+    display: none !important;
+  }
 
-/* 只顯示 docs 項目 */
-[data-item-id$="--docs"] {
-  display: block !important;
-}
+  /* 只顯示 docs 項目 */
+  [data-item-id$='--docs'] {
+    display: block !important;
+  }
 
-/* 隱藏 story 類型的項目 */
-[data-nodetype="story"] {
-  display: none !important;
-}
+  /* 隱藏 story 類型的項目 */
+  [data-nodetype='story'] {
+    display: none !important;
+  }
 
-/* 確保組件分組和 docs 顯示 */
-[data-nodetype="component"],
-[data-nodetype="docs"],
-[data-nodetype="group"] {
-  display: block !important;
-}
+  /* 確保組件分組和 docs 顯示 */
+  [data-nodetype='component'],
+  [data-nodetype='docs'],
+  [data-nodetype='group'] {
+    display: block !important;
+  }
 
-/* 隱藏組件名稱旁邊的 SVG icon */
-[data-nodetype="component"] svg,
-[data-nodetype="docs"] svg {
-  display: none !important;
-}
+  /* 隱藏組件名稱旁邊的 SVG icon */
+  [data-nodetype='component'] svg,
+  [data-nodetype='docs'] svg {
+    display: none !important;
+  }
 
-/* 隱藏所有側邊欄項目的 icon */
-[data-parent-id*="components"] svg {
-  display: none !important;
-}
+  /* 隱藏所有側邊欄項目的 icon */
+  [data-parent-id*='components'] svg {
+    display: none !important;
+  }
 
-/* 更精確地隱藏 Button 組件的 icon */
-[data-item-id="components-button"] svg {
-  display: none !important;
-}
+  /* 更精確地隱藏 Button 組件的 icon */
+  [data-item-id='components-button'] svg {
+    display: none !important;
+  }
 </style>
