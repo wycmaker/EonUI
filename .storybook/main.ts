@@ -2,11 +2,15 @@ import type { StorybookConfig } from '@storybook/react-vite';
 import type { InlineConfig } from 'vite';
 
 const config: StorybookConfig = {
-  stories: ['../src/components/**/*.stories.@(js|jsx|ts|tsx)', '../src/components/**/*.mdx'],
-  addons: ['@storybook/addon-docs', '@storybook/addon-onboarding'],
+  stories: ['../src/components/**/*.stories.@(js|jsx|ts|tsx)'],
+  addons: ['@storybook/addon-docs'],
   framework: {
     name: '@storybook/react-vite',
     options: {},
+  },
+  docs: {
+    autodocs: 'tag',
+    defaultName: 'Documentation',
   },
   typescript: {
     check: true,
