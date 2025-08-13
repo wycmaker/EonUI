@@ -152,9 +152,33 @@ export default tseslint.config([
       },
     },
   },
-  // Storybook 配置
+  // Storybook 通用配置
   {
-    files: ['.storybook/**/*.{ts,tsx}'],
-    ...storybook.configs['flat/recommended'][0],
+    files: ['.storybook/**/*.{ts,tsx}', 'src/**/*.stories.@(js|jsx|ts|tsx)'],
+    plugins: {
+      storybook: storybook,
+    },
+    rules: {
+      // 通用 Storybook 規則
+      'storybook/await-interactions': 'error',
+      'storybook/context-in-play-function': 'error',
+      'storybook/use-storybook-expect': 'error',
+      'storybook/use-storybook-testing-library': 'error',
+    },
+  },
+  // Storybook 故事文件專用配置
+  {
+    files: ['src/**/*.stories.@(js|jsx|ts|tsx)'],
+    plugins: {
+      storybook: storybook,
+    },
+    rules: {
+      // 只有故事文件需要的規則
+      'storybook/default-exports': 'error',
+      'storybook/hierarchy-separator': 'warn',
+      'storybook/no-redundant-story-name': 'warn',
+      'storybook/prefer-pascal-case': 'warn',
+      'storybook/story-exports': 'error',
+    },
   },
 ]);
