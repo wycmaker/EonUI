@@ -80,7 +80,7 @@ function App() {
         {[
           { icon: '🎨', title: '靈活的主題系統', desc: '使用 CSS 變數，支援即時主題切換' },
           { icon: '📱', title: '響應式設計', desc: '所有組件都支援行動裝置優先' },
-          { icon: '♿', title: '無障礙友善', desc: '遵循 WCAG 2.1 標準' },
+          // { icon: '♿', title: '無障礙友善', desc: '遵循 WCAG 2.1 標準' },
           { icon: '🌳', title: 'Tree-shaking 優化', desc: '只打包實際使用的組件' },
           { icon: '📚', title: '完整文檔', desc: '每個組件都有詳細說明和範例' },
         ].map((feature, index) => (
@@ -212,4 +212,4 @@ const meta: Meta<typeof Introduction> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {};
+export const Docs: Story = {};

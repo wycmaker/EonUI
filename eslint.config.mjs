@@ -169,6 +169,7 @@ export default tseslint.config([
   // Storybook 故事文件專用配置
   {
     files: ['src/**/*.stories.@(js|jsx|ts|tsx)'],
+    ignores: ['src/**/Introduction.stories.tsx', 'src/**/GetStarted.stories.tsx'],
     plugins: {
       storybook: storybook,
     },
@@ -179,6 +180,21 @@ export default tseslint.config([
       'storybook/no-redundant-story-name': 'warn',
       'storybook/prefer-pascal-case': 'warn',
       'storybook/story-exports': 'error',
+    },
+  },
+  // 純文檔頁面配置（不需要 story exports）
+  {
+    files: ['src/**/Introduction.stories.tsx', 'src/**/GetStarted.stories.tsx'],
+    plugins: {
+      storybook: storybook,
+    },
+    rules: {
+      // 文檔頁面只需要基本規則，不需要 story exports
+      'storybook/default-exports': 'error',
+      'storybook/hierarchy-separator': 'warn',
+      'storybook/prefer-pascal-case': 'warn',
+      // 禁用 story exports 規則
+      'storybook/story-exports': 'off',
     },
   },
 ]);

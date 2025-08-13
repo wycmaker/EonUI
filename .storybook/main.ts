@@ -9,7 +9,7 @@ const config: StorybookConfig = {
     options: {},
   },
   docs: {
-    defaultName: 'Documentation',
+    defaultName: 'Docs',
   },
   typescript: {
     check: true,
