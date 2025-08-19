@@ -7,11 +7,8 @@ import '../../styles/component-docs.css';
 const ButtonDocs = () => {
   return (
     <div className="component-docs-container">
-      {/* 标题和描述 */}
-      <div
-        className="component-docs-header"
-        style={{ textAlign: 'left' }}
-      >
+      {/* 標題和描述 */}
+      <div className="component-docs-header">
         <h1 className="component-docs-title">Button 按鈕</h1>
         <p className="component-docs-description">
           EonUI 的基礎按鈕組件，支援多種樣式變體和大小。按鈕是用戶界面中最常用的互動元素之一，
@@ -19,7 +16,7 @@ const ButtonDocs = () => {
         </p>
       </div>
 
-      {/* 主要预览区域 */}
+      {/* 主要預覽區域 */}
       <div className="component-docs-section">
         <h2 className="component-docs-section-title">🎮 互動式範例</h2>
         <p className="component-docs-section-description">
@@ -31,7 +28,7 @@ const ButtonDocs = () => {
         <Controls />
       </div>
 
-      {/* 样式变体 */}
+      {/* 樣式變體 */}
       <div className="component-docs-section">
         <h2 className="component-docs-section-title">🎨 樣式變體</h2>
         <p className="component-docs-section-description">
@@ -64,7 +61,7 @@ const ButtonDocs = () => {
         </div>
       </div>
 
-      {/* 大小选项 */}
+      {/* 大小選項 */}
       <div className="component-docs-section">
         <h2 className="component-docs-section-title">📏 大小選項</h2>
         <p className="component-docs-section-description">
@@ -101,7 +98,7 @@ const ButtonDocs = () => {
         </div>
       </div>
 
-      {/* 状态展示 */}
+      {/* 狀態展示 */}
       <div className="component-docs-section">
         <h2 className="component-docs-section-title">🔄 狀態展示</h2>
         <p className="component-docs-section-description">按鈕支援多種狀態，提供清晰的用戶反饋：</p>
@@ -154,7 +151,7 @@ const ButtonDocs = () => {
         </div>
       </div>
 
-      {/* 开始使用提示 */}
+      {/* 開始使用提示 */}
       <div className="component-docs-cta">
         <h3 className="component-docs-cta-title">🚀 開始使用</h3>
         <p className="component-docs-cta-text">
@@ -204,7 +201,7 @@ const meta: Meta<typeof Button> = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// 主要的 Story，用于文档中的 <Primary />
+// 主要的 Story，用於文檔中的 <Primary />
 export const Docs: Story = {
   args: {
     children: '按鈕',
