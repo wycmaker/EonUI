@@ -113,6 +113,119 @@ const config: StorybookConfig = {
       'process.env.LOGO_PATH': JSON.stringify(`${basePath}Logo.svg`),
     };
 
+    // 優化構建配置
+    config.build = config.build || {};
+    config.build.rollupOptions = config.build.rollupOptions || {};
+
+    config.build.rollupOptions.output = {
+      ...config.build.rollupOptions.output,
+      // 手動代碼分割
+      manualChunks: (id) => {
+        // 完全排除 mocker 相關文件
+        if (
+          id.includes('vite-inject-mocker') ||
+          id.includes('__vite') ||
+          id.endsWith('vite-inject-mocker-entry.js')
+        ) {
+          return null; // 返回 null 表示不包含在任何 chunk 中
+        }
+
+        // React 生態系統
+        if (id.includes('react') || id.includes('react-dom')) {
+          return 'react-vendor';
+        }
+
+        // Storybook 相關
+        if (id.includes('@storybook')) {
+          return 'storybook-vendor';
+        }
+
+        // 工具庫
+        if (id.includes('clsx') || id.includes('tailwind-merge')) {
+          return 'utils-vendor';
+        }
+
+        // 其他 node_modules
+        if (id.includes('node_modules')) {
+          return 'vendor';
+        }
+
+        // 你的組件
+        if (id.includes('/src/components/')) {
+          return 'components';
+        }
+
+        // 默認情況
+        return undefined;
+      },
+      // 設置較大的 chunk 大小限制
+      chunkFileNames: (_chunkInfo) => {
+        return `assets/[name]-[hash].js`;
+      },
+    };
+
+    // 調整 chunk 大小警告限制
+    config.build.chunkSizeWarningLimit = 1000; // 提高到 1MB
+
+    // 靜態資源處理
+    config.assetsInclude = config.assetsInclude || [];
+    if (Array.isArray(config.assetsInclude)) {
+      config.assetsInclude.push('**/*.woff2', '**/*.woff', '**/*.ttf');
+    }
+
+    // 生產環境移除開發工具
+    if (process.env.NODE_ENV === 'production') {
+      config.build.minify = true;
+      config.build.sourcemap = false;
+
+      // 靜態資源處理
+      config.build.assetsDir = 'assets';
+      config.build.rollupOptions.output.assetFileNames = (assetInfo) => {
+        // 字體文件單獨處理
+        if (assetInfo.name && /\.(woff2?|ttf|eot)$/.test(assetInfo.name)) {
+          return 'assets/fonts/[name]-[hash][extname]';
+        }
+        // 其他資源
+        return 'assets/[name]-[hash][extname]';
+      };
+
+      // 添加 Rollup 插件來過濾文件和處理警告
+      const existingPlugins = Array.isArray(config.build.rollupOptions.plugins)
+        ? config.build.rollupOptions.plugins
+        : [];
+
+      config.build.rollupOptions.plugins = [
+        ...existingPlugins,
+        {
+          name: 'exclude-vite-mocker',
+          generateBundle(
+            options: import('rollup').NormalizedOutputOptions,
+            bundle: import('rollup').OutputBundle,
+          ) {
+            // 在生成 bundle 時刪除 mocker 文件並清理引用
+            for (const fileName of Object.keys(bundle)) {
+              const chunk = bundle[fileName];
+
+              // 刪除 mocker 文件
+              if (fileName.includes('vite-inject-mocker')) {
+                delete bundle[fileName];
+                continue;
+              }
+
+              // 清理其他文件中的 mocker 引用
+              if (chunk && chunk.type === 'chunk' && 'code' in chunk && chunk.code) {
+                chunk.code = chunk.code.replace(
+                  /import\s*["'][^"']*vite-inject-mocker[^"']*["'];?\s*/g,
+                  '',
+                );
+                chunk.code = chunk.code.replace(/import\s*["'][^"']*__vite[^"']*["'];?\s*/g, '');
+              }
+            }
+          },
+        },
+      ];
+    }
+
     // 確保 Vite 配置包含路徑別名
     config.resolve = config.resolve || {};
     config.resolve.alias = {
