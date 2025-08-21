@@ -8,6 +8,7 @@ const config: StorybookConfig = {
     name: '@storybook/react-vite',
     options: {},
   },
+
   docs: {
     defaultName: 'Docs',
   },
@@ -20,6 +21,11 @@ const config: StorybookConfig = {
     },
   },
   viteFinal: async (config: InlineConfig) => {
+    // 為 GitHub Pages 設置 base path
+    if (process.env.NODE_ENV === 'production') {
+      config.base = '/EonUI/';
+    }
+
     // 確保 Vite 配置包含路徑別名
     config.resolve = config.resolve || {};
     config.resolve.alias = {
