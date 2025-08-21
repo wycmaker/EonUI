@@ -16,6 +16,10 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
    */
   loading?: boolean;
   /**
+   * 載入狀態時顯示的文字，用於螢幕閱讀器
+   */
+  loadingText?: string;
+  /**
    * 按鈕內容
    */
   children: React.ReactNode;
@@ -23,7 +27,16 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { className, variant = 'primary', size = 'md', loading = false, disabled, children, ...props },
+    {
+      className,
+      variant = 'primary',
+      size = 'md',
+      loading = false,
+      loadingText = '載入中',
+      disabled,
+      children,
+      ...props
+    },
     ref,
   ) => {
     const baseStyles =
@@ -38,8 +51,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     const sizes = {
-      xs: 'h-6 px-2 py-1 text-xs min-w-16',
-      sm: 'h-8 px-3 py-1.5 text-sm min-w-20',
+      xs: 'h-8 px-2 py-1 text-xs min-w-16', // 改為 32px 高度以符合最小觸控目標
+      sm: 'h-9 px-3 py-1.5 text-sm min-w-20', // 改為 36px 高度
       md: 'h-10 px-4 py-2 text-sm min-w-24',
       lg: 'h-12 px-5 py-2.5 text-base min-w-28',
       xl: 'h-14 px-6 py-3 text-lg min-w-32',
@@ -50,6 +63,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(baseStyles, variants[variant], sizes[size], className)}
         ref={ref}
         disabled={disabled || loading}
+        aria-disabled={disabled || loading}
+        aria-label={loading ? loadingText : props['aria-label']}
         {...props}
       >
         {loading && (
@@ -58,6 +73,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
+            aria-hidden="true"
           >
             <circle
               className="opacity-25"
