@@ -1,11 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react';
+
 import './styles/component-docs.css';
+import { getLogoPath } from './utils';
 
 // 創建 Introduction 組件
 const Introduction = () => (
   <div className="component-docs-container">
     <div className="component-docs-header">
-      <img src="/Logo.svg" />
+      <img
+        src={getLogoPath()}
+        alt="EonUI Logo"
+      />
       <p className="component-docs-description">
         一套以 React 為核心打造的 UI Library，專注於提供「永續、穩定且可擴展」的設計系統
       </p>

@@ -22,9 +22,14 @@ const config: StorybookConfig = {
   },
   viteFinal: async (config: InlineConfig) => {
     // 為 GitHub Pages 設置 base path
-    if (process.env.NODE_ENV === 'production') {
-      config.base = '/EonUI/';
-    }
+    const basePath = process.env.NODE_ENV === 'production' ? '/EonUI/' : '/';
+    config.base = basePath;
+
+    // 設置環境變數，讓組件可以訪問 base path
+    config.define = {
+      ...config.define,
+      'process.env.STORYBOOK_BASE_PATH': JSON.stringify(basePath),
+    };
 
     // 確保 Vite 配置包含路徑別名
     config.resolve = config.resolve || {};
