@@ -15,6 +15,7 @@
     "build": "tsc && vite build",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
+    "build-storybook-original": "storybook build",
     "deploy": "npm run build-storybook && gh-pages -d storybook-static",
     "type-check": "tsc --noEmit",
     "lint": "eslint \"**/*.{ts,tsx}\"",
