@@ -96,6 +96,71 @@ export const fontSize = {
   '9xl': ['8rem', { lineHeight: '1' }], // 128px
 };
 
+// Input 尺寸定義
+export const inputSizes = {
+  sm: {
+    height: '2rem', // h-8 - 32px
+    paddingX: '0.75rem', // px-3
+    paddingY: '0.25rem', // py-1
+    fontSize: '0.875rem', // text-sm
+  },
+  md: {
+    height: '2.5rem', // h-10 - 40px
+    paddingX: '0.75rem', // px-3
+    paddingY: '0.5rem', // py-2
+    fontSize: '0.875rem', // text-sm
+  },
+  lg: {
+    height: '3rem', // h-12 - 48px
+    paddingX: '1rem', // px-4
+    paddingY: '0.75rem', // py-3
+    fontSize: '1rem', // text-base
+  },
+};
+
+// 顏色系統
+export const colors = {
+  // 主要狀態顏色（對應 Tailwind 配置）
+  primary: {
+    DEFAULT: 'primary',
+    light: 'primary-light',
+    dark: 'primary-dark',
+  },
+  error: {
+    DEFAULT: 'error',
+    light: 'error-light',
+    dark: 'error-dark',
+  },
+  success: {
+    DEFAULT: 'success',
+    light: 'success-light',
+    dark: 'success-dark',
+  },
+  warning: {
+    DEFAULT: 'warning',
+    light: 'warning-light',
+    dark: 'warning-dark',
+  },
+  // 中性色
+  gray: {
+    50: 'gray-50',
+    100: 'gray-100',
+    200: 'gray-200',
+    300: 'gray-300',
+    400: 'gray-400',
+    500: 'gray-500',
+    600: 'gray-600',
+    700: 'gray-700',
+    800: 'gray-800',
+    900: 'gray-900',
+  },
+  // 背景色
+  background: {
+    white: 'white',
+    transparent: 'transparent',
+  },
+};
+
 // 層級（z-index）
 export const zIndex = {
   0: '0',

@@ -1,4 +1,4 @@
-import { buttonSizes, spacing, fontSize, zIndex } from './src/tokens/index.js';
+import { buttonSizes, inputSizes, spacing, fontSize, zIndex } from './src/tokens/index.js';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -89,6 +89,9 @@ export default {
 
       // 按鈕特定的尺寸定義（可用於自定義 utilities）
       buttonSizes,
+
+      // 輸入框特定的尺寸定義
+      inputSizes,
 
       // 動畫與過渡
       animation: {
