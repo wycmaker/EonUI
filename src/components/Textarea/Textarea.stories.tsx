@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { Story, Controls, Primary } from '@storybook/addon-docs/blocks';
 import type { Meta, StoryObj } from '@storybook/react';

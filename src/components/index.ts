@@ -7,3 +7,6 @@ export type { InputProps } from './Input/Input';
 
 export { Textarea } from './Textarea/Textarea';
 export type { TextareaProps } from './Textarea/Textarea';
+
+export { Typography } from './Typography/Typography';
+export type { TypographyProps } from './Typography/Typography';

@@ -108,12 +108,7 @@ const ColorSwatch: React.FC<ColorSwatchProps> = ({
   };
 
   const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(hexValue);
-      // 可以添加提示訊息
-    } catch (err) {
-      console.error('Failed to copy:', err);
-    }
+    await navigator.clipboard.writeText(hexValue);
   };
 
   return (

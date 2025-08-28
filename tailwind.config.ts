@@ -1,10 +1,33 @@
+import lineClamp from '@tailwindcss/line-clamp';
+
 import { buttonSizes, inputSizes, spacing, fontSize, zIndex } from './src/tokens/index.js';
 
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./src/**/*.{js,ts,jsx,tsx}', './.storybook/**/*.{js,ts,jsx,tsx}'],
+  safelist: [
+    // 動態生成 line-clamp 類別，使用正則表達式匹配
+    { pattern: /line-clamp-(1[0-9]|[1-9])/ },
+  ],
   theme: {
     extend: {
+      // 擴展 lineClamp 主題以支援更多數值
+      lineClamp: {
+        7: '7',
+        8: '8',
+        9: '9',
+        10: '10',
+        11: '11',
+        12: '12',
+        13: '13',
+        14: '14',
+        15: '15',
+        16: '16',
+        17: '17',
+        18: '18',
+        19: '19',
+        20: '20',
+      },
       // 使用 CSS 變數的圓角定義
       borderRadius: {
         none: 'var(--radius-none)',
@@ -135,5 +158,5 @@ export default {
   corePlugins: {
     preflight: true,
   },
-  plugins: [],
+  plugins: [lineClamp],
 };
