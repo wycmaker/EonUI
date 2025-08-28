@@ -105,7 +105,7 @@ import { Input } from 'eonui/Input';`}</pre>
 );
 
 const meta: Meta<typeof Introduction> = {
-  title: 'Introduction',
+  title: 'Get Started',
   component: Introduction,
   parameters: {
     layout: 'fullscreen',
