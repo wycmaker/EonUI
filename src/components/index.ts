@@ -10,3 +10,6 @@ export type { TextareaProps } from './Textarea/Textarea';
 
 export { Typography } from './Typography/Typography';
 export type { TypographyProps } from './Typography/Typography';
+
+export { Grid } from './Grid';
+export type { GridProps } from './Grid';

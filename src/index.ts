@@ -14,6 +14,9 @@ export type { TypographyProps } from './components/Typography/Typography';
 export { Textarea } from './components/Textarea/Textarea';
 export type { TextareaProps } from './components/Textarea/Textarea';
 
+export { Grid } from './components/Grid/Grid';
+export type { GridProps } from './components/Grid/Grid';
+
 // 導出工具函數
 export { cn } from './utils/cn';
 
