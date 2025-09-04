@@ -19,3 +19,6 @@ export type { LayoutProps } from './Layout';
 
 export { Radio, RadioGroup } from './Radio';
 export type { RadioProps, RadioGroupProps } from './Radio';
+
+export { Checkbox, CheckboxGroup } from './Checkbox';
+export type { CheckboxProps, CheckboxGroupProps } from './Checkbox';

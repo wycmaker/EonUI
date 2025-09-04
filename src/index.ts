@@ -23,6 +23,9 @@ export type { RadioProps, RadioGroupProps } from './components/Radio';
 export { Layout } from './components/Layout';
 export type { LayoutProps } from './components/Layout';
 
+export { Checkbox, CheckboxGroup } from './components/Checkbox';
+export type { CheckboxProps, CheckboxGroupProps } from './components/Checkbox';
+
 // 導出工具函數
 export { cn } from './utils/cn';
 
