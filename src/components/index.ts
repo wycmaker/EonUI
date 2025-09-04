@@ -16,3 +16,6 @@ export type { GridProps } from './Grid';
 
 export { Layout } from './Layout';
 export type { LayoutProps } from './Layout';
+
+export { Radio, RadioGroup } from './Radio';
+export type { RadioProps, RadioGroupProps } from './Radio';
