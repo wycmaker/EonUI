@@ -13,3 +13,6 @@ export type { TypographyProps } from './Typography/Typography';
 
 export { Grid } from './Grid';
 export type { GridProps } from './Grid';
+
+export { Layout } from './Layout';
+export type { LayoutProps } from './Layout';
