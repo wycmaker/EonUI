@@ -111,9 +111,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
     const isGrouped = !!groupContext;
     const finalSize = groupContext?.size || size;
     const finalDisabled = groupContext?.disabled || disabled;
-    const finalChecked = isGrouped 
-      ? groupContext.value?.includes(value) || false 
-      : checked;
+    const finalChecked = isGrouped ? groupContext.value?.includes(value) || false : checked;
 
     // 樣式映射
     const sizeConfig = {
@@ -159,15 +157,15 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
       if (isGrouped && groupContext?.onChange) {
         const currentValues = groupContext.value || [];
         let newValues: (string | number)[];
-        
+
         if (isChecked) {
           // 添加值到陣列
           newValues = [...currentValues, value];
         } else {
           // 從陣列中移除值
-          newValues = currentValues.filter(v => v !== value);
+          newValues = currentValues.filter((v) => v !== value);
         }
-        
+
         groupContext.onChange(newValues);
       } else if (onChange) {
         onChange(isChecked, value);
@@ -263,7 +261,7 @@ const CheckboxGroup = React.forwardRef<HTMLDivElement, CheckboxGroupProps>(
     ref,
   ) => {
     const [internalValue, setInternalValue] = React.useState<(string | number)[]>(
-      defaultValue || []
+      defaultValue || [],
     );
     const currentValue = value ?? internalValue;
 

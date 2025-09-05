@@ -1,5 +1,15 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 
+import { useClickOutside, useKeyboardNavigation, useControlledValue } from '@/hooks';
+import {
+  ComponentVariant,
+  ComponentSize,
+  ComponentStatus,
+  renderClearButton,
+  shouldShowClearButton,
+  ChevronDownIcon,
+  CheckIcon,
+} from '@/utils';
 import { cn } from '@/utils/cn';
 
 export interface SelectOption {
@@ -13,15 +23,15 @@ export interface SelectProps
   /**
    * 下拉選單的視覺樣式變體
    */
-  variant?: 'default' | 'filled' | 'outline';
+  variant?: ComponentVariant;
   /**
    * 下拉選單的大小
    */
-  size?: 'sm' | 'md' | 'lg';
+  size?: ComponentSize;
   /**
    * 下拉選單的狀態
    */
-  status?: 'default' | 'error' | 'success' | 'warning';
+  status?: ComponentStatus;
   /**
    * 選項列表
    */
@@ -117,18 +127,17 @@ const Select = React.forwardRef<HTMLDivElement, SelectProps>(
   ) => {
     const [isOpen, setIsOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
-    const [internalValue, setInternalValue] = useState(() => {
-      if (value !== undefined) return value;
-      if (defaultValue !== undefined) return defaultValue;
-      return multiple ? [] : undefined;
-    });
     const [highlightedIndex, setHighlightedIndex] = useState(-1);
 
     const containerRef = useRef<HTMLDivElement>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
 
-    const currentValue = value !== undefined ? value : internalValue;
+    const [currentValue, setValue] = useControlledValue(
+      value,
+      defaultValue !== undefined ? defaultValue : multiple ? [] : undefined,
+      onChange,
+    );
 
     // 過濾選項
     const filteredOptions = filterable
@@ -175,16 +184,8 @@ const Select = React.forwardRef<HTMLDivElement, SelectProps>(
       return null;
     }, [currentValue, multiple, options, multipleDisplayMode, maxTagCount]);
 
-    // 處理值變更
-    const handleValueChange = useCallback(
-      (newValue: string | number | (string | number)[] | undefined) => {
-        if (value === undefined) {
-          setInternalValue(newValue);
-        }
-        onChange?.(newValue);
-      },
-      [value, onChange],
-    );
+    // 處理值變更 (現在使用 useControlledValue hook)
+    const handleValueChange = setValue;
 
     // 處理選項選擇
     const handleOptionSelect = useCallback(
@@ -229,63 +230,39 @@ const Select = React.forwardRef<HTMLDivElement, SelectProps>(
     );
 
     // 點擊外部關閉
-    useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-          setIsOpen(false);
-          setSearchQuery('');
-          setHighlightedIndex(-1);
-        }
-      };
-
-      if (isOpen) {
-        document.addEventListener('mousedown', handleClickOutside);
-      }
-
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }, [isOpen]);
+    useClickOutside(
+      containerRef,
+      () => {
+        setIsOpen(false);
+        setSearchQuery('');
+        setHighlightedIndex(-1);
+      },
+      isOpen,
+    );
 
     // 鍵盤導航
-    useEffect(() => {
-      const handleKeyDown = (event: KeyboardEvent) => {
-        if (!isOpen) return;
-
-        switch (event.key) {
-          case 'ArrowDown':
-            event.preventDefault();
-            setHighlightedIndex((prev) => (prev < filteredOptions.length - 1 ? prev + 1 : prev));
-            break;
-          case 'ArrowUp':
-            event.preventDefault();
-            setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : prev));
-            break;
-          case 'Enter':
-            event.preventDefault();
-            if (highlightedIndex >= 0 && highlightedIndex < filteredOptions.length) {
-              const option = filteredOptions[highlightedIndex];
-              if (option) {
-                handleOptionSelect(option);
-              }
-            }
-            break;
-          case 'Escape':
-            setIsOpen(false);
-            setSearchQuery('');
-            setHighlightedIndex(-1);
-            break;
+    useKeyboardNavigation({
+      enabled: isOpen,
+      onArrowDown: () => {
+        setHighlightedIndex((prev) => (prev < filteredOptions.length - 1 ? prev + 1 : prev));
+      },
+      onArrowUp: () => {
+        setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : prev));
+      },
+      onEnter: () => {
+        if (highlightedIndex >= 0 && highlightedIndex < filteredOptions.length) {
+          const option = filteredOptions[highlightedIndex];
+          if (option) {
+            handleOptionSelect(option);
+          }
         }
-      };
-
-      if (isOpen) {
-        document.addEventListener('keydown', handleKeyDown);
-      }
-
-      return () => {
-        document.removeEventListener('keydown', handleKeyDown);
-      };
-    }, [isOpen, highlightedIndex, filteredOptions, handleOptionSelect]);
+      },
+      onEscape: () => {
+        setIsOpen(false);
+        setSearchQuery('');
+        setHighlightedIndex(-1);
+      },
+    });
 
     // 當開啟時聚焦搜尋框
     useEffect(() => {
@@ -327,12 +304,11 @@ const Select = React.forwardRef<HTMLDivElement, SelectProps>(
     };
 
     // 顯示清除按鈕的條件
-    const showClearButton =
-      clearable &&
-      !disabled &&
-      (multiple
-        ? Array.isArray(currentValue) && currentValue.length > 0
-        : currentValue !== undefined && currentValue !== null && currentValue !== '');
+    const showClearButton = shouldShowClearButton(
+      clearable || false,
+      currentValue,
+      disabled || false,
+    );
 
     const displayContent = getDisplayContent();
 
@@ -399,47 +375,13 @@ const Select = React.forwardRef<HTMLDivElement, SelectProps>(
 
             {/* 右側圖示 */}
             <div className="flex items-center ml-2 space-x-1">
-              {showClearButton && (
-                <button
-                  type="button"
-                  onClick={handleClear}
-                  className="text-gray-400 hover:text-gray-600 focus:text-gray-600 focus:outline-none"
-                  aria-label="清除選擇"
-                  tabIndex={-1}
-                >
-                  <svg
-                    className="h-4 w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
-              )}
-              <svg
+              {showClearButton && renderClearButton(showClearButton, handleClear, '清除選擇')}
+              <ChevronDownIcon
                 className={cn(
                   'h-4 w-4 text-gray-400 transition-transform duration-200',
                   isOpen && 'rotate-180',
                 )}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
+              />
             </div>
           </div>
         </div>
@@ -482,20 +424,7 @@ const Select = React.forwardRef<HTMLDivElement, SelectProps>(
                     <div className="flex items-center justify-between">
                       <span className="flex-1 truncate">{option.label}</span>
                       {multiple && isSelected && (
-                        <svg
-                          className="h-4 w-4 ml-2 flex-shrink-0"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                          aria-hidden="true"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
+                        <CheckIcon className="h-4 w-4 ml-2 flex-shrink-0" />
                       )}
                     </div>
                   </div>

@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
+import {
+  combineFormStyles,
+  ComponentVariant,
+  ComponentSize,
+  ComponentStatus,
+  renderClearButton,
+  shouldShowClearButton,
+} from '@/utils';
 import { cn } from '@/utils/cn';
 
 export interface TextareaProps
@@ -7,15 +15,15 @@ export interface TextareaProps
   /**
    * 文字區域的視覺樣式變體
    */
-  variant?: 'default' | 'filled' | 'outline';
+  variant?: ComponentVariant;
   /**
    * 文字區域的大小
    */
-  size?: 'sm' | 'md' | 'lg';
+  size?: ComponentSize;
   /**
    * 文字區域的狀態
    */
-  status?: 'default' | 'error' | 'success' | 'warning';
+  status?: ComponentStatus;
   /**
    * 是否顯示清除按鈕
    */
@@ -76,38 +84,6 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       setCurrentLength(length);
     }, [value]);
 
-    // 基礎樣式
-    const baseStyles =
-      'w-full rounded-md transition-all duration-200 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50';
-
-    // 變體樣式
-    const variants = {
-      default:
-        'bg-white border border-gray-300 focus:border-2 focus:border-primary-600 focus:shadow-[0_0_0_3px_rgba(37,99,235,0.1)]',
-      filled:
-        'bg-gray-50 border border-transparent focus:bg-white focus:border-2 focus:border-primary-600 focus:shadow-[0_0_0_3px_rgba(37,99,235,0.1)]',
-      outline:
-        'bg-transparent border-2 border-gray-300 focus:border-primary-600 focus:shadow-[0_0_0_3px_rgba(37,99,235,0.1)]',
-    };
-
-    // 大小樣式（針對 textarea 調整）
-    const sizes = {
-      sm: 'px-3 py-2 text-sm leading-relaxed', // 適合緊湊設計
-      md: 'px-3 py-3 text-sm leading-relaxed', // 標準大小
-      lg: 'px-4 py-4 text-base leading-relaxed', // 大尺寸
-    };
-
-    // 狀態樣式
-    const statusStyles = {
-      default: '',
-      error:
-        'border-error-600 focus:border-2 focus:border-error-600 focus:shadow-[0_0_0_3px_rgba(239,68,68,0.1)]',
-      success:
-        'border-success-600 focus:border-2 focus:border-success-600 focus:shadow-[0_0_0_3px_rgba(34,197,94,0.1)]',
-      warning:
-        'border-warning-600 focus:border-2 focus:border-warning-600 focus:shadow-[0_0_0_3px_rgba(234,179,8,0.1)]',
-    };
-
     // 調整大小樣式
     const resizeStyles = {
       none: 'resize-none',
@@ -141,13 +117,11 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     // 清除按鈕處理
     const handleClear = () => {
       setCurrentLength(0); // 重置字數統計
-      if (onClear) {
-        onClear();
-      }
+      onClear?.();
     };
 
     // 顯示清除按鈕的條件
-    const showClearButton = clearable && value && !disabled;
+    const showClearButton = shouldShowClearButton(clearable || false, value, disabled || false);
 
     // 是否顯示字數統計
     const shouldShowCount = showCount || maxLength;
@@ -162,10 +136,8 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 
     // 文字區域樣式
     const textareaStyles = cn(
-      baseStyles,
-      variants[variant],
-      sizes[size],
-      statusStyles[status],
+      'w-full',
+      combineFormStyles(variant, size, status, 'textarea'),
       resizeStyles[resize],
       showClearButton && 'pr-10',
       shouldShowCount && 'pb-6', // 為底部字數統計留空間
@@ -196,28 +168,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
         {/* 清除按鈕 */}
         {showClearButton && (
           <div className="absolute top-3 right-3">
-            <button
-              type="button"
-              onClick={handleClear}
-              className="text-gray-400 hover:text-gray-600 focus:text-gray-600 focus:outline-none pointer-events-auto"
-              aria-label="清除輸入內容"
-              tabIndex={0}
-            >
-              <svg
-                className="h-4 w-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
+            {renderClearButton(showClearButton, handleClear, '清除輸入內容')}
           </div>
         )}
 

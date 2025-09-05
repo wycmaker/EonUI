@@ -67,8 +67,8 @@ const CheckboxDocs = () => {
       <div className="component-docs-header">
         <h1 className="component-docs-title">Checkbox 複選框</h1>
         <p className="component-docs-description">
-          EonUI 的複選框組件，提供單個 Checkbox 和 CheckboxGroup 兩種使用方式。
-          設計風格類似 Element Plus，支援多種大小、顏色和狀態，支援多選功能和不確定狀態。
+          EonUI 的複選框組件，提供單個 Checkbox 和 CheckboxGroup 兩種使用方式。 設計風格類似 Element
+          Plus，支援多種大小、顏色和狀態，支援多選功能和不確定狀態。
         </p>
       </div>
 
@@ -539,8 +539,8 @@ const [hobbies, setHobbies] = useState(['reading', 'music']);
       <div className="component-docs-cta">
         <h3 className="component-docs-cta-title">🚀 開始使用</h3>
         <p className="component-docs-cta-text">
-          現在你已經了解了 Checkbox 組件的所有功能，可以在你的項目中開始使用了！
-          Checkbox 組件提供了靈活的多選功能，適用於各種表單和設定場景。
+          現在你已經了解了 Checkbox 組件的所有功能，可以在你的項目中開始使用了！ Checkbox
+          組件提供了靈活的多選功能，適用於各種表單和設定場景。
         </p>
       </div>
     </div>
@@ -562,7 +562,7 @@ const IndeterminateExample = () => {
 
   const handleParentChange = (checked: boolean) => {
     if (checked) {
-      setCheckedItems(items.map(item => item.id));
+      setCheckedItems(items.map((item) => item.id));
     } else {
       setCheckedItems([]);
     }
@@ -571,9 +571,9 @@ const IndeterminateExample = () => {
   const handleItemChange = (checked: boolean, value: string | number) => {
     const itemId = value as string;
     if (checked) {
-      setCheckedItems(prev => [...prev, itemId]);
+      setCheckedItems((prev) => [...prev, itemId]);
     } else {
-      setCheckedItems(prev => prev.filter(id => id !== itemId));
+      setCheckedItems((prev) => prev.filter((id) => id !== itemId));
     }
   };
 
@@ -585,11 +585,13 @@ const IndeterminateExample = () => {
         indeterminate={isIndeterminate}
         onChange={handleParentChange}
       >
-        <strong>全選（{checkedItems.length}/{items.length}）</strong>
+        <strong>
+          全選（{checkedItems.length}/{items.length}）
+        </strong>
       </Checkbox>
-      
+
       <div className="ml-6 space-y-2">
-        {items.map(item => (
+        {items.map((item) => (
           <Checkbox
             key={item.id}
             value={item.id}
