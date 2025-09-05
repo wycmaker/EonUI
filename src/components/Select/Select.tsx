@@ -152,24 +152,48 @@ const Select = React.forwardRef<HTMLDivElement, SelectProps>(
         if (multipleDisplayMode === 'items') {
           const selectedOptions = currentValue
             .map((val) => options.find((opt) => opt.value === val))
-            .filter((option): option is SelectOption => Boolean(option))
-            .slice(0, maxTagCount);
+            .filter((option): option is SelectOption => Boolean(option));
 
-          const hasMore = currentValue.length > maxTagCount;
+          // 動態計算可以顯示的項目數量，避免跑版
+          const calculateDisplayItems = () => {
+            // 根據輸入框大小動態調整顯示數量
+            // 小尺寸最多顯示 1 個，中等尺寸 2 個，大尺寸 3 個
+            const maxItems = size === 'sm' ? 1 : size === 'md' ? 2 : 3;
+            const actualMaxCount = Math.min(maxTagCount, maxItems);
+
+            if (selectedOptions.length <= actualMaxCount) {
+              return {
+                visibleItems: selectedOptions,
+                hasMore: false,
+                moreCount: 0,
+              };
+            } else {
+              return {
+                visibleItems: selectedOptions.slice(0, actualMaxCount),
+                hasMore: true,
+                moreCount: selectedOptions.length - actualMaxCount,
+              };
+            }
+          };
+
+          const { visibleItems, hasMore, moreCount } = calculateDisplayItems();
 
           return (
-            <div className="flex flex-wrap gap-1 flex-1 min-w-0">
-              {selectedOptions.map((option) => (
+            <div className="flex items-center gap-1 flex-1 min-w-0 overflow-hidden">
+              {visibleItems.map((option) => (
                 <span
                   key={option.value}
-                  className="inline-flex items-center px-2 py-0.5 text-xs bg-primary-50 text-primary-600 rounded-md border border-primary-200 max-w-24 truncate"
+                  className="inline-flex items-center px-2 py-0.5 text-xs bg-primary-50 text-primary-600 rounded-md border border-primary-200 flex-shrink-0"
+                  style={{
+                    maxWidth: `${Math.max(60, 200 / Math.max(visibleItems.length + (hasMore ? 1 : 0), 1))}px`,
+                  }}
                 >
-                  {option.label}
+                  <span className="truncate">{option.label}</span>
                 </span>
               ))}
               {hasMore && (
-                <span className="inline-flex items-center px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded-md">
-                  +{currentValue.length - maxTagCount}
+                <span className="inline-flex items-center px-2 py-0.5 text-xs bg-gray-100 text-gray-600 rounded-md flex-shrink-0">
+                  +{moreCount}
                 </span>
               )}
             </div>
@@ -182,7 +206,7 @@ const Select = React.forwardRef<HTMLDivElement, SelectProps>(
         return option?.label || '';
       }
       return null;
-    }, [currentValue, multiple, options, multipleDisplayMode, maxTagCount]);
+    }, [currentValue, multiple, options, multipleDisplayMode, maxTagCount, size]);
 
     // 處理值變更 (現在使用 useControlledValue hook)
     const handleValueChange = setValue;
@@ -373,15 +397,18 @@ const Select = React.forwardRef<HTMLDivElement, SelectProps>(
               )}
             </div>
 
-            {/* 右側圖示 */}
-            <div className="flex items-center ml-2 space-x-1">
-              {showClearButton && renderClearButton(showClearButton, handleClear, '清除選擇')}
-              <ChevronDownIcon
-                className={cn(
-                  'h-4 w-4 text-gray-400 transition-transform duration-200',
-                  isOpen && 'rotate-180',
-                )}
-              />
+            {/* 右側圖示 - 清除按鈕與下拉箭頭共用位置 */}
+            <div className="flex items-center ml-2">
+              {showClearButton ? (
+                renderClearButton(showClearButton, handleClear, '清除選擇')
+              ) : (
+                <ChevronDownIcon
+                  className={cn(
+                    'h-4 w-4 text-gray-400 transition-transform duration-200',
+                    isOpen && 'rotate-180',
+                  )}
+                />
+              )}
             </div>
           </div>
         </div>
