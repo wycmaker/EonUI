@@ -32,6 +32,9 @@ export type { DatePickerProps } from './components/DatePicker/DatePicker';
 export { Select } from './components/Select';
 export type { SelectProps, SelectOption } from './components/Select';
 
+export { Upload } from './components/Upload/Upload';
+export type { UploadProps } from './components/Upload/Upload';
+
 // 導出工具函數
 export { cn } from './utils/cn';
 

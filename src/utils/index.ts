@@ -19,3 +19,6 @@ export * from './icons';
 
 // 可清除功能
 export { renderClearButton, shouldShowClearButton, type ClearableProps } from './clearable';
+
+// 檔案工具函數
+export * from './fileUtils';
