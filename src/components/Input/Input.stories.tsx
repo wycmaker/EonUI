@@ -63,6 +63,7 @@ const InteractiveExample = () => {
   const [searchValue, setSearchValue] = useState('');
   const [emailValue, setEmailValue] = useState('');
   const [userValue, setUserValue] = useState('');
+  const [passwordValue, setPasswordValue] = useState('');
 
   return (
     <div className="space-y-4 w-full max-w-md">
@@ -80,6 +81,12 @@ const InteractiveExample = () => {
         prefixIcon={<EmailIcon />}
         value={emailValue}
         onChange={(e) => setEmailValue(e.target.value)}
+      />
+      <Input
+        type="password"
+        placeholder="請輸入密碼"
+        value={passwordValue}
+        onChange={(e) => setPasswordValue(e.target.value)}
       />
       <Input
         placeholder="使用者名稱"
@@ -293,6 +300,56 @@ const InputDocs = () => {
         </div>
       </div>
 
+      {/* 密碼功能 */}
+      <div className="component-docs-section">
+        <h2 className="component-docs-section-title">🔒 密碼功能</h2>
+        <p className="component-docs-section-description">
+          當輸入框類型為 password 時，會自動顯示密碼切換按鈕：
+        </p>
+
+        <div className="component-docs-showcase">
+          <Input
+            type="password"
+            placeholder="預設密碼輸入"
+            defaultValue="mySecretPassword"
+          />
+          <Input
+            type="password"
+            size="lg"
+            variant="filled"
+            placeholder="大尺寸填充樣式密碼"
+            defaultValue="anotherPassword"
+          />
+          <Input
+            type="password"
+            status="error"
+            placeholder="錯誤狀態密碼"
+            defaultValue="wrongPassword"
+          />
+        </div>
+
+        <div className="component-docs-info-card">
+          <strong>密碼功能說明：</strong>
+          <ul>
+            <li>
+              <strong>自動檢測：</strong>當 type="password" 時自動顯示密碼切換按鈕
+            </li>
+            <li>
+              <strong>視覺切換：</strong>點擊眼睛圖示在顯示/隱藏密碼之間切換
+            </li>
+            <li>
+              <strong>優先級：</strong>密碼切換按鈕優先於自訂 suffixIcon
+            </li>
+            <li>
+              <strong>無障礙：</strong>按鈕有適當的 aria-label，螢幕閱讀器友好
+            </li>
+            <li>
+              <strong>禁用狀態：</strong>當輸入框禁用時，密碼切換按鈕也會被禁用
+            </li>
+          </ul>
+        </div>
+      </div>
+
       {/* 不同輸入類型 */}
       <div className="component-docs-section">
         <h2 className="component-docs-section-title">⌨️ 不同輸入類型</h2>
@@ -311,7 +368,7 @@ const InputDocs = () => {
           />
           <Input
             type="password"
-            placeholder="密碼"
+            placeholder="密碼（自動顯示切換按鈕）"
           />
           <Input
             type="search"
@@ -405,6 +462,12 @@ const InputDocs = () => {
   prefixIcon={<SearchIcon />}
   placeholder="搜尋..."
   clearable
+/>
+
+// 密碼輸入框（自動顯示切換按鈕）
+<Input
+  type="password"
+  placeholder="請輸入密碼"
 />
 
 // 不同狀態
