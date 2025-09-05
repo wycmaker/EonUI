@@ -25,3 +25,6 @@ export type { CheckboxProps, CheckboxGroupProps } from './Checkbox';
 
 export { DatePicker } from './DatePicker';
 export type { DatePickerProps, DatePickerMode } from './DatePicker';
+
+export { Select } from './Select';
+export type { SelectProps, SelectOption } from './Select';

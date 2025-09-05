@@ -345,7 +345,7 @@ const Calendar: React.FC<CalendarProps> = ({
                 !isCurrentMonth && 'text-gray-400',
                 isCurrentMonth && 'text-gray-900',
                 isToday && 'bg-blue-100 text-blue-600 font-semibold',
-                isSelected && 'bg-primary text-white hover:bg-primary-dark',
+                isSelected && 'bg-primary-600 text-white hover:bg-primary-700',
                 disabled && 'cursor-not-allowed opacity-50 hover:bg-transparent',
               )}
             >
@@ -495,7 +495,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
           {/* 選擇器按鈕 */}
           <button
             type="button"
-            className="my-2 w-16 h-10 px-2 py-1 text-lg font-mono bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary flex items-center justify-center"
+            className="my-2 w-16 h-10 px-2 py-1 text-lg font-mono bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-primary-600 flex items-center justify-center"
             onClick={() => setIsOpen(!isOpen)}
           >
             {String(value).padStart(2, '0')}
@@ -522,7 +522,9 @@ const TimePicker: React.FC<TimePickerProps> = ({
                   key={option}
                   type="button"
                   className={`w-full px-2 py-1 text-lg font-mono text-left hover:bg-gray-50 focus:outline-none focus:bg-gray-50 ${
-                    option === value ? 'bg-primary text-white hover:bg-primary/90' : 'text-gray-700'
+                    option === value
+                      ? 'bg-primary-600 text-white hover:bg-primary-700'
+                      : 'text-gray-700'
                   }`}
                   onClick={() => handleSelect(option)}
                 >
@@ -575,7 +577,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
             <button
               type="button"
               onClick={handleConfirm}
-              className="flex-1 px-3 py-2 text-sm bg-primary text-white hover:bg-primary/90 rounded transition-colors"
+              className="flex-1 px-3 py-2 text-sm bg-primary-600 text-white hover:bg-primary-700 rounded transition-colors"
             >
               確認
             </button>
@@ -757,7 +759,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
           <button
             type="button"
             onClick={handleConfirm}
-            className="flex-1 px-3 py-2 text-sm bg-primary text-white hover:bg-primary/90 rounded transition-colors"
+            className="flex-1 px-3 py-2 text-sm bg-primary-600 text-white hover:bg-primary-700 rounded transition-colors"
           >
             確認
           </button>
@@ -880,11 +882,11 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
     // 變體樣式
     const variants = {
       default:
-        'bg-white border border-gray-300 focus:border-2 focus:border-primary focus:shadow-[0_0_0_3px_rgb(37_99_235_/_0.1)]',
+        'bg-white border border-gray-300 focus:border-2 focus:border-primary-600 focus:shadow-[0_0_0_3px_rgba(37,99,235,0.1)]',
       filled:
-        'bg-gray-50 border border-transparent focus:bg-white focus:border-2 focus:border-primary focus:shadow-[0_0_0_3px_rgb(37_99_235_/_0.1)]',
+        'bg-gray-50 border border-transparent focus:bg-white focus:border-2 focus:border-primary-600 focus:shadow-[0_0_0_3px_rgba(37,99,235,0.1)]',
       outline:
-        'bg-transparent border-2 border-gray-300 focus:border-primary focus:shadow-[0_0_0_3px_rgb(37_99_235_/_0.1)]',
+        'bg-transparent border-2 border-gray-300 focus:border-primary-600 focus:shadow-[0_0_0_3px_rgba(37,99,235,0.1)]',
     };
 
     // 大小樣式
@@ -898,11 +900,11 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
     const statusStyles = {
       default: '',
       error:
-        'border-error focus:border-2 focus:border-error focus:shadow-[0_0_0_3px_rgb(239_68_68_/_0.1)]',
+        'border-error-600 focus:border-2 focus:border-error-600 focus:shadow-[0_0_0_3px_rgba(239,68,68,0.1)]',
       success:
-        'border-success focus:border-2 focus:border-success focus:shadow-[0_0_0_3px_rgb(16_185_129_/_0.1)]',
+        'border-success-600 focus:border-2 focus:border-success-600 focus:shadow-[0_0_0_3px_rgba(34,197,94,0.1)]',
       warning:
-        'border-warning focus:border-2 focus:border-warning focus:shadow-[0_0_0_3px_rgb(251_191_36_/_0.1)]',
+        'border-warning-600 focus:border-2 focus:border-warning-600 focus:shadow-[0_0_0_3px_rgba(234,179,8,0.1)]',
     };
 
     const handleDateSelect = (date: Date) => {

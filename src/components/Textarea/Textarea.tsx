@@ -83,11 +83,11 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     // 變體樣式
     const variants = {
       default:
-        'bg-white border border-gray-300 focus:border-2 focus:border-primary focus:shadow-[0_0_0_3px_rgb(37_99_235_/_0.1)]',
+        'bg-white border border-gray-300 focus:border-2 focus:border-primary-600 focus:shadow-[0_0_0_3px_rgba(37,99,235,0.1)]',
       filled:
-        'bg-gray-50 border border-transparent focus:bg-white focus:border-2 focus:border-primary focus:shadow-[0_0_0_3px_rgb(37_99_235_/_0.1)]',
+        'bg-gray-50 border border-transparent focus:bg-white focus:border-2 focus:border-primary-600 focus:shadow-[0_0_0_3px_rgba(37,99,235,0.1)]',
       outline:
-        'bg-transparent border-2 border-gray-300 focus:border-primary focus:shadow-[0_0_0_3px_rgb(37_99_235_/_0.1)]',
+        'bg-transparent border-2 border-gray-300 focus:border-primary-600 focus:shadow-[0_0_0_3px_rgba(37,99,235,0.1)]',
     };
 
     // 大小樣式（針對 textarea 調整）
@@ -101,11 +101,11 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     const statusStyles = {
       default: '',
       error:
-        'border-error focus:border-2 focus:border-error focus:shadow-[0_0_0_3px_rgb(239_68_68_/_0.1)]',
+        'border-error-600 focus:border-2 focus:border-error-600 focus:shadow-[0_0_0_3px_rgba(239,68,68,0.1)]',
       success:
-        'border-success focus:border-2 focus:border-success focus:shadow-[0_0_0_3px_rgb(16_185_129_/_0.1)]',
+        'border-success-600 focus:border-2 focus:border-success-600 focus:shadow-[0_0_0_3px_rgba(34,197,94,0.1)]',
       warning:
-        'border-warning focus:border-2 focus:border-warning focus:shadow-[0_0_0_3px_rgb(251_191_36_/_0.1)]',
+        'border-warning-600 focus:border-2 focus:border-warning-600 focus:shadow-[0_0_0_3px_rgba(234,179,8,0.1)]',
     };
 
     // 調整大小樣式

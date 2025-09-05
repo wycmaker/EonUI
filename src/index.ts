@@ -29,6 +29,9 @@ export type { CheckboxProps, CheckboxGroupProps } from './components/Checkbox';
 export { DatePicker } from './components/DatePicker/DatePicker';
 export type { DatePickerProps } from './components/DatePicker/DatePicker';
 
+export { Select } from './components/Select';
+export type { SelectProps, SelectOption } from './components/Select';
+
 // 導出工具函數
 export { cn } from './utils/cn';
 
