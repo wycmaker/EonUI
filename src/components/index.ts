@@ -22,3 +22,6 @@ export type { RadioProps, RadioGroupProps } from './Radio';
 
 export { Checkbox, CheckboxGroup } from './Checkbox';
 export type { CheckboxProps, CheckboxGroupProps } from './Checkbox';
+
+export { DatePicker } from './DatePicker';
+export type { DatePickerProps, DatePickerMode } from './DatePicker';
