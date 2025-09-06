@@ -70,6 +70,10 @@ export interface DatePickerProps
    */
   timePickerStyle?: 'button' | 'scroll';
   /**
+   * 自動完成屬性
+   */
+  autoComplete?: string;
+  /**
    * 值改變時的回調
    */
   onChange?: (date: Date | null, dateString: string) => void;
@@ -801,6 +805,7 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
       showNow: _showNow = true,
       showSeconds = false,
       timePickerStyle = 'button',
+      autoComplete = 'off',
       onChange,
       onClear,
       disabled,
@@ -1041,6 +1046,7 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
             disabled={disabled}
             className={inputStyles}
             aria-invalid={status === 'error'}
+            autoComplete={autoComplete}
             {...props}
           />
 

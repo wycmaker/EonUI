@@ -52,6 +52,10 @@ export interface TextareaProps
    * 是否顯示字數統計
    */
   showCount?: boolean;
+  /**
+   * 自動完成屬性
+   */
+  autoComplete?: string;
 }
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
@@ -71,6 +75,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
       maxLength,
       showCount = false,
       onChange,
+      autoComplete = 'off',
       ...props
     },
     ref,
@@ -158,6 +163,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
           value={value}
           onChange={handleChange}
           maxLength={maxLength}
+          autoComplete={autoComplete}
           style={{
             minHeight: `${minHeight}px`,
             maxHeight: maxHeight ? `${maxHeight}px` : undefined,

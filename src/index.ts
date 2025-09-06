@@ -35,6 +35,15 @@ export type { SelectProps, SelectOption } from './components/Select';
 export { Upload } from './components/Upload/Upload';
 export type { UploadProps } from './components/Upload/Upload';
 
+export { Form, FormItem, useForm, Rules, useFormContext } from './components/Form';
+export type {
+  FormProps,
+  FormItemProps,
+  ValidationRule,
+  FieldError,
+  FormContextValue,
+} from './components/Form';
+
 // 導出工具函數
 export { cn } from './utils/cn';
 

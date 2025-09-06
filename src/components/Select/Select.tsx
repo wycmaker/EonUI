@@ -85,6 +85,10 @@ export interface SelectProps
    */
   width?: string;
   /**
+   * 自動完成屬性（用於搜尋輸入框）
+   */
+  autoComplete?: string;
+  /**
    * 值改變時的回調
    */
   onChange?: (value: string | number | (string | number)[] | undefined) => void;
@@ -118,6 +122,7 @@ const Select = React.forwardRef<HTMLDivElement, SelectProps>(
       multipleDisplayMode = 'count',
       maxTagCount = 3,
       width = '200px',
+      autoComplete = 'off',
       onChange,
       onClear,
       onSearch,
@@ -385,6 +390,7 @@ const Select = React.forwardRef<HTMLDivElement, SelectProps>(
                   placeholder={searchPlaceholder}
                   className="w-full bg-transparent outline-none"
                   onClick={(e) => e.stopPropagation()}
+                  autoComplete={autoComplete}
                 />
               ) : displayContent ? (
                 typeof displayContent === 'string' ? (

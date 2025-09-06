@@ -41,6 +41,10 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
    * 清除按鈕的回調函數
    */
   onClear?: () => void;
+  /**
+   * 自動完成屬性
+   */
+  autoComplete?: string;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -57,6 +61,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       disabled,
       value,
       type = 'text',
+      autoComplete = 'off',
       ...props
     },
     ref,
@@ -110,6 +115,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           disabled={disabled}
           aria-invalid={status === 'error'}
           value={value}
+          autoComplete={autoComplete}
           {...props}
         />
 
