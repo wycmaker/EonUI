@@ -32,6 +32,9 @@ export type { SelectProps, SelectOption } from './Select';
 export { Upload } from './Upload';
 export type { UploadProps, UploadFile } from './Upload';
 
+export { Table, TableColumn } from './Table';
+export type { TableProps, TableColumnProps, ColumnDef, SortConfig } from './Table';
+
 export { Form, FormItem, useForm, Rules, useFormContext } from './Form';
 export type {
   FormProps,

@@ -44,6 +44,9 @@ export type {
   FormContextValue,
 } from './components/Form';
 
+export { Table, TableColumn } from './components/Table';
+export type { TableProps, TableColumnProps, ColumnDef, SortConfig } from './components/Table';
+
 // 導出工具函數
 export { cn } from './utils/cn';
 
