@@ -1,5 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 
+import { createPortal } from 'react-dom';
+
+import { useClickOutside, usePortal } from '@/hooks';
 import { cn } from '@/utils/cn';
 
 export type DatePickerMode = 'date' | 'time' | 'datetime';
@@ -828,6 +831,7 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
     const [inputValue, setInputValue] = useState('');
     const [tempTimeValue, setTempTimeValue] = useState<Date | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     const currentValue =
       value !== undefined
@@ -835,6 +839,13 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
           ? parseDate(value, mode)
           : value
         : internalValue;
+
+    // 使用 Portal hook 處理位置計算
+    const { position: dropdownPosition, calculatePosition } = usePortal({
+      triggerRef: containerRef,
+      isOpen,
+      offset: 4,
+    });
 
     // 應用暫存的時間值
     const applyTempTimeValue = useCallback(() => {
@@ -859,26 +870,18 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
       setInputValue(displayValue);
     }, [currentValue, format, mode, showSeconds]);
 
-    // 點擊外部關閉
-    useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-          // time 模式下，關閉時應用暫存的時間值
-          if (mode === 'time') {
-            applyTempTimeValue();
-          }
-          setIsOpen(false);
+    // 點擊外部關閉下拉選單
+    useClickOutside(
+      [containerRef, dropdownRef],
+      () => {
+        // time 模式下，關閉時應用暫存的時間值
+        if (mode === 'time') {
+          applyTempTimeValue();
         }
-      };
-
-      if (isOpen) {
-        document.addEventListener('mousedown', handleClickOutside);
-      }
-
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }, [isOpen, mode, applyTempTimeValue]);
+        setIsOpen(false);
+      },
+      isOpen,
+    );
 
     // 基礎樣式
     const baseStyles =
@@ -994,6 +997,9 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
 
     const handleInputClick = () => {
       if (!disabled) {
+        if (!isOpen) {
+          calculatePosition();
+        }
         setIsOpen(!isOpen);
         // time 模式下，初始化暫存值為當前值
         if (!isOpen && mode === 'time') {
@@ -1108,73 +1114,77 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
           )}
         </div>
 
-        {/* 下拉面板 */}
-        {isOpen && (
-          <div
-            className="absolute top-full left-0 z-50 mt-1"
-            style={{
-              left: '0',
-              minWidth: 'max-content',
-            }}
-          >
-            {mode === 'date' && (
-              <div className="w-80">
-                <Calendar
-                  currentDate={currentValue || new Date()}
-                  selectedDate={currentValue}
-                  onDateSelect={handleDateSelect}
-                  minDate={minDate}
-                  maxDate={maxDate}
-                  disabledDates={disabledDates}
-                />
-              </div>
-            )}
+        {/* 下拉面板 - 使用 Portal 渲染到 body */}
+        {isOpen &&
+          createPortal(
+            <div
+              ref={dropdownRef}
+              className="absolute bg-white border border-gray-300 rounded-md shadow-lg z-50"
+              style={{
+                top: dropdownPosition.top,
+                left: dropdownPosition.left,
+                width: 'max-content',
+              }}
+            >
+              {mode === 'date' && (
+                <div className="w-80">
+                  <Calendar
+                    currentDate={currentValue || new Date()}
+                    selectedDate={currentValue}
+                    onDateSelect={handleDateSelect}
+                    minDate={minDate}
+                    maxDate={maxDate}
+                    disabledDates={disabledDates}
+                  />
+                </div>
+              )}
 
-            {mode === 'time' && (
-              <div className={timePickerStyle === 'scroll' ? 'w-80' : 'w-64'}>
-                <TimePicker
-                  selectedTime={mode === 'time' ? tempTimeValue || currentValue : currentValue}
-                  onTimeSelect={handleTimeSelect}
-                  minDate={minDate}
-                  maxDate={maxDate}
-                  disabledDates={disabledDates}
-                  showSeconds={showSeconds}
-                  style={timePickerStyle}
-                  showConfirmButton={false}
-                  onConfirm={handleTimeConfirm}
-                  onCancel={handleTimeCancel}
-                />
-              </div>
-            )}
+              {mode === 'time' && (
+                <div className={timePickerStyle === 'scroll' ? 'w-80' : 'w-64'}>
+                  <TimePicker
+                    selectedTime={mode === 'time' ? tempTimeValue || currentValue : currentValue}
+                    onTimeSelect={handleTimeSelect}
+                    minDate={minDate}
+                    maxDate={maxDate}
+                    disabledDates={disabledDates}
+                    showSeconds={showSeconds}
+                    style={timePickerStyle}
+                    showConfirmButton={false}
+                    onConfirm={handleTimeConfirm}
+                    onCancel={handleTimeCancel}
+                  />
+                </div>
+              )}
 
-            {mode === 'datetime' && (
-              <div className="w-80">
-                <Calendar
-                  currentDate={currentValue || new Date()}
-                  selectedDate={currentValue}
-                  onDateSelect={handleDateSelect}
-                  minDate={minDate}
-                  maxDate={maxDate}
-                  showToday={false}
-                  disabledDates={disabledDates}
-                />
-                <TimePicker
-                  selectedTime={currentValue}
-                  onTimeSelect={handleTimeSelect}
-                  minDate={minDate}
-                  maxDate={maxDate}
-                  disabledDates={disabledDates}
-                  showSeconds={showSeconds}
-                  style="scroll"
-                  showConfirmButton={false}
-                  showNow={false}
-                  onConfirm={handleTimeConfirm}
-                  onCancel={handleTimeCancel}
-                />
-              </div>
-            )}
-          </div>
-        )}
+              {mode === 'datetime' && (
+                <div className="w-80">
+                  <Calendar
+                    currentDate={currentValue || new Date()}
+                    selectedDate={currentValue}
+                    onDateSelect={handleDateSelect}
+                    minDate={minDate}
+                    maxDate={maxDate}
+                    showToday={false}
+                    disabledDates={disabledDates}
+                  />
+                  <TimePicker
+                    selectedTime={currentValue}
+                    onTimeSelect={handleTimeSelect}
+                    minDate={minDate}
+                    maxDate={maxDate}
+                    disabledDates={disabledDates}
+                    showSeconds={showSeconds}
+                    style="scroll"
+                    showConfirmButton={false}
+                    showNow={false}
+                    onConfirm={handleTimeConfirm}
+                    onCancel={handleTimeCancel}
+                  />
+                </div>
+              )}
+            </div>,
+            document.body,
+          )}
       </div>
     );
   },

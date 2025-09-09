@@ -117,7 +117,7 @@ const InteractiveExample = () => {
         </p>
 
         <Table<User>
-          data={data}
+          value={data}
           variant="bordered"
           size="md"
           hover
@@ -365,7 +365,7 @@ const TableDocs = () => {
             <div>
               <h4 className="font-medium mb-3 text-gray-600">使用 columns 屬性定義欄位</h4>
               <Table<User>
-                data={sampleData.slice(0, 3)}
+                value={sampleData.slice(0, 3)}
                 columns={[
                   { key: 'id', title: 'ID', width: '60px', sortable: true, align: 'center' },
                   { key: 'name', title: '姓名', width: '120px', sortable: true },
@@ -381,7 +381,7 @@ const TableDocs = () => {
             <div>
               <h4 className="font-medium mb-3 text-gray-600">使用 TableColumn 組件定義欄位</h4>
               <Table<User>
-                data={sampleData.slice(0, 3)}
+                value={sampleData.slice(0, 3)}
                 variant="striped"
                 size="md"
               >
@@ -431,7 +431,7 @@ const TableDocs = () => {
                   {variant === 'bordered' && '邊框樣式'}
                 </h4>
                 <Table<User>
-                  data={sampleData.slice(0, 3)}
+                  value={sampleData.slice(0, 3)}
                   variant={variant}
                   hover
                 >
@@ -501,7 +501,7 @@ const TableDocs = () => {
               <div key={size}>
                 <h4 className="font-medium mb-2 text-gray-600">大小：{size.toUpperCase()}</h4>
                 <Table<User>
-                  data={sampleData.slice(0, 2)}
+                  value={sampleData.slice(0, 2)}
                   size={size}
                   variant="bordered"
                 >
@@ -548,7 +548,7 @@ const TableDocs = () => {
 
         <div className="component-docs-showcase">
           <Table<User>
-            data={sampleData}
+            value={sampleData}
             variant="default"
             defaultSortConfig={{ key: 'age', direction: 'asc' }}
           >
@@ -605,7 +605,7 @@ const TableDocs = () => {
 
         <div className="component-docs-showcase">
           <Table<User>
-            data={sampleData.slice(0, 4)}
+            value={sampleData.slice(0, 4)}
             variant="striped"
           >
             <TableColumn<User>
@@ -698,7 +698,7 @@ const TableDocs = () => {
             <div>
               <h4 className="font-medium mb-3 text-gray-600">固定表頭和最大高度</h4>
               <Table<User>
-                data={sampleData}
+                value={sampleData}
                 variant="bordered"
                 stickyHeader
                 maxHeight="200px"
@@ -738,7 +738,7 @@ const TableDocs = () => {
             <div>
               <h4 className="font-medium mb-3 text-gray-600">水平滾動和固定欄位</h4>
               <Table<User>
-                data={sampleData.slice(0, 3)}
+                value={sampleData.slice(0, 3)}
                 variant="bordered"
                 maxWidth="600px"
               >
@@ -835,7 +835,7 @@ const TableDocs = () => {
             <div>
               <h4 className="font-medium mb-3 text-gray-600">載入狀態</h4>
               <Table<User>
-                data={[]}
+                value={[]}
                 loading
                 columns={[
                   { key: 'name', title: '姓名' },
@@ -848,7 +848,7 @@ const TableDocs = () => {
             <div>
               <h4 className="font-medium mb-3 text-gray-600">空資料狀態</h4>
               <Table<User>
-                data={[]}
+                value={[]}
                 emptyText="目前沒有用戶資料"
                 columns={[
                   { key: 'name', title: '姓名' },
@@ -892,7 +892,7 @@ const TableDocs = () => {
               </thead>
               <tbody>
                 <tr>
-                  <td className="border border-gray-300 px-4 py-2 font-mono text-sm">data</td>
+                  <td className="border border-gray-300 px-4 py-2 font-mono text-sm">value</td>
                   <td className="border border-gray-300 px-4 py-2 text-sm">T[]</td>
                   <td className="border border-gray-300 px-4 py-2 text-sm">
                     <span className="text-red-600 font-semibold">是</span>
@@ -998,7 +998,9 @@ const TableDocs = () => {
                   </td>
                   <td className="border border-gray-300 px-4 py-2 text-sm">否</td>
                   <td className="border border-gray-300 px-4 py-2 text-sm">-</td>
-                  <td className="border border-gray-300 px-4 py-2 text-sm">排序變更回調函數</td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm">
+                    排序變更回調函數。如果提供則為外部控制排序，如果不提供則為內部自動排序
+                  </td>
                 </tr>
                 <tr className="bg-gray-50">
                   <td className="border border-gray-300 px-4 py-2 font-mono text-sm">renderCell</td>
@@ -1019,6 +1021,22 @@ const TableDocs = () => {
                   <td className="border border-gray-300 px-4 py-2 text-sm">自訂 CSS 類名</td>
                 </tr>
                 <tr className="bg-gray-50">
+                  <td className="border border-gray-300 px-4 py-2 font-mono text-sm">onChange</td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm">
+                    (data: T[]) =&gt; void
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm">否</td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm">-</td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm">值變更回調</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2 font-mono text-sm">onBlur</td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm">() =&gt; void</td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm">否</td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm">-</td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm">失焦事件</td>
+                </tr>
+                <tr>
                   <td className="border border-gray-300 px-4 py-2 font-mono text-sm">children</td>
                   <td className="border border-gray-300 px-4 py-2 text-sm">ReactNode</td>
                   <td className="border border-gray-300 px-4 py-2 text-sm">否</td>
@@ -1275,7 +1293,7 @@ const data: User[] = [
 
 // 使用 columns 屬性
 <Table<User>
-  data={data}
+  value={data}
   columns={[
     { key: 'id', title: 'ID', sortable: true },
     { key: 'name', title: '姓名', sortable: true },
@@ -1285,7 +1303,7 @@ const data: User[] = [
 />
 
 // 使用 TableColumn 組件
-<Table<User> data={data}>
+<Table<User> value={data}>
   <TableColumn<User> dataKey="id" title="ID" sortable />
   <TableColumn<User> dataKey="name" title="姓名" sortable />
   <TableColumn<User> dataKey="email" title="電子郵件" />
@@ -1296,7 +1314,7 @@ const data: User[] = [
         <div className="component-docs-code-block">
           <h4 className="component-docs-code-title">自訂渲染</h4>
           <pre className="component-docs-code">{`// 自訂單元格渲染
-<Table<User> data={data}>
+<Table<User> value={data}>
   <TableColumn<User> dataKey="name" title="用戶">
     {(value, record, index) => (
       <div className="flex items-center space-x-2">
@@ -1305,7 +1323,7 @@ const data: User[] = [
       </div>
     )}
   </TableColumn>
-  
+
   <TableColumn<User> dataKey="status" title="狀態">
     {(value) => (
       <span className={\`px-2 py-1 rounded-full text-xs \${
@@ -1315,7 +1333,7 @@ const data: User[] = [
       </span>
     )}
   </TableColumn>
-  
+
   <TableColumn<User> dataKey="id" title="操作">
     {(_, record) => (
       <div className="flex space-x-2">
@@ -1333,7 +1351,7 @@ const data: User[] = [
 const [sortConfig, setSortConfig] = useState<SortConfig>({ key: '', direction: null });
 
 <Table<User>
-  data={data}
+  value={data}
   defaultSortConfig={{ key: 'name', direction: 'asc' }}
   onSortChange={setSortConfig}
   variant="striped"
@@ -1352,7 +1370,7 @@ const [sortConfig, setSortConfig] = useState<SortConfig>({ key: '', direction: n
 
 // 載入和空狀態
 <Table<User>
-  data={loading ? [] : data}
+  value={loading ? [] : data}
   loading={loading}
   emptyText="暫無資料"
   columns={columns}
@@ -1382,13 +1400,6 @@ const meta: Meta<typeof Table> = {
     },
   },
   argTypes: {
-    data: {
-      control: false,
-      description: '表格資料陣列',
-      table: {
-        type: { summary: 'T[]' },
-      },
-    },
     columns: {
       control: false,
       description: '欄位定義陣列',
@@ -1468,6 +1479,27 @@ const meta: Meta<typeof Table> = {
         type: { summary: 'string | number' },
       },
     },
+    value: {
+      control: false,
+      description: '表格資料陣列',
+      table: {
+        type: { summary: 'T[]' },
+      },
+    },
+    onChange: {
+      control: false,
+      description: '值變更回調',
+      table: {
+        type: { summary: '(data: T[]) => void' },
+      },
+    },
+    onBlur: {
+      control: false,
+      description: '失焦事件',
+      table: {
+        type: { summary: '() => void' },
+      },
+    },
   },
   tags: ['autodocs'],
 };
@@ -1488,7 +1520,7 @@ export const Docs: Story = {
   },
   render: (args) => (
     <Table<User>
-      data={sampleData.slice(0, 3)}
+      value={sampleData.slice(0, 3)}
       variant={args.variant}
       size={args.size}
       sortable={args.sortable}

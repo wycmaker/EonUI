@@ -8,6 +8,7 @@ import { Checkbox, CheckboxGroup } from '../Checkbox';
 import { Input } from '../Input';
 import { Radio, RadioGroup } from '../Radio';
 import { Select } from '../Select';
+import { Table, TableColumn } from '../Table';
 import { Textarea } from '../Textarea';
 
 import { Form } from './Form';
@@ -15,10 +16,64 @@ import { FormItem } from './FormItem';
 import { Rules } from './Rules';
 import '../../styles/component-docs.css';
 
+// 示例用戶資料
+interface User extends Record<string, unknown> {
+  id: number;
+  name: string;
+  email: string;
+  department: string;
+  role: string;
+  status: 'active' | 'inactive';
+}
+
+const sampleUsers: User[] = [
+  {
+    id: 1,
+    name: '張三',
+    email: 'zhang.san@company.com',
+    department: '技術部',
+    role: '前端工程師',
+    status: 'active',
+  },
+  {
+    id: 2,
+    name: '李四',
+    email: 'li.si@company.com',
+    department: '技術部',
+    role: '後端工程師',
+    status: 'active',
+  },
+  {
+    id: 3,
+    name: '王五',
+    email: 'wang.wu@company.com',
+    department: '設計部',
+    role: 'UI設計師',
+    status: 'inactive',
+  },
+  {
+    id: 4,
+    name: '趙六',
+    email: 'zhao.liu@company.com',
+    department: '產品部',
+    role: '產品經理',
+    status: 'active',
+  },
+  {
+    id: 5,
+    name: '錢七',
+    email: 'qian.qi@company.com',
+    department: '測試部',
+    role: 'QA工程師',
+    status: 'active',
+  },
+];
+
 // 互動式範例組件
 const InteractiveExample = () => {
   const [validationValues, setValidationValues] = useState<Record<string, unknown>>({});
   const [triggerValues, setTriggerValues] = useState<Record<string, unknown>>({});
+  const [complexFormValues, setComplexFormValues] = useState<Record<string, unknown>>({});
 
   const handleBasicSubmit = (values: Record<string, unknown>) => {
     alert(`基本表單提交: ${JSON.stringify(values, null, 2)}`);
@@ -34,10 +89,15 @@ const InteractiveExample = () => {
     alert(`觸發時機表單提交: ${JSON.stringify(values, null, 2)}`);
   };
 
+  const handleComplexFormSubmit = (values: Record<string, unknown>) => {
+    setComplexFormValues(values);
+    alert(`複雜表單提交: ${JSON.stringify(values, null, 2)}`);
+  };
+
   return (
-    <div className="space-y-8 w-full max-w-md">
+    <div className="space-y-8 w-full">
       {/* 基本表單 */}
-      <div>
+      <div className="max-w-md">
         <h4 className="font-medium mb-3 text-gray-700">基本表單</h4>
         <Form onSubmit={handleBasicSubmit}>
           <FormItem
@@ -63,7 +123,7 @@ const InteractiveExample = () => {
       </div>
 
       {/* 驗證表單 */}
-      <div>
+      <div className="max-w-md">
         <h4 className="font-medium mb-3 text-gray-700">驗證功能</h4>
         <Form onSubmit={handleValidationSubmit}>
           <FormItem
@@ -155,7 +215,7 @@ const InteractiveExample = () => {
       </div>
 
       {/* 驗證時機 */}
-      <div>
+      <div className="max-w-md">
         <h4 className="font-medium mb-3 text-gray-700">不同驗證時機</h4>
         <Form onSubmit={handleTriggerSubmit}>
           <FormItem
@@ -228,6 +288,290 @@ const InteractiveExample = () => {
           <div className="mt-4 p-3 bg-gray-50 rounded text-sm">
             <strong>提交的值：</strong>
             <pre>{JSON.stringify(triggerValues, null, 2)}</pre>
+          </div>
+        )}
+      </div>
+
+      {/* 複雜表單整合範例 */}
+      <div className="w-full max-w-4xl">
+        <h4 className="font-medium mb-3 text-gray-700">複雜表單 + Table 組件整合</h4>
+        <Form
+          onSubmit={handleComplexFormSubmit}
+          initialValues={{
+            teamMembers: sampleUsers,
+          }}
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* 左側：基本資訊 */}
+            <div className="space-y-4">
+              <h5 className="font-medium text-gray-600 mb-3">基本資訊</h5>
+              <FormItem
+                name="projectName"
+                label="專案名稱"
+                required
+                rules={[
+                  Rules.required('專案名稱為必填'),
+                  Rules.minLength(2, '專案名稱至少需要2個字元'),
+                ]}
+              >
+                <Input placeholder="請輸入專案名稱" />
+              </FormItem>
+
+              <FormItem
+                name="projectType"
+                label="專案類型"
+                required
+                rules={[Rules.required('請選擇專案類型')]}
+              >
+                <Select
+                  options={[
+                    { value: 'web', label: 'Web 應用' },
+                    { value: 'mobile', label: '移動應用' },
+                    { value: 'desktop', label: '桌面應用' },
+                    { value: 'api', label: 'API 服務' },
+                  ]}
+                  placeholder="請選擇專案類型"
+                />
+              </FormItem>
+
+              <FormItem
+                name="priority"
+                label="優先級"
+                required
+                rules={[Rules.required('請選擇優先級')]}
+              >
+                <RadioGroup>
+                  <Radio value="high">高</Radio>
+                  <Radio value="medium">中</Radio>
+                  <Radio value="low">低</Radio>
+                </RadioGroup>
+              </FormItem>
+
+              <FormItem
+                name="features"
+                label="功能特性"
+              >
+                <CheckboxGroup>
+                  <Checkbox value="responsive">響應式設計</Checkbox>
+                  <Checkbox value="multilang">多語言支援</Checkbox>
+                  <Checkbox value="analytics">數據分析</Checkbox>
+                  <Checkbox value="security">安全加密</Checkbox>
+                </CheckboxGroup>
+              </FormItem>
+
+              <FormItem
+                name="description"
+                label="專案描述"
+                rules={[Rules.maxLength(500, '描述不能超過500字')]}
+              >
+                <Textarea
+                  placeholder="請描述專案的主要功能和目標..."
+                  rows={4}
+                />
+              </FormItem>
+            </div>
+
+            {/* 右側：團隊成員 */}
+            <div className="space-y-4">
+              <h5 className="font-medium text-gray-600 mb-3">團隊成員選擇</h5>
+              <FormItem
+                name="teamMembers"
+                label="選擇團隊成員"
+                required
+                rules={[
+                  Rules.custom((value) => {
+                    const members = (value as User[]) || [];
+                    // eslint-disable-next-line no-console
+                    console.log('Form validation - members:', members);
+                    return members.length > 0 ? null : '請至少選擇一個團隊成員';
+                  }, 'onSubmit'),
+                ]}
+              >
+                <Table<User>
+                  value={[]} // 這個值會被 FormItem 覆蓋
+                  size="sm"
+                  variant="bordered"
+                  maxHeight="300px"
+                >
+                  <TableColumn<User>
+                    dataKey="name"
+                    title="姓名"
+                    width="120px"
+                    sortable
+                  >
+                    {(value, record, index, currentData, onDataChange) => (
+                      <Input
+                        size="sm"
+                        value={value as string}
+                        onChange={(e) => {
+                          // 步驟 1: 更新資料
+                          const updatedData = [...currentData];
+                          if (updatedData[index]) {
+                            updatedData[index] = { ...updatedData[index], name: e.target.value };
+                          }
+                          // 步驟 2: 透過 onDataChange 通知 Table
+                          onDataChange(updatedData);
+                          // 步驟 3: Table 會呼叫自己的 onChange
+                          // 步驟 4: FormItem 接收到 Table 的 onChange，更新到 Form
+                        }}
+                        placeholder="請輸入姓名"
+                      />
+                    )}
+                  </TableColumn>
+                  <TableColumn<User>
+                    dataKey="department"
+                    title="部門"
+                    width="120px"
+                    sortable
+                  >
+                    {(value, record, index, currentData, onDataChange) => (
+                      <Select
+                        size="sm"
+                        value={value as string}
+                        options={[
+                          { value: '技術部', label: '技術部' },
+                          { value: '設計部', label: '設計部' },
+                          { value: '產品部', label: '產品部' },
+                          { value: '測試部', label: '測試部' },
+                          { value: '營運部', label: '營運部' },
+                        ]}
+                        onChange={(newValue) => {
+                          const updatedData = [...currentData];
+                          if (updatedData[index]) {
+                            updatedData[index] = {
+                              ...updatedData[index],
+                              department: newValue as string,
+                            };
+                          }
+                          onDataChange(updatedData);
+                        }}
+                        placeholder="選擇部門"
+                      />
+                    )}
+                  </TableColumn>
+                  <TableColumn<User>
+                    dataKey="role"
+                    title="職位"
+                    width="140px"
+                    sortable
+                  >
+                    {(value, record, index, currentData, onDataChange) => (
+                      <Input
+                        size="sm"
+                        value={value as string}
+                        onChange={(e) => {
+                          const updatedData = [...currentData];
+                          if (updatedData[index]) {
+                            updatedData[index] = { ...updatedData[index], role: e.target.value };
+                          }
+                          onDataChange(updatedData);
+                        }}
+                        placeholder="請輸入職位"
+                      />
+                    )}
+                  </TableColumn>
+                  <TableColumn<User>
+                    dataKey="status"
+                    title="狀態"
+                    width="100px"
+                    align="center"
+                  >
+                    {(value, record, index, currentData, onDataChange) => (
+                      <Select
+                        size="sm"
+                        value={value as string}
+                        options={[
+                          { value: 'active', label: '在職' },
+                          { value: 'inactive', label: '離職' },
+                        ]}
+                        onChange={(newValue) => {
+                          const updatedData = [...currentData];
+                          if (updatedData[index]) {
+                            updatedData[index] = {
+                              ...updatedData[index],
+                              status: newValue as 'active' | 'inactive',
+                            };
+                          }
+                          onDataChange(updatedData);
+                        }}
+                      />
+                    )}
+                  </TableColumn>
+                </Table>
+              </FormItem>
+
+              <FormItem
+                name="budget"
+                label="預算範圍"
+                required
+                rules={[
+                  Rules.required('請輸入預算'),
+                  Rules.custom((value) => {
+                    const budget = Number(value);
+                    if (isNaN(budget) || budget <= 0) {
+                      return '請輸入有效的預算金額';
+                    }
+                    return null;
+                  }, 'onBlur'),
+                ]}
+              >
+                <Input
+                  type="number"
+                  placeholder="請輸入預算金額"
+                  min="0"
+                />
+              </FormItem>
+
+              <FormItem
+                name="deadline"
+                label="截止日期"
+                required
+                rules={[Rules.required('請選擇截止日期')]}
+              >
+                <Input
+                  type="date"
+                  min={new Date().toISOString().split('T')[0]}
+                />
+              </FormItem>
+
+              <FormItem
+                name="notifications"
+                label="通知設定"
+              >
+                <CheckboxGroup>
+                  <Checkbox value="email">郵件通知</Checkbox>
+                  <Checkbox value="sms">簡訊通知</Checkbox>
+                  <Checkbox value="push">推播通知</Checkbox>
+                </CheckboxGroup>
+              </FormItem>
+            </div>
+          </div>
+
+          <div className="pt-6 border-t mt-6">
+            <div className="flex gap-4">
+              <Button
+                type="submit"
+                variant="primary"
+              >
+                建立專案
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setComplexFormValues({})}
+              >
+                清除
+              </Button>
+            </div>
+          </div>
+        </Form>
+
+        {Object.keys(complexFormValues).length > 0 && (
+          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+            <h6 className="font-medium mb-2">提交的表單資料：</h6>
+            <pre className="text-sm text-gray-700 whitespace-pre-wrap">
+              {JSON.stringify(complexFormValues, null, 2)}
+            </pre>
           </div>
         )}
       </div>
@@ -928,11 +1272,11 @@ const FormDocs = () => {
   <FormItem name="username" label="使用者名稱" required>
     <Input placeholder="請輸入使用者名稱" />
   </FormItem>
-  
+
   <FormItem name="email" label="電子郵件">
     <Input type="email" placeholder="請輸入電子郵件" />
   </FormItem>
-  
+
   <Button type="submit">提交</Button>
 </Form>
 

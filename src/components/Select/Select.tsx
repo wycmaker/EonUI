@@ -1,6 +1,8 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react';
 
-import { useClickOutside, useKeyboardNavigation, useControlledValue } from '@/hooks';
+import { createPortal } from 'react-dom';
+
+import { useClickOutside, useKeyboardNavigation, useControlledValue, usePortal } from '@/hooks';
 import {
   ComponentVariant,
   ComponentSize,
@@ -121,7 +123,7 @@ const Select = React.forwardRef<HTMLDivElement, SelectProps>(
       noDataText = '無資料',
       multipleDisplayMode = 'count',
       maxTagCount = 3,
-      width = '200px',
+      width,
       autoComplete = 'off',
       onChange,
       onClear,
@@ -143,6 +145,13 @@ const Select = React.forwardRef<HTMLDivElement, SelectProps>(
       defaultValue !== undefined ? defaultValue : multiple ? [] : undefined,
       onChange,
     );
+
+    // 使用 Portal hook 處理位置計算
+    const { position: dropdownPosition, calculatePosition } = usePortal({
+      triggerRef: containerRef,
+      isOpen,
+      offset: 4,
+    });
 
     // 過濾選項
     const filteredOptions = filterable
@@ -258,9 +267,9 @@ const Select = React.forwardRef<HTMLDivElement, SelectProps>(
       [onSearch],
     );
 
-    // 點擊外部關閉
+    // 點擊外部關閉 - 需要排除 dropdown
     useClickOutside(
-      containerRef,
+      [containerRef, dropdownRef],
       () => {
         setIsOpen(false);
         setSearchQuery('');
@@ -373,7 +382,14 @@ const Select = React.forwardRef<HTMLDivElement, SelectProps>(
         <div
           ref={ref}
           className={containerStyles}
-          onClick={() => !disabled && setIsOpen(!isOpen)}
+          onClick={() => {
+            if (!disabled) {
+              if (!isOpen) {
+                calculatePosition();
+              }
+              setIsOpen(!isOpen);
+            }
+          }}
           aria-expanded={isOpen}
           aria-haspopup="listbox"
           role="combobox"
@@ -419,53 +435,59 @@ const Select = React.forwardRef<HTMLDivElement, SelectProps>(
           </div>
         </div>
 
-        {/* 下拉選項 */}
-        {isOpen && (
-          <div
-            ref={dropdownRef}
-            className="absolute top-full left-0 z-50 mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto"
-            style={{
-              minWidth: '100%',
-              width: 'max-content',
-              maxWidth: 'min(400px, 100vw - 32px)',
-            }}
-            role="listbox"
-            aria-multiselectable={multiple}
-          >
-            {filteredOptions.length === 0 ? (
-              <div className="px-3 py-2 text-sm text-gray-500 text-center">{noDataText}</div>
-            ) : (
-              filteredOptions.map((option, index) => {
-                const isSelected = isOptionSelected(option);
-                const isHighlighted = index === highlightedIndex;
+        {/* 下拉選項 - 使用 Portal 渲染到 body */}
+        {isOpen &&
+          createPortal(
+            <div
+              ref={dropdownRef}
+              className="absolute bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto"
+              style={{
+                top: dropdownPosition.top,
+                left: dropdownPosition.left,
+                width: 'max-content',
+                minWidth: dropdownPosition.width,
+                maxWidth: 'min(400px, 100vw - 32px)',
+                zIndex: 9999,
+              }}
+              role="listbox"
+              aria-multiselectable={multiple}
+            >
+              {filteredOptions.length === 0 ? (
+                <div className="px-3 py-2 text-sm text-gray-500 text-center">{noDataText}</div>
+              ) : (
+                filteredOptions.map((option, index) => {
+                  const isSelected = isOptionSelected(option);
+                  const isHighlighted = index === highlightedIndex;
 
-                return (
-                  <div
-                    key={option.value}
-                    className={cn(
-                      'px-3 py-2 text-sm cursor-pointer transition-colors',
-                      'hover:bg-gray-100 focus:bg-gray-100',
-                      isHighlighted && 'bg-gray-100',
-                      isSelected && 'bg-primary-50 text-primary-600 font-medium border-primary-600',
-                      option.disabled && 'cursor-not-allowed opacity-50 hover:bg-transparent',
-                    )}
-                    onClick={() => handleOptionSelect(option)}
-                    role="option"
-                    aria-selected={isSelected}
-                    onMouseEnter={() => setHighlightedIndex(index)}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="flex-1 truncate">{option.label}</span>
-                      {multiple && isSelected && (
-                        <CheckIcon className="h-4 w-4 ml-2 flex-shrink-0" />
+                  return (
+                    <div
+                      key={option.value}
+                      className={cn(
+                        'px-3 py-2 text-sm cursor-pointer transition-colors',
+                        'hover:bg-gray-100 focus:bg-gray-100',
+                        isHighlighted && 'bg-gray-100',
+                        isSelected &&
+                          'bg-primary-50 text-primary-600 font-medium border-primary-600',
+                        option.disabled && 'cursor-not-allowed opacity-50 hover:bg-transparent',
                       )}
+                      onClick={() => handleOptionSelect(option)}
+                      role="option"
+                      aria-selected={isSelected}
+                      onMouseEnter={() => setHighlightedIndex(index)}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="flex-1 truncate">{option.label}</span>
+                        {multiple && isSelected && (
+                          <CheckIcon className="h-4 w-4 ml-2 flex-shrink-0" />
+                        )}
+                      </div>
                     </div>
-                  </div>
-                );
-              })
-            )}
-          </div>
-        )}
+                  );
+                })
+              )}
+            </div>,
+            document.body,
+          )}
       </div>
     );
   },

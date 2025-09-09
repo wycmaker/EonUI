@@ -1,4 +1,4 @@
-import React, { createContext, useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 
 import { cn } from '@/utils/cn';
 import { SpinnerIcon, SortAscIcon, SortDescIcon, EmptyDataIcon } from '@/utils/icons';
@@ -38,25 +38,8 @@ export interface ColumnDef<T = Record<string, unknown>> {
   fixed?: 'left' | 'right';
 }
 
-// Table Context 類型 - 使用泛型 (內部使用)
-interface TableContextValue<T = Record<string, unknown>> {
-  data: T[];
-  sortedData: T[];
-  sortConfig: SortConfig;
-  onSort: (key: string) => void;
-  columns: ColumnDef<T>[];
-  renderCell: (value: unknown, record: T, index: number, key: keyof T) => React.ReactNode;
-}
-
-// 創建 Context (內部使用)
-const TableContext = createContext<TableContextValue<Record<string, unknown>> | null>(null);
-
 // Table 組件 Props
 export interface TableProps<T = Record<string, unknown>> {
-  /**
-   * 表格資料
-   */
-  data: T[];
   /**
    * 欄位定義（可選，也可使用 TableColumn 子組件）
    */
@@ -67,6 +50,8 @@ export interface TableProps<T = Record<string, unknown>> {
   defaultSortConfig?: SortConfig;
   /**
    * 排序變更回調
+   * - 如果提供：外部控制排序模式，需要外部處理排序邏輯並更新 value
+   * - 如果不提供：內部自動排序模式，Table 會自動對 value 進行排序
    */
   onSortChange?: (sortConfig: SortConfig) => void;
   /**
@@ -117,6 +102,18 @@ export interface TableProps<T = Record<string, unknown>> {
    * 子元素
    */
   children?: React.ReactNode;
+  /**
+   * 表格資料
+   */
+  value: T[];
+  /**
+   * 值變更回調
+   */
+  onChange?: (data: T[]) => void;
+  /**
+   * 失焦事件
+   */
+  onBlur?: () => void;
 }
 
 // TableColumn 組件 Props
@@ -152,7 +149,13 @@ export interface TableColumnProps<T = Record<string, unknown>> {
   /**
    * 自訂渲染函數（children 函數）
    */
-  children?: (value: unknown, record: T, index: number) => React.ReactNode;
+  children?: (
+    value: unknown,
+    record: T,
+    index: number,
+    data: T[],
+    onDataChange: (newData: T[]) => void,
+  ) => React.ReactNode;
 }
 
 // 排序圖示組件
@@ -197,7 +200,6 @@ export const TableColumn = <T extends Record<string, unknown>>(_props: TableColu
 
 // 主要 Table 組件
 export const Table = <T extends Record<string, unknown>>({
-  data,
   columns: propColumns = [],
   defaultSortConfig = { key: '', direction: null },
   onSortChange,
@@ -213,8 +215,19 @@ export const Table = <T extends Record<string, unknown>>({
   className,
   renderCell,
   children,
+  value,
+  onChange,
+  onBlur,
 }: TableProps<T>) => {
   const [sortConfig, setSortConfig] = useState<SortConfig>(defaultSortConfig);
+
+  // 當 value 變更時同步資料
+  useEffect(() => {
+    if (value && onChange) {
+      // 如果有 value 和 onChange，表示是受控模式
+      // 這裡可以執行一些同步邏輯
+    }
+  }, [value, onChange]);
 
   // 從 children 中提取欄位配置
   const childColumns = useMemo(() => {
@@ -244,11 +257,17 @@ export const Table = <T extends Record<string, unknown>>({
 
   // 排序資料
   const sortedData = useMemo(() => {
-    if (!sortConfig.key || !sortConfig.direction) {
-      return data;
+    // 如果有 onSortChange，表示由外部控制排序，直接返回原始資料
+    if (onSortChange) {
+      return value;
     }
 
-    return [...data].sort((a, b) => {
+    // 如果沒有 onSortChange，進行內部排序
+    if (!sortConfig.key || !sortConfig.direction) {
+      return value;
+    }
+
+    return [...value].sort((a, b) => {
       const aValue = a[sortConfig.key as keyof T];
       const bValue = b[sortConfig.key as keyof T];
 
@@ -263,7 +282,7 @@ export const Table = <T extends Record<string, unknown>>({
 
       return sortConfig.direction === 'desc' ? comparison * -1 : comparison;
     });
-  }, [data, sortConfig]);
+  }, [value, sortConfig, onSortChange]);
 
   // 排序處理
   const handleSort = useCallback(
@@ -278,17 +297,43 @@ export const Table = <T extends Record<string, unknown>>({
               : 'asc',
       };
 
-      setSortConfig(newSortConfig);
-      onSortChange?.(newSortConfig);
+      // 如果有 onSortChange，表示外部控制排序
+      if (onSortChange) {
+        // 更新內部狀態（用於顯示排序圖示）
+        setSortConfig(newSortConfig);
+        // 通知外部處理排序
+        onSortChange(newSortConfig);
+      } else {
+        // 沒有 onSortChange，純內部排序
+        setSortConfig(newSortConfig);
+      }
     },
     [sortConfig, onSortChange],
+  );
+
+  // 處理資料變更（當表格內容需要更新到父層時）
+  const handleDataChange = useCallback(
+    (newData: T[]) => {
+      if (onChange) {
+        onChange(newData);
+      }
+    },
+    [onChange],
   );
 
   // 預設單元格渲染函數
   const defaultRenderCell = useCallback(
     (value: unknown, record: T, index: number, key: keyof T) => {
       // 檢查是否有對應的 TableColumn children 函數
-      let childRender: ((value: unknown, record: T, index: number) => React.ReactNode) | undefined;
+      let childRender:
+        | ((
+            value: unknown,
+            record: T,
+            index: number,
+            data: T[],
+            onDataChange: (newData: T[]) => void,
+          ) => React.ReactNode)
+        | undefined;
 
       React.Children.forEach(children, (child) => {
         if (React.isValidElement(child) && child.type === TableColumn) {
@@ -301,7 +346,7 @@ export const Table = <T extends Record<string, unknown>>({
 
       // 優先使用 children 函數，然後是 renderCell prop，最後是預設渲染
       if (childRender) {
-        return childRender(value, record, index);
+        return childRender(value, record, index, sortedData, handleDataChange);
       }
 
       if (renderCell) {
@@ -323,21 +368,15 @@ export const Table = <T extends Record<string, unknown>>({
 
       return String(value);
     },
-    [children, renderCell],
+    [children, renderCell, sortedData, handleDataChange],
   );
 
-  // Context 值
-  const contextValue: TableContextValue<T> = useMemo(
-    () => ({
-      data,
-      sortedData,
-      sortConfig,
-      onSort: handleSort,
-      columns: finalColumns,
-      renderCell: defaultRenderCell,
-    }),
-    [data, sortedData, sortConfig, handleSort, finalColumns, defaultRenderCell],
-  );
+  // 處理失焦事件
+  const handleTableBlur = useCallback(() => {
+    if (onBlur) {
+      onBlur();
+    }
+  }, [onBlur]);
 
   // 表格容器樣式
   const containerStyles = cn(
@@ -349,7 +388,7 @@ export const Table = <T extends Record<string, unknown>>({
 
   // 表格樣式
   const tableStyles = cn(
-    'w-full table-auto',
+    'w-full table-fixed',
     TABLE_VARIANTS[variant],
     TABLE_SIZES[size],
     'bg-white',
@@ -370,6 +409,7 @@ export const Table = <T extends Record<string, unknown>>({
               className={cn(
                 CELL_PADDING[size],
                 'font-semibold text-gray-900 border-b border-gray-200 align-middle',
+                'overflow-hidden text-ellipsis whitespace-nowrap',
                 column.align === 'center' && 'text-center',
                 column.align === 'right' && 'text-right',
                 isSortable && 'cursor-pointer hover:bg-gray-100 select-none',
@@ -438,23 +478,24 @@ export const Table = <T extends Record<string, unknown>>({
   );
 
   return (
-    <TableContext.Provider value={contextValue as TableContextValue<Record<string, unknown>>}>
-      <div className={containerStyles}>
-        {loading ? (
-          <LoadingSpinner />
-        ) : sortedData.length === 0 ? (
-          <EmptyData text={emptyText} />
-        ) : (
-          <table
-            className={tableStyles}
-            role="table"
-          >
-            {renderHeader()}
-            {renderBody()}
-          </table>
-        )}
-      </div>
-    </TableContext.Provider>
+    <div
+      className={containerStyles}
+      onBlur={handleTableBlur}
+    >
+      {loading ? (
+        <LoadingSpinner />
+      ) : sortedData.length === 0 ? (
+        <EmptyData text={emptyText} />
+      ) : (
+        <table
+          className={tableStyles}
+          role="table"
+        >
+          {renderHeader()}
+          {renderBody()}
+        </table>
+      )}
+    </div>
   );
 };
 
