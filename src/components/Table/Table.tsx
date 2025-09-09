@@ -153,8 +153,7 @@ export interface TableColumnProps<T = Record<string, unknown>> {
     value: unknown,
     record: T,
     index: number,
-    data: T[],
-    onDataChange: (newData: T[]) => void,
+    updateField: (newValue: unknown) => void,
   ) => React.ReactNode;
 }
 
@@ -330,8 +329,7 @@ export const Table = <T extends Record<string, unknown>>({
             value: unknown,
             record: T,
             index: number,
-            data: T[],
-            onDataChange: (newData: T[]) => void,
+            updateField: (newValue: unknown) => void,
           ) => React.ReactNode)
         | undefined;
 
@@ -346,7 +344,16 @@ export const Table = <T extends Record<string, unknown>>({
 
       // 優先使用 children 函數，然後是 renderCell prop，最後是預設渲染
       if (childRender) {
-        return childRender(value, record, index, sortedData, handleDataChange);
+        // 創建簡化的更新函數
+        const updateField = (newValue: unknown) => {
+          const updatedData = [...sortedData];
+          if (updatedData[index]) {
+            updatedData[index] = { ...updatedData[index], [key]: newValue };
+          }
+          handleDataChange(updatedData);
+        };
+
+        return childRender(value, record, index, updateField);
       }
 
       if (renderCell) {

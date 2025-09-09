@@ -91,7 +91,6 @@ const InteractiveExample = () => {
 
   const handleComplexFormSubmit = (values: Record<string, unknown>) => {
     setComplexFormValues(values);
-    alert(`複雜表單提交: ${JSON.stringify(values, null, 2)}`);
   };
 
   return (
@@ -399,21 +398,11 @@ const InteractiveExample = () => {
                     width="120px"
                     sortable
                   >
-                    {(value, record, index, currentData, onDataChange) => (
+                    {(value, _record, _index, updateField) => (
                       <Input
                         size="sm"
                         value={value as string}
-                        onChange={(e) => {
-                          // 步驟 1: 更新資料
-                          const updatedData = [...currentData];
-                          if (updatedData[index]) {
-                            updatedData[index] = { ...updatedData[index], name: e.target.value };
-                          }
-                          // 步驟 2: 透過 onDataChange 通知 Table
-                          onDataChange(updatedData);
-                          // 步驟 3: Table 會呼叫自己的 onChange
-                          // 步驟 4: FormItem 接收到 Table 的 onChange，更新到 Form
-                        }}
+                        onChange={(e) => updateField(e.target.value)}
                         placeholder="請輸入姓名"
                       />
                     )}
@@ -424,7 +413,7 @@ const InteractiveExample = () => {
                     width="120px"
                     sortable
                   >
-                    {(value, record, index, currentData, onDataChange) => (
+                    {(value, _record, _index, updateField) => (
                       <Select
                         size="sm"
                         value={value as string}
@@ -435,16 +424,7 @@ const InteractiveExample = () => {
                           { value: '測試部', label: '測試部' },
                           { value: '營運部', label: '營運部' },
                         ]}
-                        onChange={(newValue) => {
-                          const updatedData = [...currentData];
-                          if (updatedData[index]) {
-                            updatedData[index] = {
-                              ...updatedData[index],
-                              department: newValue as string,
-                            };
-                          }
-                          onDataChange(updatedData);
-                        }}
+                        onChange={(newValue) => updateField(newValue)}
                         placeholder="選擇部門"
                       />
                     )}
@@ -455,17 +435,11 @@ const InteractiveExample = () => {
                     width="140px"
                     sortable
                   >
-                    {(value, record, index, currentData, onDataChange) => (
+                    {(value, _record, _index, updateField) => (
                       <Input
                         size="sm"
                         value={value as string}
-                        onChange={(e) => {
-                          const updatedData = [...currentData];
-                          if (updatedData[index]) {
-                            updatedData[index] = { ...updatedData[index], role: e.target.value };
-                          }
-                          onDataChange(updatedData);
-                        }}
+                        onChange={(e) => updateField(e.target.value)}
                         placeholder="請輸入職位"
                       />
                     )}
@@ -476,7 +450,7 @@ const InteractiveExample = () => {
                     width="100px"
                     align="center"
                   >
-                    {(value, record, index, currentData, onDataChange) => (
+                    {(value, _record, _index, updateField) => (
                       <Select
                         size="sm"
                         value={value as string}
@@ -484,16 +458,7 @@ const InteractiveExample = () => {
                           { value: 'active', label: '在職' },
                           { value: 'inactive', label: '離職' },
                         ]}
-                        onChange={(newValue) => {
-                          const updatedData = [...currentData];
-                          if (updatedData[index]) {
-                            updatedData[index] = {
-                              ...updatedData[index],
-                              status: newValue as 'active' | 'inactive',
-                            };
-                          }
-                          onDataChange(updatedData);
-                        }}
+                        onChange={(newValue) => updateField(newValue)}
                       />
                     )}
                   </TableColumn>
