@@ -20,6 +20,7 @@ interface User extends Record<string, unknown> {
   status: 'active' | 'inactive';
   joinDate: Date;
   salary: number;
+  actions?: never; // 用於操作欄位，不包含實際資料
 }
 
 // 示例資料
@@ -264,13 +265,13 @@ const InteractiveExample = () => {
           </TableColumn>
 
           <TableColumn<User>
-            dataKey="id"
+            dataKey="actions"
             title="操作"
             width="150px"
             align="center"
           >
             {(_, record) => (
-              <div className="flex space-x-1">
+              <div className="flex flex-wrap gap-1 justify-center">
                 {editingId === record.id ? (
                   <>
                     <Button
@@ -664,11 +665,11 @@ const TableDocs = () => {
             <TableColumn<User>
               dataKey="id"
               title="操作"
-              width="120px"
+              width="150px"
               align="center"
             >
               {(_, _record) => (
-                <div className="flex space-x-1">
+                <div className="">
                   <Button
                     size="xs"
                     variant="outline"
@@ -739,7 +740,7 @@ const TableDocs = () => {
               <h4 className="font-medium mb-3 text-gray-600">水平滾動和固定欄位</h4>
               <Table<User>
                 value={sampleData.slice(0, 3)}
-                variant="bordered"
+                variant="striped"
                 maxWidth="600px"
               >
                 <TableColumn<User>
@@ -751,7 +752,7 @@ const TableDocs = () => {
                 <TableColumn<User>
                   dataKey="name"
                   title="姓名"
-                  width="120px"
+                  width="500px"
                 />
                 <TableColumn<User>
                   dataKey="email"
@@ -779,13 +780,13 @@ const TableDocs = () => {
                   width="120px"
                 />
                 <TableColumn<User>
-                  dataKey="id"
+                  dataKey="actions"
                   title="操作"
                   width="120px"
                   fixed="right"
                 >
                   {() => (
-                    <div className="flex space-x-1">
+                    <div className="">
                       <Button
                         size="xs"
                         variant="outline"
@@ -1409,10 +1410,10 @@ const meta: Meta<typeof Table> = {
     },
     variant: {
       control: { type: 'select' },
-      options: ['default', 'striped', 'bordered'],
-      description: '表格樣式變體',
+      options: ['default', 'striped', 'bordered', ['striped', 'bordered']],
+      description: '表格樣式變體（可以是單一樣式或多個樣式的陣列）',
       table: {
-        type: { summary: 'string' },
+        type: { summary: "'default' | 'striped' | 'bordered' | ('striped' | 'bordered')[]" },
         defaultValue: { summary: 'default' },
       },
     },
@@ -1550,5 +1551,132 @@ export const Docs: Story = {
         align="center"
       />
     </Table>
+  ),
+};
+
+// 組合變體範例：Striped + Bordered
+export const CombinedVariants: Story = {
+  args: {
+    variant: ['striped', 'bordered'],
+    size: 'md',
+    sortable: true,
+    hover: true,
+  },
+  render: (args) => (
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-semibold mb-4">Striped + Bordered 組合</h3>
+        <Table<User>
+          value={sampleData.slice(0, 5)}
+          variant={args.variant}
+          size={args.size}
+          sortable={args.sortable}
+          hover={args.hover}
+        >
+          <TableColumn<User>
+            dataKey="id"
+            title="ID"
+            width="60px"
+            sortable
+          />
+          <TableColumn<User>
+            dataKey="name"
+            title="姓名"
+            sortable
+          />
+          <TableColumn<User>
+            dataKey="role"
+            title="職位"
+            sortable
+          />
+          <TableColumn<User>
+            dataKey="age"
+            title="年齡"
+            width="80px"
+            align="center"
+            sortable
+          />
+          <TableColumn<User>
+            dataKey="salary"
+            title="薪資"
+            width="100px"
+            align="right"
+            sortable
+          />
+          <TableColumn<User>
+            dataKey="status"
+            title="狀態"
+            width="80px"
+            align="center"
+          >
+            {(value) => (
+              <span
+                className={`px-2 py-1 rounded-full text-xs font-medium ${
+                  value === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                }`}
+              >
+                {value === 'active' ? '啟用' : '停用'}
+              </span>
+            )}
+          </TableColumn>
+        </Table>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold mb-4">比較：僅 Striped</h3>
+        <Table<User>
+          value={sampleData.slice(0, 3)}
+          variant="striped"
+          size={args.size}
+          sortable={args.sortable}
+          hover={args.hover}
+        >
+          <TableColumn<User>
+            dataKey="name"
+            title="姓名"
+            sortable
+          />
+          <TableColumn<User>
+            dataKey="role"
+            title="職位"
+            sortable
+          />
+          <TableColumn<User>
+            dataKey="age"
+            title="年齡"
+            align="center"
+            sortable
+          />
+        </Table>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold mb-4">比較：僅 Bordered</h3>
+        <Table<User>
+          value={sampleData.slice(0, 3)}
+          variant="bordered"
+          size={args.size}
+          sortable={args.sortable}
+          hover={args.hover}
+        >
+          <TableColumn<User>
+            dataKey="name"
+            title="姓名"
+            sortable
+          />
+          <TableColumn<User>
+            dataKey="role"
+            title="職位"
+            sortable
+          />
+          <TableColumn<User>
+            dataKey="age"
+            title="年齡"
+            align="center"
+            sortable
+          />
+        </Table>
+      </div>
+    </div>
   ),
 };

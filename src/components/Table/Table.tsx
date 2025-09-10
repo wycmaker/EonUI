@@ -10,6 +10,27 @@ const TABLE_VARIANTS = {
   bordered: 'border-2 border-gray-300',
 } as const;
 
+// 工具函數：檢查是否包含特定變體
+const hasVariant = (
+  variant: 'default' | 'striped' | 'bordered' | ('striped' | 'bordered')[],
+  target: 'striped' | 'bordered',
+): boolean => {
+  if (Array.isArray(variant)) {
+    return variant.includes(target);
+  }
+  return variant === target;
+};
+
+// 工具函數：獲取表格邊框樣式
+const getTableBorderStyle = (
+  variant: 'default' | 'striped' | 'bordered' | ('striped' | 'bordered')[],
+): string => {
+  if (hasVariant(variant, 'bordered')) {
+    return TABLE_VARIANTS.bordered;
+  }
+  return TABLE_VARIANTS.default;
+};
+
 const TABLE_SIZES = {
   sm: 'text-xs',
   md: 'text-base',
@@ -59,9 +80,9 @@ export interface TableProps<T = Record<string, unknown>> {
    */
   sortable?: boolean;
   /**
-   * 表格樣式變體
+   * 表格樣式變體（可以是單一樣式或多個樣式的陣列）
    */
-  variant?: 'default' | 'striped' | 'bordered';
+  variant?: 'default' | 'striped' | 'bordered' | ('striped' | 'bordered')[];
   /**
    * 表格大小
    */
@@ -396,7 +417,7 @@ export const Table = <T extends Record<string, unknown>>({
   // 表格樣式
   const tableStyles = cn(
     'w-full table-fixed',
-    TABLE_VARIANTS[variant],
+    getTableBorderStyle(variant),
     TABLE_SIZES[size],
     'bg-white',
   );
@@ -416,7 +437,8 @@ export const Table = <T extends Record<string, unknown>>({
               className={cn(
                 CELL_PADDING[size],
                 'font-semibold text-gray-900 border-b border-gray-200 align-middle',
-                'overflow-hidden text-ellipsis whitespace-nowrap',
+                hasVariant(variant, 'bordered') && 'border-r border-gray-200 last:border-r-0',
+                'break-words',
                 column.align === 'center' && 'text-center',
                 column.align === 'right' && 'text-right',
                 isSortable && 'cursor-pointer hover:bg-gray-100 select-none',
@@ -453,9 +475,9 @@ export const Table = <T extends Record<string, unknown>>({
         <tr
           key={`row-${rowIndex}-${record.id || rowIndex}`}
           className={cn(
-            variant === 'striped' && rowIndex % 2 === 1 && 'bg-gray-100',
-            hover && variant === 'striped' && 'hover:bg-gray-200 transition-colors',
-            hover && variant !== 'striped' && 'hover:bg-gray-50 transition-colors',
+            hasVariant(variant, 'striped') && rowIndex % 2 === 1 && 'bg-gray-100',
+            hover && hasVariant(variant, 'striped') && 'hover:bg-gray-200 transition-colors',
+            hover && !hasVariant(variant, 'striped') && 'hover:bg-gray-50 transition-colors',
           )}
         >
           {finalColumns.map((column, colIndex) => {
@@ -468,14 +490,17 @@ export const Table = <T extends Record<string, unknown>>({
                 className={cn(
                   CELL_PADDING[size],
                   'border-b border-gray-200',
+                  hasVariant(variant, 'bordered') && 'border-r border-gray-200 last:border-r-0',
+                  'break-words',
+                  hasVariant(variant, 'striped') && rowIndex % 2 === 1 ? 'bg-gray-100' : 'bg-white',
                   column.align === 'center' && 'text-center',
                   column.align === 'right' && 'text-right',
-                  column.fixed === 'left' && 'sticky left-0 bg-white z-10',
-                  column.fixed === 'right' && 'sticky right-0 bg-white z-10',
+                  column.fixed === 'left' && 'sticky left-0 z-10',
+                  column.fixed === 'right' && 'sticky right-0 z-10',
                 )}
                 style={{ width: column.width }}
               >
-                {cellContent}
+                <div className="w-full">{cellContent}</div>
               </td>
             );
           })}
