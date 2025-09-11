@@ -5,6 +5,7 @@
 export type ComponentVariant = 'default' | 'filled' | 'outline';
 export type ComponentSize = 'sm' | 'md' | 'lg';
 export type ComponentStatus = 'default' | 'error' | 'success' | 'warning';
+export type AlertType = 'primary' | 'success' | 'info' | 'warning' | 'error';
 
 /**
  * 基礎表單樣式
@@ -96,6 +97,46 @@ export const getStatusStyles = (status: ComponentStatus) => {
   };
   return statusStyles[status];
 };
+
+/**
+ * Alert 類型樣式映射
+ */
+export const getAlertTypeStyles = (type: AlertType) => {
+  const alertStyles = {
+    primary: {
+      container: 'bg-primary-50 border-primary-200 text-primary-900',
+      icon: 'text-primary-600',
+      closeButton: 'text-primary-500 hover:text-primary-700 focus:ring-primary-500',
+    },
+    success: {
+      container: 'bg-success-50 border-success-200 text-success-900',
+      icon: 'text-success-600',
+      closeButton: 'text-success-500 hover:text-success-700 focus:ring-success-500',
+    },
+    info: {
+      container: 'bg-gray-50 border-gray-200 text-gray-900',
+      icon: 'text-gray-600',
+      closeButton: 'text-gray-500 hover:text-gray-700 focus:ring-gray-500',
+    },
+    warning: {
+      container: 'bg-warning-50 border-warning-200 text-warning-900',
+      icon: 'text-warning-600',
+      closeButton: 'text-warning-500 hover:text-warning-700 focus:ring-warning-500',
+    },
+    error: {
+      container: 'bg-error-50 border-error-200 text-error-900',
+      icon: 'text-error-600',
+      closeButton: 'text-error-500 hover:text-error-700 focus:ring-error-500',
+    },
+  };
+  return alertStyles[type];
+};
+
+/**
+ * Alert 基礎樣式
+ */
+export const getBaseAlertStyles = () =>
+  'pointer-events-auto relative flex items-start rounded-lg border p-4 shadow-lg transition-all duration-300 ease-in-out min-w-80 max-w-md';
 
 /**
  * 組合表單組件樣式

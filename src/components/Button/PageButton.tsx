@@ -3,7 +3,8 @@ import React from 'react';
 import { cn } from '@/utils/cn';
 import { getSizeStyles, type ComponentSize } from '@/utils/formStyles';
 
-export interface PageButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'style' | 'onClick'> {
+export interface PageButtonProps
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'style' | 'onClick'> {
   /**
    * 頁碼數字
    */

@@ -47,6 +47,26 @@ export type {
 export { Table, TableColumn } from './components/Table';
 export type { TableProps, TableColumnProps, ColumnDef, SortConfig } from './components/Table';
 
+export { Pagination } from './components/Pagination';
+export type { PaginationProps, PaginationLayoutItem } from './components/Pagination';
+
+export {
+  Alert,
+  AlertContainer,
+  AlertProvider,
+  AlertService,
+  alertManager,
+} from './components/Alert';
+export type {
+  AlertProps,
+  AlertType,
+  AlertPosition,
+  AlertInstance,
+  AlertServiceOptions,
+  AlertServiceMethod,
+  AlertGlobalConfig,
+} from './components/Alert';
+
 // 導出工具函數
 export { cn } from './utils/cn';
 

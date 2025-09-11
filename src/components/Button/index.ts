@@ -10,3 +10,7 @@ export type { NavigationButtonProps } from './NavigationButton';
 // 導出頁碼按鈕組件
 export { PageButton } from './PageButton';
 export type { PageButtonProps } from './PageButton';
+
+// 導出關閉按鈕組件
+export { CloseButton } from './CloseButton';
+export type { CloseButtonProps } from './CloseButton';
