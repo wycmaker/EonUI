@@ -5,3 +5,4 @@ export { useControlledValue } from './useControlledValue';
 export { useUniqueGroupName } from './useGroupContext';
 export { useDragAndDrop } from './useDragAndDrop';
 export { usePortal } from './usePortal';
+export { useResponsivePageCount, type PaginationLayoutItem } from './useResponsivePageCount';

@@ -283,6 +283,47 @@ export const SortDescIcon: React.FC<IconProps> = ({
   </svg>
 );
 
+// 分頁導航圖示
+export const PrevIcon: React.FC<IconProps> = ({
+  className = 'w-4 h-4',
+  'aria-hidden': ariaHidden = true,
+}) => (
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    aria-hidden={ariaHidden}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M15 19l-7-7 7-7"
+    />
+  </svg>
+);
+
+export const NextIcon: React.FC<IconProps> = ({
+  className = 'w-4 h-4',
+  'aria-hidden': ariaHidden = true,
+}) => (
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    aria-hidden={ariaHidden}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M9 5l7 7-7 7"
+    />
+  </svg>
+);
+
 // 空資料圖示
 export const EmptyDataIcon: React.FC<IconProps> = ({
   className = 'h-8 w-8',

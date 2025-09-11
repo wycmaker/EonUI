@@ -1,6 +1,6 @@
 // 具名導出以支援 tree-shaking
-export { Button } from './Button/Button';
-export type { ButtonProps } from './Button/Button';
+export { Button, NavigationButton, PageButton } from './Button';
+export type { ButtonProps, NavigationButtonProps, PageButtonProps } from './Button';
 
 export { Input } from './Input/Input';
 export type { InputProps } from './Input/Input';
@@ -16,6 +16,9 @@ export type { GridProps } from './Grid';
 
 export { Layout } from './Layout';
 export type { LayoutProps } from './Layout';
+
+export { Pagination } from './Pagination';
+export type { PaginationProps, PaginationLayoutItem } from './Pagination';
 
 export { Radio, RadioGroup } from './Radio';
 export type { RadioProps, RadioGroupProps } from './Radio';

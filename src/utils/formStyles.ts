@@ -32,7 +32,7 @@ export const getVariantStyles = (variant: ComponentVariant) => {
  */
 export const getSizeStyles = (
   size: ComponentSize,
-  type: 'input' | 'button' | 'textarea' = 'input',
+  type: 'input' | 'button' | 'textarea' | 'pagination-button' | 'pagination-nav' = 'input',
 ) => {
   if (type === 'button') {
     const buttonSizes = {
@@ -52,6 +52,24 @@ export const getSizeStyles = (
       lg: 'px-4 py-4 text-base leading-relaxed',
     };
     return textareaSizes[size];
+  }
+
+  if (type === 'pagination-button') {
+    const paginationButtonSizes = {
+      sm: 'h-7 w-7 text-xs',
+      md: 'h-8 w-8 text-sm',
+      lg: 'h-10 w-10 text-base',
+    };
+    return paginationButtonSizes[size];
+  }
+
+  if (type === 'pagination-nav') {
+    const paginationNavSizes = {
+      sm: 'h-7 px-2 text-xs',
+      md: 'h-8 px-3 text-sm',
+      lg: 'h-10 px-4 text-base',
+    };
+    return paginationNavSizes[size];
   }
 
   // 預設為 input 樣式
