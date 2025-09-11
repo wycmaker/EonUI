@@ -62,3 +62,6 @@ export type {
   AlertServiceMethod,
   AlertGlobalConfig,
 } from './Alert';
+
+export { Modal, ModalProvider, ModalService, modalManager } from './Modal';
+export type { ModalProps, ModalInstance } from './Modal';

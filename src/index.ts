@@ -67,6 +67,9 @@ export type {
   AlertGlobalConfig,
 } from './components/Alert';
 
+export { Modal, ModalProvider, ModalService, modalManager } from './components/Modal';
+export type { ModalProps, ModalInstance } from './components/Modal';
+
 // 導出工具函數
 export { cn } from './utils/cn';
 
