@@ -2,16 +2,17 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 import { cn } from '@/utils/cn';
 import {
+  getAlertTypeStyles,
+  getBaseAlertStyles,
+  AlertType as FormAlertType,
+} from '@/utils/formStyles';
+import {
   CheckCircleIcon,
   InfoCircleIcon,
   WarningTriangleIcon,
   ErrorCircleIcon,
 } from '@/utils/icons';
-import {
-  getAlertTypeStyles,
-  getBaseAlertStyles,
-  AlertType as FormAlertType,
-} from '@/utils/formStyles';
+
 import { CloseButton } from '../Button/CloseButton';
 
 export type AlertType = FormAlertType;

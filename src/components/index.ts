@@ -65,3 +65,13 @@ export type {
 
 export { Modal, ModalProvider, ModalService, modalManager } from './Modal';
 export type { ModalProps, ModalInstance } from './Modal';
+
+// MessageBox 組件
+export { MessageBox, MessageBoxProvider, MessageBoxService, messageBoxManager } from './MessageBox';
+export type {
+  MessageBoxProps,
+  MessageBoxType,
+  MessageBoxVariant,
+  MessageBoxInstance,
+  MessageBoxServiceOptions,
+} from './MessageBox';

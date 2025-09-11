@@ -70,6 +70,20 @@ export type {
 export { Modal, ModalProvider, ModalService, modalManager } from './components/Modal';
 export type { ModalProps, ModalInstance } from './components/Modal';
 
+export {
+  MessageBox,
+  MessageBoxProvider,
+  MessageBoxService,
+  messageBoxManager,
+} from './components/MessageBox';
+export type {
+  MessageBoxProps,
+  MessageBoxType,
+  MessageBoxVariant,
+  MessageBoxInstance,
+  MessageBoxServiceOptions,
+} from './components/MessageBox';
+
 // 導出工具函數
 export { cn } from './utils/cn';
 
