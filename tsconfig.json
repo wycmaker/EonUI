@@ -6,6 +6,7 @@
     "module": "ESNext",
     "moduleResolution": "bundler",
     "jsx": "react-jsx",
+    "jsxImportSource": "react",
 
     // 輸出配置
     "outDir": "./dist",
@@ -44,7 +45,7 @@
       "@/tokens/*": ["./src/tokens/*"]
     }
   },
-  "include": ["src/**/*", ".storybook/**/*", "vite.config.ts", "tailwind.config.ts"],
+  "include": ["src/**/*", ".storybook/**/*", "vite.config.ts"],
   "exclude": [
     "node_modules",
     "dist",

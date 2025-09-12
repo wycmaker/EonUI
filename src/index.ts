@@ -1,4 +1,4 @@
-// 導入 Tailwind CSS
+// 導入 CSS 樣式
 import './index.css';
 
 // 導出所有組件 - 使用具名導出支援 tree-shaking
