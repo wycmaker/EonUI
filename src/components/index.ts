@@ -79,3 +79,7 @@ export type {
 // Tab 組件
 export { Tab, TabPane, useTabContext } from './Tab';
 export type { TabProps, TabPaneProps, TabItem } from './Tab';
+
+// Menu 組件
+export { Menu } from './Menu';
+export type { MenuProps, MenuItem } from './Menu';

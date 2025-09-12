@@ -87,6 +87,9 @@ export type {
 export { Tab, TabPane, useTabContext } from './components/Tab';
 export type { TabProps, TabPaneProps, TabItem } from './components/Tab';
 
+export { Menu } from './components/Menu';
+export type { MenuProps, MenuItem } from './components/Menu';
+
 // 導出工具函數
 export { cn } from './utils/cn';
 
