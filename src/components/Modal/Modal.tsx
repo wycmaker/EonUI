@@ -241,6 +241,53 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
       return undefined;
     }, [shouldRender, isVisible, closable, handleClose]);
 
+    // 焦點管理
+    useEffect(() => {
+      if (isVisible && modalRef.current) {
+        // 保存當前聚焦的元素
+        const previousActiveElement = document.activeElement as HTMLElement;
+
+        // 聚焦到 Modal
+        modalRef.current.focus();
+
+        // 焦點困在 Modal 內
+        const handleTabKey = (e: KeyboardEvent) => {
+          if (e.key === 'Tab' && modalRef.current) {
+            const focusableElements = modalRef.current.querySelectorAll(
+              'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+            );
+            const firstElement = focusableElements[0] as HTMLElement;
+            const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+            if (e.shiftKey) {
+              // Shift + Tab
+              if (document.activeElement === firstElement) {
+                e.preventDefault();
+                lastElement?.focus();
+              }
+            } else {
+              // Tab
+              if (document.activeElement === lastElement) {
+                e.preventDefault();
+                firstElement?.focus();
+              }
+            }
+          }
+        };
+
+        document.addEventListener('keydown', handleTabKey);
+
+        return () => {
+          document.removeEventListener('keydown', handleTabKey);
+          // 恢復之前的焦點
+          if (previousActiveElement && typeof previousActiveElement.focus === 'function') {
+            previousActiveElement.focus();
+          }
+        };
+      }
+      return undefined;
+    }, [isVisible]);
+
     if (!shouldRender) {
       return null;
     }
@@ -283,12 +330,22 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
           }}
           onClick={(e) => e.stopPropagation()}
           data-modal-id={id}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby={title ? `modal-title-${id}` : undefined}
+          aria-describedby={`modal-content-${id}`}
+          tabIndex={-1}
         >
           {/* 標題列 */}
           {(title || closable) && (
             <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
               {title && (
-                <h2 className="text-lg font-semibold text-gray-900 flex-1 pr-4">{title}</h2>
+                <h2
+                  id={`modal-title-${id}`}
+                  className="text-lg font-semibold text-gray-900 flex-1 pr-4"
+                >
+                  {title}
+                </h2>
               )}
               {closable && (
                 <CloseButton
@@ -302,7 +359,12 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
           )}
 
           {/* 內容區域 */}
-          <div className="flex-1 px-6 py-4 overflow-auto">{children}</div>
+          <div
+            id={`modal-content-${id}`}
+            className="flex-1 px-6 py-4 overflow-auto"
+          >
+            {children}
+          </div>
 
           {/* 頁腳 */}
           {footer && (

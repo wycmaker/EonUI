@@ -184,6 +184,11 @@ const UploadList: React.FC<UploadListProps> = ({
                   <div
                     className="bg-primary h-1 rounded-full transition-all duration-300"
                     style={{ width: `${file.percent}%` }}
+                    role="progressbar"
+                    aria-valuenow={file.percent}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-label={`${file.name} 上傳進度 ${file.percent}%`}
                   />
                 </div>
               )}
@@ -263,6 +268,11 @@ const UploadList: React.FC<UploadListProps> = ({
                   <div
                     className="bg-primary h-1 rounded-full transition-all duration-300"
                     style={{ width: `${file.percent}%` }}
+                    role="progressbar"
+                    aria-valuenow={file.percent}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
+                    aria-label={`${file.name} 上傳進度 ${file.percent}%`}
                   />
                 </div>
               )}
@@ -310,7 +320,14 @@ const UploadList: React.FC<UploadListProps> = ({
 
           {/* 狀態指示器 */}
           {file.status === 'uploading' && (
-            <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div
+              className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+              role="progressbar"
+              aria-valuenow={file.percent || 0}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-label={`${file.name} 上傳進度 ${file.percent || 0}%`}
+            >
               <div className="text-center text-white">
                 <SpinnerIcon className="h-6 w-6 mx-auto mb-2" />
                 <div className="text-xs">{file.percent || 0}%</div>
@@ -319,7 +336,11 @@ const UploadList: React.FC<UploadListProps> = ({
           )}
 
           {file.status === 'error' && (
-            <div className="absolute inset-0 bg-red-500 bg-opacity-50 flex items-center justify-center">
+            <div
+              className="absolute inset-0 bg-red-500 bg-opacity-50 flex items-center justify-center"
+              role="alert"
+              aria-label={`${file.name} 上傳失敗`}
+            >
               <ClearIcon className="h-6 w-6 text-white" />
             </div>
           )}
