@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Story, Controls, Primary } from '@storybook/addon-docs/blocks';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { CodeExample } from '../shared/CodeExample';
+
 import { Pagination } from './Pagination';
 import '../../styles/component-docs.css';
 
@@ -116,24 +118,66 @@ const PaginationDocs = () => {
 
       {/* 實際使用範例 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔄 實際使用範例</h2>
-        <p className="component-docs-section-description">
-          以下是實際的分頁範例，展示各種功能組合：
-        </p>
+        <CodeExample
+          title="🔄 實際使用範例"
+          description="以下是實際的分頁範例，展示各種功能組合："
+          code={`// 互動式分頁範例
+const [current, setCurrent] = useState(1);
+const [pageSize, setPageSize] = useState(10);
+const [showTotal, setShowTotal] = useState(true);
+const [showSizeChanger, setShowSizeChanger] = useState(true);
 
-        <div className="component-docs-showcase">
+return (
+  <div className="space-y-6 w-full max-w-4xl">
+    <div>
+      <h4 className="font-medium mb-2 text-gray-700">基本分頁</h4>
+      <Pagination
+        current={current}
+        pageSize={pageSize}
+        total={500}
+        showTotal={showTotal}
+        showSizeChanger={showSizeChanger}
+        onChange={(page, size) => {
+          setCurrent(page);
+          setPageSize(size);
+        }}
+      />
+    </div>
+  </div>
+);`}
+        >
           <InteractiveExample />
-        </div>
+        </CodeExample>
       </div>
 
       {/* 基本用法 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎯 基本用法</h2>
-        <p className="component-docs-section-description">
-          最簡單的分頁使用方式，只需要提供總數據量：
-        </p>
+        <CodeExample
+          title="🔄 基本用法範例"
+          description="最簡單的分頁使用方式，只需要提供總數據量："
+          code={`// 基本分頁
+<Pagination
+  defaultCurrent={1}
+  defaultPageSize={10}
+  total={100}
+/>
 
-        <div className="component-docs-showcase">
+// 顯示總數
+<Pagination
+  defaultCurrent={1}
+  defaultPageSize={10}
+  total={100}
+  layout={['prev', 'pages', 'next', 'total']}
+/>
+
+// 更多頁數
+<Pagination
+  defaultCurrent={5}
+  defaultPageSize={10}
+  total={500}
+  layout={['prev', 'pages', 'next', 'total']}
+/>`}
+        >
           <div className="space-y-6">
             <div>
               <h4 className="font-medium mb-3 text-gray-600">基本分頁</h4>
@@ -164,15 +208,30 @@ const PaginationDocs = () => {
               />
             </div>
           </div>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 頁碼樣式 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎨 頁碼樣式</h2>
-        <p className="component-docs-section-description">支援兩種頁碼樣式：純數字和有背景：</p>
+        <CodeExample
+          title="🔄 頁碼樣式範例"
+          description="支援兩種頁碼樣式：純數字和有背景："
+          code={`// 背景樣式（預設）
+<Pagination
+  defaultCurrent={3}
+  defaultPageSize={10}
+  total={200}
+  pageNumberStyle="background"
+/>
 
-        <div className="component-docs-showcase">
+// 純數字樣式
+<Pagination
+  defaultCurrent={3}
+  defaultPageSize={10}
+  total={200}
+  pageNumberStyle="plain"
+/>`}
+        >
           <div className="space-y-6">
             <div>
               <h4 className="font-medium mb-3 text-gray-600">背景樣式（預設）</h4>
@@ -194,7 +253,7 @@ const PaginationDocs = () => {
               />
             </div>
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>樣式說明：</strong>
@@ -211,10 +270,36 @@ const PaginationDocs = () => {
 
       {/* 大小選項 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📏 大小選項</h2>
-        <p className="component-docs-section-description">支援三種不同的大小選項：</p>
+        <CodeExample
+          title="🔄 大小選項範例"
+          description="支援三種不同的大小選項："
+          code={`// 小尺寸
+<Pagination
+  defaultCurrent={2}
+  defaultPageSize={10}
+  total={100}
+  size="sm"
+  layout={['total', 'sizes', 'prev', 'pages', 'next']}
+/>
 
-        <div className="component-docs-showcase">
+// 中等尺寸（預設）
+<Pagination
+  defaultCurrent={2}
+  defaultPageSize={10}
+  total={100}
+  size="md"
+  layout={['total', 'sizes', 'prev', 'pages', 'next']}
+/>
+
+// 大尺寸
+<Pagination
+  defaultCurrent={2}
+  defaultPageSize={10}
+  total={100}
+  size="lg"
+  layout={['total', 'sizes', 'prev', 'pages', 'next']}
+/>`}
+        >
           <div className="space-y-6">
             {(['sm', 'md', 'lg'] as const).map((size) => (
               <div key={size}>
@@ -229,7 +314,7 @@ const PaginationDocs = () => {
               </div>
             ))}
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>尺寸指南：</strong>
@@ -249,10 +334,35 @@ const PaginationDocs = () => {
 
       {/* 功能組合 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">⚙️ 功能組合</h2>
-        <p className="component-docs-section-description">展示各種功能的組合使用：</p>
+        <CodeExample
+          title="🔄 功能組合範例"
+          description="展示各種功能的組合使用："
+          code={`// 顯示每頁數量選擇器
+<Pagination
+  defaultCurrent={1}
+  defaultPageSize={20}
+  total={500}
+  layout={['prev', 'pages', 'next', 'sizes']}
+  pageSizeOptions={[10, 20, 50, 100]}
+/>
 
-        <div className="component-docs-showcase">
+// 快速跳轉
+<Pagination
+  defaultCurrent={5}
+  defaultPageSize={10}
+  total={1000}
+  layout={['prev', 'pages', 'next', 'jumper']}
+/>
+
+// 完整功能
+<Pagination
+  defaultCurrent={8}
+  defaultPageSize={25}
+  total={1000}
+  layout={['total', 'sizes', 'prev', 'pages', 'next', 'jumper']}
+  pageSizeOptions={[10, 25, 50, 100]}
+/>`}
+        >
           <div className="space-y-6">
             <div>
               <h4 className="font-medium mb-3 text-gray-600">顯示每頁數量選擇器</h4>
@@ -286,15 +396,48 @@ const PaginationDocs = () => {
               />
             </div>
           </div>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 自訂文字和圖示 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔧 自訂文字和圖示</h2>
-        <p className="component-docs-section-description">可以自訂上一頁、下一頁的文字或圖示：</p>
+        <CodeExample
+          title="🔄 自訂文字和圖示範例"
+          description="可以自訂上一頁、下一頁的文字或圖示："
+          code={`// 自訂文字
+<Pagination
+  defaultCurrent={3}
+  defaultPageSize={10}
+  total={200}
+  prevText="上一頁"
+  nextText="下一頁"
+/>
 
-        <div className="component-docs-showcase">
+// 自訂圖示
+<Pagination
+  defaultCurrent={3}
+  defaultPageSize={10}
+  total={200}
+  prevText={
+    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+      <path
+        fillRule="evenodd"
+        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+        clipRule="evenodd"
+      />
+    </svg>
+  }
+  nextText={
+    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+      <path
+        fillRule="evenodd"
+        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+        clipRule="evenodd"
+      />
+    </svg>
+  }
+/>`}
+        >
           <div className="space-y-6">
             <div>
               <h4 className="font-medium mb-3 text-gray-600">自訂文字</h4>
@@ -342,17 +485,38 @@ const PaginationDocs = () => {
               />
             </div>
           </div>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 佈局配置 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📐 佈局配置</h2>
-        <p className="component-docs-section-description">
-          透過 layout 屬性可以自訂分頁組件的佈局和功能順序：
-        </p>
+        <CodeExample
+          title="🔄 佈局配置範例"
+          description="透過 layout 屬性可以自訂分頁組件的佈局和功能順序："
+          code={`// 完整佈局
+<Pagination
+  defaultCurrent={3}
+  defaultPageSize={20}
+  total={500}
+  layout={['total', 'sizes', 'prev', 'pages', 'next', 'jumper']}
+/>
 
-        <div className="component-docs-showcase">
+// 簡潔佈局
+<Pagination
+  defaultCurrent={3}
+  defaultPageSize={20}
+  total={500}
+  layout={['prev', 'pages', 'next', 'total']}
+/>
+
+// 功能在前佈局
+<Pagination
+  defaultCurrent={3}
+  defaultPageSize={20}
+  total={500}
+  layout={['sizes', 'jumper', 'prev', 'pages', 'next']}
+/>`}
+        >
           <div className="space-y-6">
             <div>
               <h4 className="font-medium mb-3 text-gray-600">完整佈局</h4>
@@ -391,7 +555,7 @@ const PaginationDocs = () => {
               </p>
             </div>
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>佈局元素說明：</strong>
@@ -420,12 +584,45 @@ const PaginationDocs = () => {
 
       {/* 響應式設計 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📱 響應式設計</h2>
-        <p className="component-docs-section-description">
-          分頁組件會根據容器寬度自動調整顯示的頁碼數量：
-        </p>
+        <CodeExample
+          title="🔄 響應式設計範例"
+          description="分頁組件會根據容器寬度自動調整顯示的頁碼數量："
+          code={`// 大螢幕（顯示 9 個頁碼）
+<div className="w-full">
+  <Pagination
+    defaultCurrent={10}
+    defaultPageSize={10}
+    total={1000}
+  />
+</div>
 
-        <div className="component-docs-showcase">
+// 中等螢幕（顯示 7 個頁碼）
+<div className="w-96">
+  <Pagination
+    defaultCurrent={10}
+    defaultPageSize={10}
+    total={1000}
+  />
+</div>
+
+// 小螢幕（顯示 5 個頁碼）
+<div className="w-80">
+  <Pagination
+    defaultCurrent={10}
+    defaultPageSize={10}
+    total={1000}
+  />
+</div>
+
+// 極小螢幕（顯示 3 個頁碼）
+<div className="w-64">
+  <Pagination
+    defaultCurrent={10}
+    defaultPageSize={10}
+    total={1000}
+  />
+</div>`}
+        >
           <div className="space-y-6">
             <div>
               <h4 className="font-medium mb-3 text-gray-600">大螢幕（顯示 9 個頁碼）</h4>
@@ -471,7 +668,7 @@ const PaginationDocs = () => {
               </div>
             </div>
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>響應式規則：</strong>
@@ -494,10 +691,18 @@ const PaginationDocs = () => {
 
       {/* 禁用狀態 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🚫 禁用狀態</h2>
-        <p className="component-docs-section-description">可以禁用整個分頁組件：</p>
-
-        <div className="component-docs-showcase">
+        <CodeExample
+          title="🔄 禁用狀態範例"
+          description="可以禁用整個分頁組件："
+          code={`// 禁用的分頁組件
+<Pagination
+  defaultCurrent={3}
+  defaultPageSize={20}
+  total={500}
+  layout={['total', 'sizes', 'prev', 'pages', 'next', 'jumper']}
+  disabled
+/>`}
+        >
           <div className="space-y-6">
             <div>
               <h4 className="font-medium mb-3 text-gray-600">禁用的分頁</h4>
@@ -510,17 +715,44 @@ const PaginationDocs = () => {
               />
             </div>
           </div>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 自訂總數顯示 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎨 自訂總數顯示</h2>
-        <p className="component-docs-section-description">
-          可以透過 showTotalText 函數自訂總數的顯示方式：
-        </p>
+        <CodeExample
+          title="🔄 自訂總數顯示範例"
+          description="可以透過 showTotalText 函數自訂總數的顯示方式："
+          code={`// 預設總數顯示
+<Pagination
+  defaultCurrent={3}
+  defaultPageSize={20}
+  total={500}
+  layout={['prev', 'pages', 'next', 'total']}
+/>
 
-        <div className="component-docs-showcase">
+// 自訂總數顯示
+<Pagination
+  defaultCurrent={3}
+  defaultPageSize={20}
+  total={500}
+  layout={['prev', 'pages', 'next', 'total']}
+  showTotalText={(total, range) => (
+    <span className="text-primary font-semibold">
+      第 {range[0]}-{range[1]} 項 / 共 {total} 項
+    </span>
+  )}
+/>
+
+// 簡潔總數顯示
+<Pagination
+  defaultCurrent={3}
+  defaultPageSize={20}
+  total={500}
+  layout={['prev', 'pages', 'next', 'total']}
+  showTotalText={(total) => \`總計 \${total} 項\`}
+/>`}
+        >
           <div className="space-y-6">
             <div>
               <h4 className="font-medium mb-3 text-gray-600">預設總數顯示</h4>
@@ -558,7 +790,7 @@ const PaginationDocs = () => {
               />
             </div>
           </div>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 使用方式 */}

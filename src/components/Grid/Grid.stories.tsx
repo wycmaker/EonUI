@@ -1,6 +1,8 @@
 import { Story, Controls, Primary } from '@storybook/addon-docs/blocks';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { CodeExample } from '../shared/CodeExample';
+
 import { Grid } from './Grid';
 
 import '../../styles/component-docs.css';
@@ -154,34 +156,81 @@ const GridDocs = () => {
 
       {/* 基本網格展示 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📏 基本網格</h2>
-        <p className="component-docs-section-description">
-          12 等分網格系統，支援靈活的欄位分配和響應式設計。
-        </p>
+        <CodeExample
+          title="🔄 基本網格範例"
+          description="12 等分網格系統，支援靈活的欄位分配和響應式設計。"
+          code={`// 12 等分網格系統
+<Grid container spacing={0} wrap={false}>
+  {Array.from({ length: 12 }, (_, i) => (
+    <Grid key={i} item xs={1}>
+      <div className="bg-blue-100 border border-blue-300 p-2 text-center text-xs">
+        {i + 1}
+      </div>
+    </Grid>
+  ))}
+</Grid>
 
-        <div className="component-docs-showcase">
+// 響應式佈局
+<Grid container spacing={0}>
+  <Grid item xs={12} sm={6} md={4}>
+    <div className="bg-green-100 border border-green-300 p-4 text-center">
+      響應式欄位 1 (xs=12, sm=6, md=4)
+    </div>
+  </Grid>
+  <Grid item xs={12} sm={6} md={4}>
+    <div className="bg-green-100 border border-green-300 p-4 text-center">
+      響應式欄位 2 (xs=12, sm=6, md=4)
+    </div>
+  </Grid>
+  <Grid item xs={12} sm={6} md={4}>
+    <div className="bg-green-100 border border-green-300 p-4 text-center">
+      響應式欄位 3 (xs=12, sm=6, md=4)
+    </div>
+  </Grid>
+</Grid>`}
+        >
           <GridShowcase />
-        </div>
+        </CodeExample>
       </div>
 
       {/* 對齊方式展示 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎯 對齊方式</h2>
-        <p className="component-docs-section-description">
-          支援多種垂直和水平對齊方式，適應不同的佈局需求。
-        </p>
+        <CodeExample
+          title="🔄 對齊方式範例"
+          description="支援多種垂直和水平對齊方式，適應不同的佈局需求。"
+          code={`// 不同的對齊方式
+<Grid container justifyContent="center" alignItems="center">
+  <Grid item>居中對齊</Grid>
+</Grid>
 
-        <div className="component-docs-showcase">
+<Grid container justifyContent="space-between">
+  <Grid item>左側</Grid>
+  <Grid item>右側</Grid>
+</Grid>`}
+        >
           <AlignmentShowcase />
-        </div>
+        </CodeExample>
       </div>
 
       {/* 順序展示 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎯 順序</h2>
-        <p className="component-docs-section-description">支援多種順序，適應不同的佈局需求。</p>
-
-        <div className="component-docs-showcase">
+        <CodeExample
+          title="🔄 項目順序範例"
+          description="支援多種順序，適應不同的佈局需求。"
+          code={`// 響應式項目順序控制
+<Grid container spacing={0}>
+  <Grid item xs={12} md={3} order={{ xs: 2, md: 1 }}>
+    <div className="bg-red-100 border border-red-300 p-2 text-center">
+      側邊欄（桌面第1位，手機第2位）
+    </div>
+  </Grid>
+  <Grid item xs={12} md={9} order={{ xs: 1, md: 2 }}>
+    <div className="bg-blue-100 border border-blue-300 p-2 text-center">
+      主要內容（桌面第2位，手機第1位）
+    </div>
+  </Grid>
+</Grid>`}
+        >
           <Grid
             container
             spacing={0}
@@ -207,7 +256,7 @@ const GridDocs = () => {
               </div>
             </Grid>
           </Grid>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 使用方式 */}

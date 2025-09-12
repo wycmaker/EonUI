@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Story, Controls, Primary } from '@storybook/addon-docs/blocks';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { CodeExample } from '../shared/CodeExample';
+
 import { Radio, RadioGroup } from './Radio';
 import '../../styles/component-docs.css';
 
@@ -85,64 +87,111 @@ const RadioDocs = () => {
 
       {/* 實際使用範例 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔄 實際使用範例</h2>
-        <p className="component-docs-section-description">
-          以下是實際的單選框範例，展示各種功能組合：
-        </p>
+        <CodeExample
+          title="🔄 實際使用範例"
+          description="以下是實際的單選框範例，展示各種功能組合："
+          code={`// 互動式 Radio 範例
+const [basicValue, setBasicValue] = useState('option1');
+const [preferences, setPreferences] = useState('email');
+const [theme, setTheme] = useState('light');
 
-        <div className="component-docs-showcase">
+return (
+  <div className="space-y-8 w-full max-w-md">
+    <div>
+      <h4 className="font-medium mb-3 text-gray-700">基本選項</h4>
+      <RadioGroup value={basicValue} onChange={setBasicValue}>
+        <Radio value="option1">選項一</Radio>
+        <Radio value="option2">選項二</Radio>
+        <Radio value="option3">選項三</Radio>
+      </RadioGroup>
+    </div>
+
+    <div>
+      <h4 className="font-medium mb-3 text-gray-700">通知偏好</h4>
+      <RadioGroup value={preferences} onChange={setPreferences} direction="horizontal">
+        <Radio value="email">電子郵件</Radio>
+        <Radio value="sms">簡訊</Radio>
+        <Radio value="push">推播通知</Radio>
+      </RadioGroup>
+    </div>
+  </div>
+);`}
+        >
           <InteractiveExample />
-        </div>
+        </CodeExample>
       </div>
 
       {/* 基本用法 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎯 基本用法</h2>
-        <p className="component-docs-section-description">
-          Radio 可以單獨使用或配合 RadioGroup 使用：
-        </p>
-
-        <div className="component-docs-showcase">
-          <div className="space-y-6">
-            {/* 單獨使用 */}
-            <div>
-              <h4 className="font-medium mb-3 text-gray-600">單獨使用 Radio</h4>
-              <div className="flex flex-col space-y-2">
-                <Radio
-                  value="option1"
-                  defaultChecked
-                >
-                  已選中的選項
-                </Radio>
-                <Radio value="option2">未選中的選項</Radio>
-                <Radio
-                  value="option3"
-                  disabled
-                >
-                  禁用的選項
-                </Radio>
-              </div>
+        <div className="space-y-6 w-full">
+          <CodeExample
+            title="🔄 單獨使用 Radio"
+            description="Radio 可以單獨使用或配合 RadioGroup 使用："
+            code={`// 不同狀態的 Radio 按鈕
+<Radio value="option1" defaultChecked>
+  已選中的選項
+</Radio>
+<Radio value="option2">未選中的選項</Radio>
+<Radio value="option3" disabled>
+  禁用的選項
+</Radio>`}
+          >
+            <div className="flex flex-col space-y-2">
+              <Radio
+                value="option1"
+                defaultChecked
+              >
+                已選中的選項
+              </Radio>
+              <Radio value="option2">未選中的選項</Radio>
+              <Radio
+                value="option3"
+                disabled
+              >
+                禁用的選項
+              </Radio>
             </div>
+          </CodeExample>
 
-            {/* RadioGroup */}
-            <div>
-              <h4 className="font-medium mb-3 text-gray-600">使用 RadioGroup</h4>
-              <RadioGroup defaultValue="option1">
-                <Radio value="option1">選項一</Radio>
-                <Radio value="option2">選項二</Radio>
-                <Radio value="option3">選項三</Radio>
-              </RadioGroup>
-            </div>
-          </div>
+          <CodeExample
+            title="使用 RadioGroup"
+            code={`// 群組管理多個 Radio
+<RadioGroup defaultValue="option1">
+  <Radio value="option1">選項一</Radio>
+  <Radio value="option2">選項二</Radio>
+  <Radio value="option3">選項三</Radio>
+</RadioGroup>`}
+          >
+            <RadioGroup defaultValue="option1">
+              <Radio value="option1">選項一</Radio>
+              <Radio value="option2">選項二</Radio>
+              <Radio value="option3">選項三</Radio>
+            </RadioGroup>
+          </CodeExample>
         </div>
       </div>
 
       {/* 大小選項 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📏 大小選項</h2>
-        <p className="component-docs-section-description">支援三種不同的大小選項：</p>
+        <CodeExample
+          title="🔄 大小選項範例"
+          description="支援三種不同的大小選項："
+          code={`// 三種不同的 Radio 大小
+<RadioGroup defaultValue="option1" size="sm" direction="horizontal">
+  <Radio value="option1">小尺寸</Radio>
+  <Radio value="option2">選項二</Radio>
+</RadioGroup>
 
-        <div className="component-docs-showcase">
+<RadioGroup defaultValue="option1" size="md" direction="horizontal">
+  <Radio value="option1">中等尺寸</Radio>
+  <Radio value="option2">選項二</Radio>
+</RadioGroup>
+
+<RadioGroup defaultValue="option1" size="lg" direction="horizontal">
+  <Radio value="option1">大尺寸</Radio>
+  <Radio value="option2">選項二</Radio>
+</RadioGroup>`}
+        >
           <div className="space-y-6">
             {(['sm', 'md', 'lg'] as const).map((size) => (
               <div key={size}>
@@ -159,7 +208,7 @@ const RadioDocs = () => {
               </div>
             ))}
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>尺寸指南：</strong>
@@ -179,10 +228,34 @@ const RadioDocs = () => {
 
       {/* 顏色選項 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎨 顏色選項</h2>
-        <p className="component-docs-section-description">支援多種顏色主題：</p>
+        <CodeExample
+          title="🔄 顏色選項範例"
+          description="支援多種顏色主題："
+          code={`// 不同顏色的 Radio 組件
+// 主要色
+<RadioGroup defaultValue="checked" direction="horizontal">
+  <Radio value="checked" color="primary">已選中</Radio>
+  <Radio value="unchecked" color="primary">未選中</Radio>
+</RadioGroup>
 
-        <div className="component-docs-showcase">
+// 成功色
+<RadioGroup defaultValue="checked" direction="horizontal">
+  <Radio value="checked" color="success">已選中</Radio>
+  <Radio value="unchecked" color="success">未選中</Radio>
+</RadioGroup>
+
+// 警告色
+<RadioGroup defaultValue="checked" direction="horizontal">
+  <Radio value="checked" color="warning">已選中</Radio>
+  <Radio value="unchecked" color="warning">未選中</Radio>
+</RadioGroup>
+
+// 錯誤色
+<RadioGroup defaultValue="checked" direction="horizontal">
+  <Radio value="checked" color="error">已選中</Radio>
+  <Radio value="unchecked" color="error">未選中</Radio>
+</RadioGroup>`}
+        >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {(
               [
@@ -217,17 +290,28 @@ const RadioDocs = () => {
               </div>
             ))}
           </div>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 排列方向 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📐 排列方向</h2>
-        <p className="component-docs-section-description">
-          RadioGroup 支援垂直和水平兩種排列方向：
-        </p>
+        <CodeExample
+          title="🔄 排列方向範例"
+          description="RadioGroup 支援垂直和水平兩種排列方向："
+          code={`// 垂直排列（預設）
+<RadioGroup defaultValue="vertical1" direction="vertical">
+  <Radio value="vertical1">垂直選項一</Radio>
+  <Radio value="vertical2">垂直選項二</Radio>
+  <Radio value="vertical3">垂直選項三</Radio>
+</RadioGroup>
 
-        <div className="component-docs-showcase">
+// 水平排列
+<RadioGroup defaultValue="horizontal1" direction="horizontal">
+  <Radio value="horizontal1">水平選項一</Radio>
+  <Radio value="horizontal2">水平選項二</Radio>
+  <Radio value="horizontal3">水平選項三</Radio>
+</RadioGroup>`}
+        >
           <div className="space-y-8">
             <div>
               <h4 className="font-medium mb-3 text-gray-600">垂直排列（預設）</h4>
@@ -253,17 +337,28 @@ const RadioDocs = () => {
               </RadioGroup>
             </div>
           </div>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 禁用狀態 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🚫 禁用狀態</h2>
-        <p className="component-docs-section-description">
-          支援單個 Radio 禁用或整個 RadioGroup 禁用：
-        </p>
+        <CodeExample
+          title="🔄 禁用狀態範例"
+          description="支援單個 Radio 禁用或整個 RadioGroup 禁用："
+          code={`// 單個 Radio 禁用
+<RadioGroup defaultValue="option1">
+  <Radio value="option1">正常選項</Radio>
+  <Radio value="option2" disabled>禁用選項</Radio>
+  <Radio value="option3" disabled defaultChecked>禁用且選中</Radio>
+</RadioGroup>
 
-        <div className="component-docs-showcase">
+// 整個 RadioGroup 禁用
+<RadioGroup defaultValue="option1" disabled>
+  <Radio value="option1">群組禁用選項一</Radio>
+  <Radio value="option2">群組禁用選項二</Radio>
+  <Radio value="option3">群組禁用選項三</Radio>
+</RadioGroup>`}
+        >
           <div className="space-y-8">
             <div>
               <h4 className="font-medium mb-3 text-gray-600">單個 Radio 禁用</h4>
@@ -297,15 +392,29 @@ const RadioDocs = () => {
               </RadioGroup>
             </div>
           </div>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 無標籤 Radio */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">⚪ 無標籤 Radio</h2>
-        <p className="component-docs-section-description">Radio 可以不帶標籤文字：</p>
+        <CodeExample
+          title="🔄 無標籤 Radio 範例"
+          description="Radio 可以不帶標籤文字："
+          code={`// 不同大小的無標籤 Radio
+<RadioGroup defaultValue="sm" direction="horizontal">
+  <Radio value="sm" size="sm">小尺寸</Radio>
+  <Radio value="md" size="md">中尺寸</Radio>
+  <Radio value="lg" size="lg">大尺寸</Radio>
+</RadioGroup>
 
-        <div className="component-docs-showcase">
+// 不同顏色的無標籤 Radio
+<RadioGroup defaultValue="primary" direction="horizontal">
+  <Radio value="primary" color="primary" />
+  <Radio value="success" color="success" />
+  <Radio value="warning" color="warning" />
+  <Radio value="error" color="error" />
+</RadioGroup>`}
+        >
           <div className="space-y-4">
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-600">不同大小：</span>
@@ -359,15 +468,58 @@ const RadioDocs = () => {
               </RadioGroup>
             </div>
           </div>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 複雜範例 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔗 複雜範例</h2>
-        <p className="component-docs-section-description">展示實際應用場景的複雜範例：</p>
+        <CodeExample
+          title="🔄 複雜範例 - 用戶設定表單"
+          description="展示實際應用場景的複雜範例："
+          code={`// 複雜的表單範例
+<div className="border rounded-lg p-6 bg-gray-50">
+  <h3 className="text-lg font-semibold mb-4">用戶設定</h3>
 
-        <div className="component-docs-showcase">
+  <div className="space-y-4">
+    {/* 通知頻率 */}
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        通知頻率
+      </label>
+      <RadioGroup defaultValue="daily" size="sm">
+        <Radio value="realtime">即時通知</Radio>
+        <Radio value="daily">每日摘要</Radio>
+        <Radio value="weekly">每週摘要</Radio>
+        <Radio value="never">從不通知</Radio>
+      </RadioGroup>
+    </div>
+
+    {/* 主題偏好 */}
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        主題偏好
+      </label>
+      <RadioGroup defaultValue="auto" direction="horizontal" size="sm">
+        <Radio value="light">淺色</Radio>
+        <Radio value="dark">深色</Radio>
+        <Radio value="auto">自動</Radio>
+      </RadioGroup>
+    </div>
+
+    {/* 隱私設定 */}
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        隱私設定
+      </label>
+      <RadioGroup defaultValue="friends">
+        <Radio value="public">公開</Radio>
+        <Radio value="friends">僅好友</Radio>
+        <Radio value="private">私人</Radio>
+      </RadioGroup>
+    </div>
+  </div>
+</div>`}
+        >
           <div className="max-w-lg space-y-6">
             {/* 表單範例 */}
             <div className="border rounded-lg p-6 bg-gray-50">
@@ -411,7 +563,7 @@ const RadioDocs = () => {
               </div>
             </div>
           </div>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 使用方式 */}

@@ -119,9 +119,9 @@ export const ModalService = {
           }
           ModalService.close(modalId);
           resolve(true);
-        } catch (error) {
-          // 如果 onOk 拋出錯誤，不關閉 Modal
-          console.error('Modal confirm onOk error:', error);
+        } catch (_error) {
+          // 如果 onOk 拋出錯誤，不關閉 Modal，保持錯誤處理
+          resolve(false);
         }
       };
 
@@ -183,11 +183,11 @@ export const ModalService = {
           if (onOk) {
             await onOk();
           }
-          ModalService.close(modalId);
-          resolve();
-        } catch (error) {
-          console.error('Modal alert onOk error:', error);
+        } catch (_error) {
+          // 忽略onOk錯誤，繼續關閉Modal
         }
+        ModalService.close(modalId);
+        resolve();
       };
 
       const footer = React.createElement(

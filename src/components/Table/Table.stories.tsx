@@ -6,6 +6,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from '../Button';
 import { Input } from '../Input';
 import { Select } from '../Select';
+import { CodeExample } from '../shared/CodeExample';
 
 import { Table, TableColumn } from './Table';
 import '../../styles/component-docs.css';
@@ -343,24 +344,58 @@ const TableDocs = () => {
 
       {/* 實際使用範例 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔄 實際使用範例</h2>
-        <p className="component-docs-section-description">
-          以下是完整的表格使用範例，展示各種功能組合：
-        </p>
+        <CodeExample
+          title="🔄 實際使用範例"
+          description="以下是完整的表格使用範例，展示各種功能組合："
+          code={`const [selectedRows, setSelectedRows] = useState<string[]>([]);
+const [editingId, setEditingId] = useState<string | null>(null);
 
-        <div className="component-docs-showcase">
+<Table<User>
+  data={users}
+  loading={false}
+  selectable
+  selectedRowKeys={selectedRows}
+  onSelectedRowsChange={setSelectedRows}
+  pagination={{
+    current: 1,
+    pageSize: 10,
+    total: users.length,
+  }}
+>
+  <TableColumn dataKey="name" title="姓名" sortable />
+  <TableColumn dataKey="age" title="年齡" sortable />
+  <TableColumn dataKey="role" title="職位" />
+</Table>`}
+        >
           <InteractiveExample />
-        </div>
+        </CodeExample>
       </div>
 
       {/* 基本用法 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎯 基本用法</h2>
-        <p className="component-docs-section-description">
-          Table 組件支援兩種定義欄位的方式：通過 columns prop 或使用 TableColumn 子組件。
-        </p>
+        <CodeExample
+          title="🎯 基本用法"
+          description="Table 組件支援兩種定義欄位的方式：通過 columns prop 或使用 TableColumn 子組件。"
+          code={`// 方法1：使用 columns 屬性定義欄位
+<Table<User>
+  value={userData}
+  columns={[
+    { key: 'id', title: 'ID', width: '60px', sortable: true },
+    { key: 'name', title: '姓名', width: '120px', sortable: true },
+    { key: 'email', title: '電子郵件', sortable: true },
+    { key: 'role', title: '職位', sortable: true },
+  ]}
+  variant="default"
+/>
 
-        <div className="component-docs-showcase">
+// 方法2：使用 TableColumn 組件定義欄位
+<Table<User> value={userData} variant="striped">
+  <TableColumn dataKey="id" title="ID" width="60px" sortable />
+  <TableColumn dataKey="name" title="姓名" sortable />
+  <TableColumn dataKey="email" title="電子郵件" sortable />
+  <TableColumn dataKey="role" title="職位" sortable />
+</Table>`}
+        >
           <div className="space-y-8">
             {/* 使用 columns prop */}
             <div>
@@ -414,15 +449,38 @@ const TableDocs = () => {
               </Table>
             </div>
           </div>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 樣式變體 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎨 樣式變體</h2>
-        <p className="component-docs-section-description">Table 組件提供了三種不同的樣式變體：</p>
+        <CodeExample
+          title="🎨 樣式變體"
+          description="Table 組件提供了三種不同的樣式變體："
+          code={`// 預設樣式
+<Table<User> value={data} variant="default" hover>
+  <TableColumn dataKey="name" title="姓名" />
+  <TableColumn dataKey="email" title="電子郵件" />
+  <TableColumn dataKey="role" title="職位" />
+  <TableColumn dataKey="status" title="狀態" />
+</Table>
 
-        <div className="component-docs-showcase">
+// 條紋樣式
+<Table<User> value={data} variant="striped" hover>
+  <TableColumn dataKey="name" title="姓名" />
+  <TableColumn dataKey="email" title="電子郵件" />
+  <TableColumn dataKey="role" title="職位" />
+  <TableColumn dataKey="status" title="狀態" />
+</Table>
+
+// 邊框樣式
+<Table<User> value={data} variant="bordered" hover>
+  <TableColumn dataKey="name" title="姓名" />
+  <TableColumn dataKey="email" title="電子郵件" />
+  <TableColumn dataKey="role" title="職位" />
+  <TableColumn dataKey="status" title="狀態" />
+</Table>`}
+        >
           <div className="space-y-6">
             {(['default', 'striped', 'bordered'] as const).map((variant) => (
               <div key={variant}>
@@ -473,7 +531,7 @@ const TableDocs = () => {
               </div>
             ))}
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>樣式說明：</strong>
@@ -493,10 +551,30 @@ const TableDocs = () => {
 
       {/* 大小選項 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📏 大小選項</h2>
-        <p className="component-docs-section-description">支援三種不同的大小選項：</p>
+        <CodeExample
+          title="🔄 大小選項範例"
+          description="支援三種不同的大小選項："
+          code={`// 小尺寸表格
+<Table<User> value={data} size="sm" variant="bordered">
+  <TableColumn dataKey="name" title="姓名" />
+  <TableColumn dataKey="email" title="電子郵件" />
+  <TableColumn dataKey="role" title="職位" />
+</Table>
 
-        <div className="component-docs-showcase">
+// 中等尺寸表格（預設）
+<Table<User> value={data} size="md" variant="bordered">
+  <TableColumn dataKey="name" title="姓名" />
+  <TableColumn dataKey="email" title="電子郵件" />
+  <TableColumn dataKey="role" title="職位" />
+</Table>
+
+// 大尺寸表格
+<Table<User> value={data} size="lg" variant="bordered">
+  <TableColumn dataKey="name" title="姓名" />
+  <TableColumn dataKey="email" title="電子郵件" />
+  <TableColumn dataKey="role" title="職位" />
+</Table>`}
+        >
           <div className="space-y-6">
             {(['sm', 'md', 'lg'] as const).map((size) => (
               <div key={size}>
@@ -522,7 +600,7 @@ const TableDocs = () => {
               </div>
             ))}
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>尺寸指南：</strong>
@@ -542,12 +620,27 @@ const TableDocs = () => {
 
       {/* 排序功能 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔀 排序功能</h2>
-        <p className="component-docs-section-description">
-          表格支援欄位排序功能，點擊表頭可以切換排序方式：
-        </p>
-
-        <div className="component-docs-showcase">
+        <CodeExample
+          title="🔄 排序功能範例"
+          description="支援欄位排序功能，點擊表頭可以切換排序方式："
+          code={`// 啟用欄位排序功能
+<Table<User>
+  value={data}
+  variant="default"
+  defaultSortConfig={{ key: 'age', direction: 'asc' }}
+>
+  <TableColumn<User> dataKey="name" title="姓名" sortable />
+  <TableColumn<User> dataKey="age" title="年齡" sortable align="center">
+    {(value) => \`\${value}歲\`}
+  </TableColumn>
+  <TableColumn<User> dataKey="salary" title="薪資" sortable align="right">
+    {(value) => \`NT$\${(value as number).toLocaleString()}\`}
+  </TableColumn>
+  <TableColumn<User> dataKey="joinDate" title="加入日期" sortable>
+    {(value) => (value as Date).toLocaleDateString('zh-TW')}
+  </TableColumn>
+</Table>`}
+        >
           <Table<User>
             value={sampleData}
             variant="default"
@@ -582,7 +675,7 @@ const TableDocs = () => {
               {(value) => (value as Date).toLocaleDateString('zh-TW')}
             </TableColumn>
           </Table>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>排序功能說明：</strong>
@@ -599,12 +692,48 @@ const TableDocs = () => {
 
       {/* 自訂渲染 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎨 自訂渲染</h2>
-        <p className="component-docs-section-description">
-          使用 TableColumn 的 children 函數可以自訂單元格的渲染內容：
-        </p>
+        <CodeExample
+          title="🔄 自訂渲染範例"
+          description="使用 TableColumn 的 children 函數可以自訂單元格的渲染內容："
+          code={`// 使用 children 函數自訂單元格渲染
+<Table<User> value={data} variant="striped">
+  <TableColumn<User> dataKey="name" title="用戶資訊" width="200px">
+    {(_, record) => (
+      <div className="flex items-center space-x-3">
+        <div className="h-8 w-8 bg-primary-600 rounded-full flex items-center justify-center text-white font-medium text-sm">
+          {record.name.charAt(0)}
+        </div>
+        <div>
+          <div className="font-medium text-gray-900">{record.name}</div>
+          <div className="text-sm text-gray-500">{record.email}</div>
+        </div>
+      </div>
+    )}
+  </TableColumn>
 
-        <div className="component-docs-showcase">
+  <TableColumn<User> dataKey="status" title="狀態" align="center">
+    {(value, record) => (
+      <div className="flex flex-col items-center space-y-1">
+        <span className={\`px-2 py-1 rounded-full text-xs font-medium \${
+          value === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+        }\`}>
+          {value === 'active' ? '活躍' : '停用'}
+        </span>
+        <span className="text-xs text-gray-500">{record.age}歲</span>
+      </div>
+    )}
+  </TableColumn>
+
+  <TableColumn<User> dataKey="id" title="操作" align="center">
+    {(_, record) => (
+      <div className="space-x-2">
+        <Button size="xs" variant="outline">查看</Button>
+        <Button size="xs" variant="outline">編輯</Button>
+      </div>
+    )}
+  </TableColumn>
+</Table>`}
+        >
           <Table<User>
             value={sampleData.slice(0, 4)}
             variant="striped"
@@ -686,15 +815,50 @@ const TableDocs = () => {
               )}
             </TableColumn>
           </Table>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 固定欄位和滾動 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📌 固定欄位和滾動</h2>
-        <p className="component-docs-section-description">支援固定欄位和水平/垂直滾動功能：</p>
+        <CodeExample
+          title="🔄 固定欄位和滾動範例"
+          description="支援固定欄位和水平/垂直滾動功能："
+          code={`// 固定表頭和最大高度
+<Table<User>
+  value={data}
+  variant="bordered"
+  stickyHeader
+  maxHeight="200px"
+>
+  <TableColumn dataKey="name" title="姓名" width="120px" />
+  <TableColumn dataKey="email" title="電子郵件" width="200px" />
+  <TableColumn dataKey="role" title="職位" width="120px" />
+  <TableColumn dataKey="age" title="年齡" width="80px" align="center" />
+  <TableColumn dataKey="salary" title="薪資" width="100px" align="right">
+    {(value) => \`NT$\${value.toLocaleString()}\`}
+  </TableColumn>
+</Table>
 
-        <div className="component-docs-showcase">
+// 水平滾動和固定欄位
+<Table<User>
+  value={data}
+  variant="striped"
+  maxWidth="600px"
+>
+  <TableColumn dataKey="id" title="ID" width="60px" fixed="left" />
+  <TableColumn dataKey="name" title="姓名" width="500px" />
+  <TableColumn dataKey="email" title="電子郵件" width="200px" />
+  <TableColumn dataKey="role" title="職位" width="120px" />
+  <TableColumn dataKey="actions" title="操作" width="120px" fixed="right">
+    {() => (
+      <div className="space-x-2">
+        <Button size="xs" variant="outline">編輯</Button>
+        <Button size="xs" variant="outline">刪除</Button>
+      </div>
+    )}
+  </TableColumn>
+</Table>`}
+        >
           <div className="space-y-6">
             <div>
               <h4 className="font-medium mb-3 text-gray-600">固定表頭和最大高度</h4>
@@ -805,7 +969,7 @@ const TableDocs = () => {
               </Table>
             </div>
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>固定和滾動功能：</strong>
@@ -828,10 +992,31 @@ const TableDocs = () => {
 
       {/* 狀態展示 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔄 狀態展示</h2>
-        <p className="component-docs-section-description">表格支援載入狀態和空資料狀態：</p>
+        <CodeExample
+          title="🔄 狀態展示範例"
+          description="支援載入狀態和空資料狀態："
+          code={`// 載入狀態
+<Table<User>
+  value={[]}
+  loading
+  columns={[
+    { key: 'name', title: '姓名' },
+    { key: 'email', title: '電子郵件' },
+    { key: 'role', title: '職位' },
+  ]}
+/>
 
-        <div className="component-docs-showcase">
+// 空資料狀態
+<Table<User>
+  value={[]}
+  emptyText="目前沒有用戶資料"
+  columns={[
+    { key: 'name', title: '姓名' },
+    { key: 'email', title: '電子郵件' },
+    { key: 'role', title: '職位' },
+  ]}
+/>`}
+        >
           <div className="space-y-6">
             <div>
               <h4 className="font-medium mb-3 text-gray-600">載入狀態</h4>
@@ -859,7 +1044,7 @@ const TableDocs = () => {
               />
             </div>
           </div>
-        </div>
+        </CodeExample>
       </div>
 
       {/* Table Props 說明 */}

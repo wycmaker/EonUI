@@ -1,5 +1,9 @@
+import React from 'react';
+
 import { Story, Controls, Primary } from '@storybook/addon-docs/blocks';
 import type { Meta, StoryObj } from '@storybook/react';
+
+import { CodeExample } from '../shared/CodeExample';
 
 import { Button } from './Button';
 import '../../styles/component-docs.css';
@@ -30,17 +34,22 @@ const ButtonDocs = () => {
 
       {/* 樣式變體 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎨 樣式變體</h2>
-        <p className="component-docs-section-description">
-          Button 組件提供了四種不同的樣式變體，適用於不同的使用場景：
-        </p>
-
-        <div className="component-docs-showcase">
-          <Button variant="primary">主要按鈕</Button>
-          <Button variant="secondary">次要按鈕</Button>
-          <Button variant="outline">外框按鈕</Button>
-          <Button variant="ghost">幽靈按鈕</Button>
-        </div>
+        <CodeExample
+          title="🎨 樣式變體範例"
+          description="Button 組件提供了四種不同的樣式變體，適用於不同的使用場景："
+          code={`// 四種不同的按鈕樣式
+<Button variant="primary">主要按鈕</Button>
+<Button variant="secondary">次要按鈕</Button>
+<Button variant="outline">外框按鈕</Button>
+<Button variant="ghost">幽靈按鈕</Button>`}
+        >
+          <div className="flex gap-4 flex-wrap">
+            <Button variant="primary">主要按鈕</Button>
+            <Button variant="secondary">次要按鈕</Button>
+            <Button variant="outline">外框按鈕</Button>
+            <Button variant="ghost">幽靈按鈕</Button>
+          </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>使用建議：</strong>
@@ -63,18 +72,24 @@ const ButtonDocs = () => {
 
       {/* 大小選項 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📏 大小選項</h2>
-        <p className="component-docs-section-description">
-          支援五種不同的大小選項，適應不同的設計需求：
-        </p>
-
-        <div className="component-docs-showcase center">
-          <Button size="xs">超小</Button>
-          <Button size="sm">小</Button>
-          <Button size="md">中</Button>
-          <Button size="lg">大</Button>
-          <Button size="xl">超大</Button>
-        </div>
+        <CodeExample
+          title="📏 大小選項範例"
+          description="支援五種不同的大小選項，適應不同的設計需求："
+          code={`// 五種不同的按鈕大小
+<Button size="xs">超小</Button>
+<Button size="sm">小</Button>
+<Button size="md">中</Button>
+<Button size="lg">大</Button>
+<Button size="xl">超大</Button>`}
+        >
+          <div className="flex gap-4 items-center flex-wrap">
+            <Button size="xs">超小</Button>
+            <Button size="sm">小</Button>
+            <Button size="md">中</Button>
+            <Button size="lg">大</Button>
+            <Button size="xl">超大</Button>
+          </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>尺寸指南：</strong>
@@ -100,25 +115,38 @@ const ButtonDocs = () => {
 
       {/* 狀態展示 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔄 狀態展示</h2>
-        <p className="component-docs-section-description">按鈕支援多種狀態，提供清晰的用戶反饋：</p>
+        <CodeExample
+          title="🔄 按鈕狀態範例"
+          description="按鈕支援多種狀態，提供清晰的用戶反饋："
+          code={`// 載入狀態
+<Button loading>載入中</Button>
+<Button loading loadingText="正在處理請求">提交表單</Button>
 
-        <div className="component-docs-showcase">
-          <Button loading>載入中</Button>
-          <Button
-            loading
-            loadingText="正在處理請求"
-          >
-            提交表單
-          </Button>
-          <Button disabled>已禁用</Button>
-          <Button
-            variant="outline"
-            disabled
-          >
-            禁用外框
-          </Button>
-        </div>
+// 禁用狀態
+<Button disabled>已禁用</Button>
+<Button variant="outline" disabled>禁用外框</Button>`}
+        >
+          <div className="space-y-4">
+            <div className="flex gap-4 flex-wrap">
+              <Button loading>載入中</Button>
+              <Button
+                loading
+                loadingText="正在處理請求"
+              >
+                提交表單
+              </Button>
+            </div>
+            <div className="flex gap-4 flex-wrap">
+              <Button disabled>已禁用</Button>
+              <Button
+                variant="outline"
+                disabled
+              >
+                禁用外框
+              </Button>
+            </div>
+          </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>狀態說明：</strong>
@@ -138,22 +166,29 @@ const ButtonDocs = () => {
 
       {/* 無障礙性展示 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">♿ 無障礙性功能</h2>
-        <p className="component-docs-section-description">
-          Button 組件遵循 WCAG 2.1 AA 標準，提供完整的無障礙性支援：
-        </p>
-
-        <div className="component-docs-showcase">
-          <Button aria-label="關閉對話框">✕</Button>
-          <Button
-            loading
-            loadingText="正在儲存資料"
-          >
-            儲存
-          </Button>
-          <Button disabled>已禁用</Button>
-          <Button size="xs">最小尺寸</Button>
-        </div>
+        <CodeExample
+          title="♿ 無障礙性功能"
+          description="Button 組件遵循 WCAG 2.1 AA 標準，提供完整的無障礙性支援："
+          code={`// 無障礙性按鈕功能
+<Button aria-label="關閉對話框">✕</Button>
+<Button loading loadingText="正在儲存資料">
+  儲存
+</Button>
+<Button disabled>已禁用</Button>
+<Button size="xs">最小尺寸</Button>`}
+        >
+          <div className="flex gap-4 flex-wrap">
+            <Button aria-label="關閉對話框">✕</Button>
+            <Button
+              loading
+              loadingText="正在儲存資料"
+            >
+              儲存
+            </Button>
+            <Button disabled>已禁用</Button>
+            <Button size="xs">最小尺寸</Button>
+          </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>無障礙性特色：</strong>
@@ -179,27 +214,35 @@ const ButtonDocs = () => {
 
       {/* 載入狀態展示 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔄 載入狀態</h2>
-        <p className="component-docs-section-description">
-          載入狀態提供清晰的用戶反饋，支援自訂螢幕閱讀器文字：
-        </p>
-
-        <div className="component-docs-showcase">
-          <Button loading>預設載入文字</Button>
-          <Button
-            loading
-            loadingText="正在處理請求"
-          >
-            提交表單
-          </Button>
-          <Button
-            loading
-            loadingText="正在儲存資料"
-            variant="secondary"
-          >
-            儲存
-          </Button>
-        </div>
+        <CodeExample
+          title="🔄 載入狀態範例"
+          description="不同的載入狀態配置，提供清晰的用戶反饋："
+          code={`// 不同的載入狀態配置
+<Button loading>預設載入文字</Button>
+<Button loading loadingText="正在處理請求">
+  提交表單
+</Button>
+<Button loading loadingText="正在儲存資料" variant="secondary">
+  儲存
+</Button>`}
+        >
+          <div className="flex gap-4 flex-wrap">
+            <Button loading>預設載入文字</Button>
+            <Button
+              loading
+              loadingText="正在處理請求"
+            >
+              提交表單
+            </Button>
+            <Button
+              loading
+              loadingText="正在儲存資料"
+              variant="secondary"
+            >
+              儲存
+            </Button>
+          </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>載入狀態特色：</strong>
@@ -222,29 +265,35 @@ const ButtonDocs = () => {
 
       {/* 尺寸與觸控目標 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📏 尺寸與觸控目標</h2>
-        <p className="component-docs-section-description">
-          所有尺寸都符合 WCAG 2.1 AA 最小觸控目標要求：
-        </p>
-
-        <div className="component-docs-showcase center">
-          <div style={{ textAlign: 'center' }}>
-            <Button size="xs">32px 高度</Button>
-            <div style={{ fontSize: '0.75rem', color: '#666', marginTop: '0.25rem' }}>
-              符合最小觸控目標
+        <CodeExample
+          title="📏 尺寸與觸控目標範例"
+          description="所有尺寸都符合 WCAG 2.1 AA 最小觸控目標要求："
+          code={`// 不同尺寸的觸控目標展示
+<Button size="xs">32px 高度</Button>
+<Button size="sm">36px 高度</Button>
+<Button size="md">40px 高度</Button>`}
+        >
+          <div className="flex gap-6 justify-center">
+            <div style={{ textAlign: 'center' }}>
+              <Button size="xs">32px 高度</Button>
+              <div style={{ fontSize: '0.75rem', color: '#666', marginTop: '0.25rem' }}>
+                符合最小觸控目標
+              </div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <Button size="sm">36px 高度</Button>
+              <div style={{ fontSize: '0.75rem', color: '#666', marginTop: '0.25rem' }}>
+                改善的觸控體驗
+              </div>
+            </div>
+            <div style={{ textAlign: 'center' }}>
+              <Button size="md">40px 高度</Button>
+              <div style={{ fontSize: '0.75rem', color: '#666', marginTop: '0.25rem' }}>
+                標準尺寸
+              </div>
             </div>
           </div>
-          <div style={{ textAlign: 'center' }}>
-            <Button size="sm">36px 高度</Button>
-            <div style={{ fontSize: '0.75rem', color: '#666', marginTop: '0.25rem' }}>
-              改善的觸控體驗
-            </div>
-          </div>
-          <div style={{ textAlign: 'center' }}>
-            <Button size="md">40px 高度</Button>
-            <div style={{ fontSize: '0.75rem', color: '#666', marginTop: '0.25rem' }}>標準尺寸</div>
-          </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>觸控目標標準：</strong>

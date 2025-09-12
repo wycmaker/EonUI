@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { Story, Controls, Primary } from '@storybook/addon-docs/blocks';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { CodeExample } from '../shared/CodeExample';
+
 import { Textarea } from './Textarea';
 import '../../styles/component-docs.css';
 
@@ -82,40 +84,62 @@ const TextareaDocs = () => {
 
       {/* 互動式展示 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔄 實際使用範例</h2>
-        <p className="component-docs-section-description">
-          以下是實際的文字區域範例，展示各種功能組合：
-        </p>
+        <CodeExample
+          title="🔄 實際使用範例"
+          description="以下是實際的文字區域範例，展示各種功能組合："
+          code={`// 互動式 Textarea 範例
+const [basicValue, setBasicValue] = useState('');
+const [autoSize, setAutoSize] = useState(true);
+const [showCount, setShowCount] = useState(true);
 
-        <div className="component-docs-showcase">
+return (
+  <div className="space-y-6 w-full max-w-md">
+    <div>
+      <h4 className="font-medium mb-2 text-gray-700">基本文字區域</h4>
+      <Textarea
+        value={basicValue}
+        onChange={(e) => setBasicValue(e.target.value)}
+        placeholder="請輸入您的文字..."
+        autoSize={autoSize}
+        showCount={showCount}
+        maxLength={200}
+      />
+    </div>
+  </div>
+);`}
+        >
           <InteractiveExample />
-        </div>
+        </CodeExample>
       </div>
 
       {/* 樣式變體 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎨 樣式變體</h2>
-        <p className="component-docs-section-description">
-          Textarea 組件提供了三種不同的樣式變體：
-        </p>
-
-        <div className="component-docs-showcase">
-          <Textarea
-            variant="default"
-            placeholder="預設樣式"
-            minRows={3}
-          />
-          <Textarea
-            variant="filled"
-            placeholder="填充樣式"
-            minRows={3}
-          />
-          <Textarea
-            variant="outline"
-            placeholder="外框樣式"
-            minRows={3}
-          />
-        </div>
+        <CodeExample
+          title="🔄 樣式變體範例"
+          description="支援三種不同的文字區域樣式："
+          code={`// 三種不同的文字區域樣式
+<Textarea variant="default" placeholder="預設樣式" minRows={3} />
+<Textarea variant="filled" placeholder="填充樣式" minRows={3} />
+<Textarea variant="outline" placeholder="外框樣式" minRows={3} />`}
+        >
+          <div className="space-y-4">
+            <Textarea
+              variant="default"
+              placeholder="預設樣式"
+              minRows={3}
+            />
+            <Textarea
+              variant="filled"
+              placeholder="填充樣式"
+              minRows={3}
+            />
+            <Textarea
+              variant="outline"
+              placeholder="外框樣式"
+              minRows={3}
+            />
+          </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>使用建議：</strong>
@@ -135,28 +159,32 @@ const TextareaDocs = () => {
 
       {/* 大小選項 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📏 大小選項</h2>
-        <p className="component-docs-section-description">
-          支援三種不同的大小選項，影響內邊距和字體大小：
-        </p>
-
-        <div className="component-docs-showcase">
-          <Textarea
-            size="sm"
-            placeholder="小尺寸 - 緊湊設計"
-            minRows={3}
-          />
-          <Textarea
-            size="md"
-            placeholder="中等尺寸 - 標準大小"
-            minRows={3}
-          />
-          <Textarea
-            size="lg"
-            placeholder="大尺寸 - 舒適閱讀"
-            minRows={3}
-          />
-        </div>
+        <CodeExample
+          title="🔄 大小選項範例"
+          description="支援三種不同的文字區域大小："
+          code={`// 三種不同的文字區域大小
+<Textarea size="sm" placeholder="小尺寸 - 緊湊設計" minRows={3} />
+<Textarea size="md" placeholder="中等尺寸 - 標準大小" minRows={3} />
+<Textarea size="lg" placeholder="大尺寸 - 舒適閱讀" minRows={3} />`}
+        >
+          <div className="space-y-4">
+            <Textarea
+              size="sm"
+              placeholder="小尺寸 - 緊湊設計"
+              minRows={3}
+            />
+            <Textarea
+              size="md"
+              placeholder="中等尺寸 - 標準大小"
+              minRows={3}
+            />
+            <Textarea
+              size="lg"
+              placeholder="大尺寸 - 舒適閱讀"
+              minRows={3}
+            />
+          </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>尺寸指南：</strong>
@@ -176,33 +204,38 @@ const TextareaDocs = () => {
 
       {/* 狀態展示 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🚦 狀態展示</h2>
-        <p className="component-docs-section-description">
-          文字區域支援多種狀態，提供清晰的視覺反饋：
-        </p>
-
-        <div className="component-docs-showcase">
-          <Textarea
-            status="default"
-            placeholder="預設狀態"
-            minRows={3}
-          />
-          <Textarea
-            status="error"
-            placeholder="錯誤狀態"
-            minRows={3}
-          />
-          <Textarea
-            status="success"
-            placeholder="成功狀態"
-            minRows={3}
-          />
-          <Textarea
-            status="warning"
-            placeholder="警告狀態"
-            minRows={3}
-          />
-        </div>
+        <CodeExample
+          title="🔄 狀態展示範例"
+          description="支援多種不同的文字區域狀態："
+          code={`// 不同狀態的文字區域
+<Textarea status="default" placeholder="預設狀態" minRows={3} />
+<Textarea status="error" placeholder="錯誤狀態" minRows={3} />
+<Textarea status="success" placeholder="成功狀態" minRows={3} />
+<Textarea status="warning" placeholder="警告狀態" minRows={3} />`}
+        >
+          <div className="space-y-4">
+            <Textarea
+              status="default"
+              placeholder="預設狀態"
+              minRows={3}
+            />
+            <Textarea
+              status="error"
+              placeholder="錯誤狀態"
+              minRows={3}
+            />
+            <Textarea
+              status="success"
+              placeholder="成功狀態"
+              minRows={3}
+            />
+            <Textarea
+              status="warning"
+              placeholder="警告狀態"
+              minRows={3}
+            />
+          </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>狀態說明：</strong>
@@ -225,31 +258,38 @@ const TextareaDocs = () => {
 
       {/* 調整大小選項 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔧 調整大小選項</h2>
-        <p className="component-docs-section-description">支援不同的調整大小模式：</p>
-
-        <div className="component-docs-showcase">
-          <Textarea
-            resize="none"
-            placeholder="不可調整大小"
-            minRows={3}
-          />
-          <Textarea
-            resize="vertical"
-            placeholder="僅垂直調整（預設）"
-            minRows={3}
-          />
-          <Textarea
-            resize="horizontal"
-            placeholder="僅水平調整"
-            minRows={3}
-          />
-          <Textarea
-            resize="both"
-            placeholder="水平垂直都可調整"
-            minRows={3}
-          />
-        </div>
+        <CodeExample
+          title="🔄 調整大小選項範例"
+          description="支援不同的調整大小模式："
+          code={`// 不同調整大小模式
+<Textarea resize="none" placeholder="不可調整大小" minRows={3} />
+<Textarea resize="vertical" placeholder="僅垂直調整（預設）" minRows={3} />
+<Textarea resize="horizontal" placeholder="僅水平調整" minRows={3} />
+<Textarea resize="both" placeholder="水平垂直都可調整" minRows={3} />`}
+        >
+          <div className="space-y-4">
+            <Textarea
+              resize="none"
+              placeholder="不可調整大小"
+              minRows={3}
+            />
+            <Textarea
+              resize="vertical"
+              placeholder="僅垂直調整（預設）"
+              minRows={3}
+            />
+            <Textarea
+              resize="horizontal"
+              placeholder="僅水平調整"
+              minRows={3}
+            />
+            <Textarea
+              resize="both"
+              placeholder="水平垂直都可調整"
+              minRows={3}
+            />
+          </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>調整模式說明：</strong>
@@ -272,30 +312,37 @@ const TextareaDocs = () => {
 
       {/* 行數控制 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📐 行數控制</h2>
-        <p className="component-docs-section-description">支援最小和最大行數設定：</p>
-
-        <div className="component-docs-showcase">
-          <Textarea
-            minRows={2}
-            placeholder="最小 2 行"
-          />
-          <Textarea
-            minRows={4}
-            placeholder="最小 4 行"
-          />
-          <Textarea
-            minRows={3}
-            maxRows={6}
-            placeholder="最小 3 行，最大 6 行"
-          />
-          <Textarea
-            minRows={5}
-            maxRows={5}
-            resize="none"
-            placeholder="固定 5 行"
-          />
-        </div>
+        <CodeExample
+          title="🔄 行數設定範例"
+          description="支援不同的行數設定："
+          code={`// 不同行數設定
+<Textarea minRows={2} placeholder="最小 2 行" />
+<Textarea minRows={4} placeholder="最小 4 行" />
+<Textarea minRows={3} maxRows={6} placeholder="最小 3 行，最大 6 行" />
+<Textarea minRows={5} maxRows={5} resize="none" placeholder="固定 5 行" />`}
+        >
+          <div className="space-y-4">
+            <Textarea
+              minRows={2}
+              placeholder="最小 2 行"
+            />
+            <Textarea
+              minRows={4}
+              placeholder="最小 4 行"
+            />
+            <Textarea
+              minRows={3}
+              maxRows={6}
+              placeholder="最小 3 行，最大 6 行"
+            />
+            <Textarea
+              minRows={5}
+              maxRows={5}
+              resize="none"
+              placeholder="固定 5 行"
+            />
+          </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>行數控制說明：</strong>
@@ -313,29 +360,54 @@ const TextareaDocs = () => {
 
       {/* 字數限制與統計 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔢 字數限制與統計</h2>
-        <p className="component-docs-section-description">支援字數統計和最大字數限制功能：</p>
+        <CodeExample
+          title="🔄 字數計數範例"
+          description="支援字數統計和最大字數限制功能："
+          code={`// 僅顯示字數
+<Textarea
+  placeholder="無限制，僅顯示字數"
+  showCount
+  minRows={3}
+  defaultValue="這個文字區域會顯示字數統計"
+/>
 
-        <div className="component-docs-showcase">
-          <Textarea
-            placeholder="無限制，僅顯示字數"
-            showCount
-            minRows={3}
-            defaultValue="這個文字區域會顯示字數統計"
-          />
-          <Textarea
-            placeholder="最多 50 個字"
-            maxLength={50}
-            minRows={3}
-            defaultValue="這個文字區域最多只能輸入 50 個字，超出時會被阻擋"
-          />
-          <Textarea
-            placeholder="最多 20 個字（測試警告狀態）"
-            maxLength={20}
-            minRows={3}
-            defaultValue="這裡已經接近字數限制了"
-          />
-        </div>
+// 字數限制
+<Textarea
+  placeholder="最多 50 個字"
+  maxLength={50}
+  minRows={3}
+  defaultValue="這個文字區域最多只能輸入 50 個字，超出時會被阻擋"
+/>
+
+// 接近限制時警告
+<Textarea
+  placeholder="最多 20 個字（測試警告狀態）"
+  maxLength={20}
+  minRows={3}
+  defaultValue="這裡已經接近字數限制了"
+/>`}
+        >
+          <div className="space-y-4">
+            <Textarea
+              placeholder="無限制，僅顯示字數"
+              showCount
+              minRows={3}
+              defaultValue="這個文字區域會顯示字數統計"
+            />
+            <Textarea
+              placeholder="最多 50 個字"
+              maxLength={50}
+              minRows={3}
+              defaultValue="這個文字區域最多只能輸入 50 個字，超出時會被阻擋"
+            />
+            <Textarea
+              placeholder="最多 20 個字（測試警告狀態）"
+              maxLength={20}
+              minRows={3}
+              defaultValue="這裡已經接近字數限制了"
+            />
+          </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>字數功能說明：</strong>
@@ -355,10 +427,18 @@ const TextareaDocs = () => {
 
       {/* 清除功能 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🗑️ 清除功能</h2>
-        <p className="component-docs-section-description">支援清除按鈕功能：</p>
-
-        <div className="component-docs-showcase">
+        <CodeExample
+          title="🔄 清除功能範例"
+          description="支援清除按鈕功能："
+          code={`// 可清除的文字區域
+<Textarea
+  clearable
+  placeholder="可清除的文字區域"
+  defaultValue="這裡有一些預設文字，可以點擊右上角的清除按鈕來清空。"
+  minRows={4}
+  maxLength={100}
+/>`}
+        >
           <Textarea
             clearable
             placeholder="可清除的文字區域"
@@ -366,7 +446,7 @@ const TextareaDocs = () => {
             minRows={4}
             maxLength={100}
           />
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>清除功能說明：</strong>
@@ -383,54 +463,87 @@ const TextareaDocs = () => {
 
       {/* 禁用狀態 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🚫 禁用狀態</h2>
-        <p className="component-docs-section-description">展示禁用狀態下的各種樣式：</p>
+        <CodeExample
+          title="🔄 禁用狀態範例"
+          description="展示禁用狀態下的各種樣式："
+          code={`// 禁用的文字區域
+<Textarea disabled placeholder="禁用的文字區域" minRows={3} />
 
-        <div className="component-docs-showcase">
-          <Textarea
-            disabled
-            placeholder="禁用的文字區域"
-            minRows={3}
-          />
-          <Textarea
-            disabled
-            variant="filled"
-            placeholder="禁用的填充樣式"
-            minRows={3}
-          />
-          <Textarea
-            disabled
-            defaultValue="禁用狀態下的預設內容"
-            minRows={3}
-          />
-        </div>
+// 禁用的填充樣式
+<Textarea disabled variant="filled" placeholder="禁用的填充樣式" minRows={3} />
+
+// 禁用狀態下的預設內容
+<Textarea disabled defaultValue="禁用狀態下的預設內容" minRows={3} />`}
+        >
+          <div className="space-y-4">
+            <Textarea
+              disabled
+              placeholder="禁用的文字區域"
+              minRows={3}
+            />
+            <Textarea
+              disabled
+              variant="filled"
+              placeholder="禁用的填充樣式"
+              minRows={3}
+            />
+            <Textarea
+              disabled
+              defaultValue="禁用狀態下的預設內容"
+              minRows={3}
+            />
+          </div>
+        </CodeExample>
       </div>
 
       {/* 組合使用 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔗 組合使用</h2>
-        <p className="component-docs-section-description">展示各種屬性的組合使用：</p>
+        <CodeExample
+          title="🔄 組合使用範例"
+          description="展示各種屬性的組合使用："
+          code={`// 大尺寸外框成功狀態
+<Textarea
+  size="lg"
+  variant="outline"
+  status="success"
+  clearable
+  placeholder="大尺寸外框成功狀態"
+  defaultValue="組合範例文字"
+  minRows={4}
+  maxRows={8}
+/>
 
-        <div className="component-docs-showcase">
-          <Textarea
-            size="lg"
-            variant="outline"
-            status="success"
-            clearable
-            placeholder="大尺寸外框成功狀態"
-            defaultValue="組合範例文字"
-            minRows={4}
-            maxRows={8}
-          />
-          <Textarea
-            size="sm"
-            variant="filled"
-            status="warning"
-            placeholder="小尺寸填充警告狀態"
-            minRows={2}
-            resize="none"
-          />
-        </div>
+// 小尺寸填充警告狀態
+<Textarea
+  size="sm"
+  variant="filled"
+  status="warning"
+  placeholder="小尺寸填充警告狀態"
+  minRows={2}
+  resize="none"
+/>`}
+        >
+          <div className="space-y-4">
+            <Textarea
+              size="lg"
+              variant="outline"
+              status="success"
+              clearable
+              placeholder="大尺寸外框成功狀態"
+              defaultValue="組合範例文字"
+              minRows={4}
+              maxRows={8}
+            />
+            <Textarea
+              size="sm"
+              variant="filled"
+              status="warning"
+              placeholder="小尺寸填充警告狀態"
+              minRows={2}
+              resize="none"
+            />
+          </div>
+        </CodeExample>
       </div>
 
       {/* 使用方式 */}

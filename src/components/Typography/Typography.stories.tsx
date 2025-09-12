@@ -1,6 +1,8 @@
 import { Story, Controls, Primary } from '@storybook/addon-docs/blocks';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { CodeExample } from '../shared/CodeExample';
+
 import { Typography } from './Typography';
 import '../../styles/component-docs.css';
 
@@ -179,12 +181,22 @@ const TypographyDocs = () => {
 
       {/* 字體層級展示 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📏 字體層級</h2>
-        <p className="component-docs-section-description">完整的字體大小層級，從 H1 到輔助文字：</p>
-
-        <div className="component-docs-showcase">
+        <CodeExample
+          title="🔄 字體大小層級範例"
+          description="完整的字體大小層級，從 H1 到輔助文字："
+          code={`// 完整的字體大小層級
+<Typography as="h1">H1 主標題</Typography>
+<Typography as="h2">H2 次標題</Typography>
+<Typography as="h3">H3 三級標題</Typography>
+<Typography as="h4">H4 四級標題</Typography>
+<Typography as="h5">H5 五級標題</Typography>
+<Typography as="h6">H6 六級標題</Typography>
+<Typography>標準內文</Typography>
+<Typography size="sm">小型文字</Typography>
+<Typography size="xs">輔助文字</Typography>`}
+        >
           <TypographyShowcase />
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>使用建議：</strong>
@@ -204,14 +216,20 @@ const TypographyDocs = () => {
 
       {/* 顏色選項 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎨 顏色選項</h2>
-        <p className="component-docs-section-description">
-          支援多種語義化顏色，配合不同的使用場景：
-        </p>
-
-        <div className="component-docs-showcase">
+        <CodeExample
+          title="🔄 顏色選項範例"
+          description="不同語義化顏色的Typography："
+          code={`// 不同語義化顏色的Typography
+<Typography color="default">預設文字顏色</Typography>
+<Typography color="primary">主要品牌色</Typography>
+<Typography color="secondary">次要品牌色</Typography>
+<Typography color="success">成功狀態色</Typography>
+<Typography color="warning">警告狀態色</Typography>
+<Typography color="error">錯誤狀態色</Typography>
+<Typography color="muted">次要文字色</Typography>`}
+        >
           <ColorShowcase />
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>顏色使用指南：</strong>
@@ -234,89 +252,125 @@ const TypographyDocs = () => {
 
       {/* 字體粗細 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">💪 字體粗細</h2>
-        <p className="component-docs-section-description">
-          提供四種字體粗細選項，建立清晰的視覺層次：
-        </p>
-
-        <div className="component-docs-showcase">
+        <CodeExample
+          title="🔄 字體粗細範例"
+          description="不同粗細程度的文字："
+          code={`// 不同粗細程度的文字
+<Typography weight="normal">Normal 正常粗細</Typography>
+<Typography weight="medium">Medium 中等粗細</Typography>
+<Typography weight="semibold">Semibold 半粗體</Typography>
+<Typography weight="bold">Bold 粗體</Typography>`}
+        >
           <WeightShowcase />
-        </div>
+        </CodeExample>
       </div>
 
       {/* 文字裝飾 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">✨ 文字裝飾</h2>
-        <p className="component-docs-section-description">支援斜體、底線、刪除線等文字裝飾效果：</p>
-
-        <div className="component-docs-showcase">
+        <CodeExample
+          title="🔄 文字裝飾範例"
+          description="不同的文字裝飾效果："
+          code={`// 不同的文字裝飾效果
+<Typography italic>斜體文字 (italic)</Typography>
+<Typography underline>底線文字 (underline)</Typography>
+<Typography lineThrough>刪除線文字 (line-through)</Typography>
+<Typography italic underline>斜體加底線</Typography>
+<Typography weight="bold" underline>粗體加底線</Typography>`}
+        >
           <DecorationShowcase />
-        </div>
-      </div>
+        </CodeExample>
 
-      {/* 文字處理 */}
-      <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📝 文字處理</h2>
-        <p className="component-docs-section-description">
-          提供多種文字處理選項，適應不同的佈局需求：
-        </p>
+        {/* 文字處理 */}
+        <div className="component-docs-section">
+          <CodeExample
+            title="🔄 文字處理範例"
+            description="不同的文字處理方式："
+            code={`// 不同的文字處理方式
+<Typography truncate>
+  這是一段很長的文字，會在超出容器寬度時被截斷並顯示省略號...
+</Typography>
 
-        <div className="component-docs-showcase">
-          <TextHandlingShowcase />
+<Typography noWrap>
+  這段文字不會換行，會保持在同一行顯示
+</Typography>
+
+<Typography>
+  這是正常的文字，會根據容器寬度自動換行，
+  當文字超出容器寬度時會自動換到下一行繼續顯示。
+</Typography>`}
+          >
+            <TextHandlingShowcase />
+          </CodeExample>
         </div>
       </div>
 
       {/* 對齊方式 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📐 對齊方式</h2>
-        <p className="component-docs-section-description">支援四種文字對齊方式：</p>
+        <CodeExample
+          title="🔄 文字對齊範例"
+          description="不同的文字對齊方式："
+          code={`// 不同的文字對齊方式
+// 靠左對齊（預設）
+<Typography align="left">靠左對齊的文字內容</Typography>
 
-        <div className="component-docs-showcase space-y-6">
-          <div>
-            <h4 className="font-medium mb-2 text-gray-600">靠左對齊 (left)</h4>
-            <div className="border p-6 rounded bg-gray-50">
-              <Typography align="left">
-                這是靠左對齊的文字範例。在大多數語言中，這是最常見的對齊方式。
-                文字會從容器的左邊緣開始排列，形成左邊整齊、右邊不規則的效果。
-                這種對齊方式閱讀起來最自然，適合大部分的內容展示。
-              </Typography>
+// 置中對齊
+<Typography align="center">置中對齊的文字內容</Typography>
+
+// 靠右對齊
+<Typography align="right">靠右對齊的文字內容</Typography>
+
+// 兩端對齊
+<Typography align="justify">
+  兩端對齊的文字內容，會自動調整間距使左右兩端都對齊容器邊緣
+</Typography>`}
+        >
+          <div className="space-y-6">
+            <div>
+              <h4 className="font-medium mb-2 text-gray-600">靠左對齊 (left)</h4>
+              <div className="border p-6 rounded bg-gray-50">
+                <Typography align="left">
+                  這是靠左對齊的文字範例。在大多數語言中，這是最常見的對齊方式。
+                  文字會從容器的左邊緣開始排列，形成左邊整齊、右邊不規則的效果。
+                  這種對齊方式閱讀起來最自然，適合大部分的內容展示。
+                </Typography>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="font-medium mb-2 text-gray-600">置中對齊 (center)</h4>
+              <div className="border p-6 rounded bg-gray-50">
+                <Typography align="center">
+                  這是置中對齊的文字範例。文字會在容器的中央位置對齊，
+                  兩邊保持相等的邊距。這種對齊方式常用於標題、引用文字，
+                  或需要強調的重要內容，能夠吸引讀者的注意力。
+                </Typography>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="font-medium mb-2 text-gray-600">靠右對齊 (right)</h4>
+              <div className="border p-6 rounded bg-gray-50">
+                <Typography align="right">
+                  這是靠右對齊的文字範例。文字會從容器的右邊緣開始排列，
+                  形成右邊整齊、左邊不規則的效果。在某些設計中，
+                  這種對齊方式可以創造特殊的視覺效果，或用於特定的版面設計需求。
+                </Typography>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="font-medium mb-2 text-gray-600">兩端對齊 (justify)</h4>
+              <div className="border p-6 rounded bg-gray-50">
+                <Typography align="justify">
+                  這是兩端對齊的文字範例。文字會在容器中均勻分布，使得每一行的左右兩端都對齊容器的邊緣。
+                  這種對齊方式會自動調整單字或字元之間的間距，創造出整齊劃一的視覺效果。
+                  兩端對齊特別適用於報紙、雜誌或書籍等正式出版物，能夠提供專業、整潔的排版外觀。
+                  不過需要注意的是，在較短的行或較寬的容器中，可能會產生不自然的間距。
+                </Typography>
+              </div>
             </div>
           </div>
-
-          <div>
-            <h4 className="font-medium mb-2 text-gray-600">置中對齊 (center)</h4>
-            <div className="border p-6 rounded bg-gray-50">
-              <Typography align="center">
-                這是置中對齊的文字範例。文字會在容器的中央位置對齊，
-                兩邊保持相等的邊距。這種對齊方式常用於標題、引用文字，
-                或需要強調的重要內容，能夠吸引讀者的注意力。
-              </Typography>
-            </div>
-          </div>
-
-          <div>
-            <h4 className="font-medium mb-2 text-gray-600">靠右對齊 (right)</h4>
-            <div className="border p-6 rounded bg-gray-50">
-              <Typography align="right">
-                這是靠右對齊的文字範例。文字會從容器的右邊緣開始排列，
-                形成右邊整齊、左邊不規則的效果。在某些設計中，
-                這種對齊方式可以創造特殊的視覺效果，或用於特定的版面設計需求。
-              </Typography>
-            </div>
-          </div>
-
-          <div>
-            <h4 className="font-medium mb-2 text-gray-600">兩端對齊 (justify)</h4>
-            <div className="border p-6 rounded bg-gray-50">
-              <Typography align="justify">
-                這是兩端對齊的文字範例。文字會在容器中均勻分布，使得每一行的左右兩端都對齊容器的邊緣。
-                這種對齊方式會自動調整單字或字元之間的間距，創造出整齊劃一的視覺效果。
-                兩端對齊特別適用於報紙、雜誌或書籍等正式出版物，能夠提供專業、整潔的排版外觀。
-                不過需要注意的是，在較短的行或較寬的容器中，可能會產生不自然的間距。
-              </Typography>
-            </div>
-          </div>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 使用方式 */}

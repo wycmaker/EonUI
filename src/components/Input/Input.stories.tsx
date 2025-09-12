@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Story, Controls, Primary } from '@storybook/addon-docs/blocks';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { CodeExample } from '../shared/CodeExample';
+
 import { Input } from './Input';
 import '../../styles/component-docs.css';
 
@@ -126,35 +128,79 @@ const InputDocs = () => {
 
       {/* 互動式展示 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔄 實際使用範例</h2>
-        <p className="component-docs-section-description">
-          以下是實際的輸入框範例，展示各種功能組合：
-        </p>
+        <CodeExample
+          title="🔄 實際使用範例"
+          description="以下是實際的輸入框範例，展示各種功能組合："
+          code={`// 互動式輸入框範例
+const [basicValue, setBasicValue] = useState('');
+const [emailValue, setEmailValue] = useState('');
+const [passwordValue, setPasswordValue] = useState('');
 
-        <div className="component-docs-showcase">
+return (
+  <div className="space-y-6 w-full max-w-md">
+    <div>
+      <h4 className="font-medium mb-2 text-gray-700">基本輸入框</h4>
+      <Input
+        value={basicValue}
+        onChange={(e) => setBasicValue(e.target.value)}
+        placeholder="請輸入文字"
+        prefixIcon={<UserIcon />}
+      />
+    </div>
+
+    <div>
+      <h4 className="font-medium mb-2 text-gray-700">電子郵件輸入</h4>
+      <Input
+        type="email"
+        value={emailValue}
+        onChange={(e) => setEmailValue(e.target.value)}
+        placeholder="請輸入電子郵件"
+        prefixIcon={<EmailIcon />}
+        clearable
+      />
+    </div>
+
+    <div>
+      <h4 className="font-medium mb-2 text-gray-700">密碼輸入</h4>
+      <Input
+        type="password"
+        value={passwordValue}
+        onChange={(e) => setPasswordValue(e.target.value)}
+        placeholder="請輸入密碼"
+      />
+    </div>
+  </div>
+);`}
+        >
           <InteractiveExample />
-        </div>
+        </CodeExample>
       </div>
 
       {/* 樣式變體 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎨 樣式變體</h2>
-        <p className="component-docs-section-description">Input 組件提供了三種不同的樣式變體：</p>
-
-        <div className="component-docs-showcase">
-          <Input
-            variant="default"
-            placeholder="預設樣式"
-          />
-          <Input
-            variant="filled"
-            placeholder="填充樣式"
-          />
-          <Input
-            variant="outline"
-            placeholder="外框樣式"
-          />
-        </div>
+        <CodeExample
+          title="🔄 樣式變體範例"
+          description="Input 組件提供了三種不同的樣式變體："
+          code={`// 三種不同的輸入框樣式
+<Input variant="default" placeholder="預設樣式" />
+<Input variant="filled" placeholder="填充樣式" />
+<Input variant="outline" placeholder="外框樣式" />`}
+        >
+          <div className="space-y-4">
+            <Input
+              variant="default"
+              placeholder="預設樣式"
+            />
+            <Input
+              variant="filled"
+              placeholder="填充樣式"
+            />
+            <Input
+              variant="outline"
+              placeholder="外框樣式"
+            />
+          </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>使用建議：</strong>
@@ -174,25 +220,29 @@ const InputDocs = () => {
 
       {/* 大小選項 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📏 大小選項</h2>
-        <p className="component-docs-section-description">
-          支援三種不同的大小選項，所有尺寸都符合 WCAG 最小觸控目標要求：
-        </p>
-
-        <div className="component-docs-showcase">
-          <Input
-            size="sm"
-            placeholder="小尺寸 (32px)"
-          />
-          <Input
-            size="md"
-            placeholder="中等尺寸 (40px)"
-          />
-          <Input
-            size="lg"
-            placeholder="大尺寸 (48px)"
-          />
-        </div>
+        <CodeExample
+          title="🔄 大小選項範例"
+          description="支援三種不同的大小選項，所有尺寸都符合 WCAG 最小觸控目標要求："
+          code={`// 三種不同的輸入框大小
+<Input size="sm" placeholder="小尺寸 (32px)" />
+<Input size="md" placeholder="中等尺寸 (40px)" />
+<Input size="lg" placeholder="大尺寸 (48px)" />`}
+        >
+          <div className="space-y-4">
+            <Input
+              size="sm"
+              placeholder="小尺寸 (32px)"
+            />
+            <Input
+              size="md"
+              placeholder="中等尺寸 (40px)"
+            />
+            <Input
+              size="lg"
+              placeholder="大尺寸 (48px)"
+            />
+          </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>尺寸指南：</strong>
@@ -212,29 +262,34 @@ const InputDocs = () => {
 
       {/* 狀態展示 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🚦 狀態展示</h2>
-        <p className="component-docs-section-description">
-          輸入框支援多種狀態，提供清晰的視覺反饋：
-        </p>
-
-        <div className="component-docs-showcase">
-          <Input
-            status="default"
-            placeholder="預設狀態"
-          />
-          <Input
-            status="error"
-            placeholder="錯誤狀態"
-          />
-          <Input
-            status="success"
-            placeholder="成功狀態"
-          />
-          <Input
-            status="warning"
-            placeholder="警告狀態"
-          />
-        </div>
+        <CodeExample
+          title="🔄 狀態展示範例"
+          description="輸入框支援多種狀態，提供清晰的視覺反饋："
+          code={`// 不同的輸入框狀態
+<Input status="default" placeholder="預設狀態" />
+<Input status="error" placeholder="錯誤狀態" />
+<Input status="success" placeholder="成功狀態" />
+<Input status="warning" placeholder="警告狀態" />`}
+        >
+          <div className="space-y-4">
+            <Input
+              status="default"
+              placeholder="預設狀態"
+            />
+            <Input
+              status="error"
+              placeholder="錯誤狀態"
+            />
+            <Input
+              status="success"
+              placeholder="成功狀態"
+            />
+            <Input
+              status="warning"
+              placeholder="警告狀態"
+            />
+          </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>狀態說明：</strong>
@@ -257,29 +312,36 @@ const InputDocs = () => {
 
       {/* 圖示與功能 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎯 圖示與功能</h2>
-        <p className="component-docs-section-description">支援前綴圖示、後綴圖示和清除功能：</p>
-
-        <div className="component-docs-showcase">
-          <Input
-            prefixIcon={<SearchIcon />}
-            placeholder="前綴圖示"
-          />
-          <Input
-            suffixIcon={<EmailIcon />}
-            placeholder="後綴圖示"
-          />
-          <Input
-            prefixIcon={<SearchIcon />}
-            clearable
-            placeholder="可清除的輸入框"
-          />
-          <Input
-            prefixIcon={<UserIcon />}
-            suffixIcon={<EmailIcon />}
-            placeholder="前後綴圖示"
-          />
-        </div>
+        <CodeExample
+          title="🔄 圖示與功能範例"
+          description="支援前綴圖示、後綴圖示和清除功能："
+          code={`// 輸入框的圖示和功能配置
+<Input prefixIcon={<SearchIcon />} placeholder="前綴圖示" />
+<Input suffixIcon={<EmailIcon />} placeholder="後綴圖示" />
+<Input prefixIcon={<SearchIcon />} clearable placeholder="可清除的輸入框" />
+<Input prefixIcon={<UserIcon />} suffixIcon={<EmailIcon />} placeholder="前後綴圖示" />`}
+        >
+          <div className="space-y-4">
+            <Input
+              prefixIcon={<SearchIcon />}
+              placeholder="前綴圖示"
+            />
+            <Input
+              suffixIcon={<EmailIcon />}
+              placeholder="後綴圖示"
+            />
+            <Input
+              prefixIcon={<SearchIcon />}
+              clearable
+              placeholder="可清除的輸入框"
+            />
+            <Input
+              prefixIcon={<UserIcon />}
+              suffixIcon={<EmailIcon />}
+              placeholder="前後綴圖示"
+            />
+          </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>功能說明：</strong>
@@ -302,31 +364,54 @@ const InputDocs = () => {
 
       {/* 密碼功能 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔒 密碼功能</h2>
-        <p className="component-docs-section-description">
-          當輸入框類型為 password 時，會自動顯示密碼切換按鈕：
-        </p>
+        <CodeExample
+          title="🔄 密碼功能範例"
+          description="當輸入框類型為 password 時，會自動顯示密碼切換按鈕："
+          code={`// 基本密碼輸入框
+<Input
+  type="password"
+  placeholder="預設密碼輸入"
+  defaultValue="mySecretPassword"
+/>
 
-        <div className="component-docs-showcase">
-          <Input
-            type="password"
-            placeholder="預設密碼輸入"
-            defaultValue="mySecretPassword"
-          />
-          <Input
-            type="password"
-            size="lg"
-            variant="filled"
-            placeholder="大尺寸填充樣式密碼"
-            defaultValue="anotherPassword"
-          />
-          <Input
-            type="password"
-            status="error"
-            placeholder="錯誤狀態密碼"
-            defaultValue="wrongPassword"
-          />
-        </div>
+// 大尺寸填充樣式密碼
+<Input
+  type="password"
+  size="lg"
+  variant="filled"
+  placeholder="大尺寸填充樣式密碼"
+  defaultValue="anotherPassword"
+/>
+
+// 錯誤狀態密碼
+<Input
+  type="password"
+  status="error"
+  placeholder="錯誤狀態密碼"
+  defaultValue="wrongPassword"
+/>`}
+        >
+          <div className="space-y-4">
+            <Input
+              type="password"
+              placeholder="預設密碼輸入"
+              defaultValue="mySecretPassword"
+            />
+            <Input
+              type="password"
+              size="lg"
+              variant="filled"
+              placeholder="大尺寸填充樣式密碼"
+              defaultValue="anotherPassword"
+            />
+            <Input
+              type="password"
+              status="error"
+              placeholder="錯誤狀態密碼"
+              defaultValue="wrongPassword"
+            />
+          </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>密碼功能說明：</strong>
@@ -352,91 +437,127 @@ const InputDocs = () => {
 
       {/* 不同輸入類型 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">⌨️ 不同輸入類型</h2>
-        <p className="component-docs-section-description">支援各種 HTML 輸入類型：</p>
-
-        <div className="component-docs-showcase">
-          <Input
-            type="text"
-            placeholder="文字輸入"
-            prefixIcon={<UserIcon />}
-          />
-          <Input
-            type="email"
-            placeholder="電子郵件"
-            prefixIcon={<EmailIcon />}
-          />
-          <Input
-            type="password"
-            placeholder="密碼（自動顯示切換按鈕）"
-          />
-          <Input
-            type="search"
-            placeholder="搜尋"
-            prefixIcon={<SearchIcon />}
-            clearable
-          />
-          <Input
-            type="tel"
-            placeholder="電話號碼"
-          />
-          <Input
-            type="url"
-            placeholder="網址"
-          />
-          <Input
-            type="number"
-            placeholder="數字"
-          />
-        </div>
+        <CodeExample
+          title="🔄 不同輸入類型範例"
+          description="支援各種 HTML 輸入類型："
+          code={`// 各種 HTML 輸入類型
+<Input type="text" placeholder="文字輸入" prefixIcon={<UserIcon />} />
+<Input type="email" placeholder="電子郵件" prefixIcon={<EmailIcon />} />
+<Input type="password" placeholder="密碼（自動顯示切換按鈕）" />
+<Input type="search" placeholder="搜尋" prefixIcon={<SearchIcon />} clearable />
+<Input type="tel" placeholder="電話號碼" />
+<Input type="url" placeholder="網址" />
+<Input type="number" placeholder="數字" />`}
+        >
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Input
+              type="text"
+              placeholder="文字輸入"
+              prefixIcon={<UserIcon />}
+            />
+            <Input
+              type="email"
+              placeholder="電子郵件"
+              prefixIcon={<EmailIcon />}
+            />
+            <Input
+              type="password"
+              placeholder="密碼（自動顯示切換按鈕）"
+            />
+            <Input
+              type="search"
+              placeholder="搜尋"
+              prefixIcon={<SearchIcon />}
+              clearable
+            />
+            <Input
+              type="tel"
+              placeholder="電話號碼"
+            />
+            <Input
+              type="url"
+              placeholder="網址"
+            />
+            <Input
+              type="number"
+              placeholder="數字"
+            />
+          </div>
+        </CodeExample>
       </div>
 
       {/* 禁用狀態 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🚫 禁用狀態</h2>
-        <p className="component-docs-section-description">展示禁用狀態下的各種樣式：</p>
-
-        <div className="component-docs-showcase">
-          <Input
-            disabled
-            placeholder="禁用的輸入框"
-          />
-          <Input
-            disabled
-            variant="filled"
-            placeholder="禁用的填充樣式"
-          />
-          <Input
-            disabled
-            prefixIcon={<SearchIcon />}
-            placeholder="禁用帶圖示"
-          />
-        </div>
+        <CodeExample
+          title="🔄 禁用狀態範例"
+          description="展示禁用狀態下的各種樣式："
+          code={`// 禁用狀態下的各種樣式
+<Input disabled placeholder="禁用的輸入框" />
+<Input disabled variant="filled" placeholder="禁用的填充樣式" />
+<Input disabled prefixIcon={<SearchIcon />} placeholder="禁用帶圖示" />`}
+        >
+          <div className="space-y-4">
+            <Input
+              disabled
+              placeholder="禁用的輸入框"
+            />
+            <Input
+              disabled
+              variant="filled"
+              placeholder="禁用的填充樣式"
+            />
+            <Input
+              disabled
+              prefixIcon={<SearchIcon />}
+              placeholder="禁用帶圖示"
+            />
+          </div>
+        </CodeExample>
       </div>
 
       {/* 組合使用 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔗 組合使用</h2>
-        <p className="component-docs-section-description">展示各種屬性的組合使用：</p>
+        <CodeExample
+          title="🔄 組合使用範例"
+          description="展示各種屬性的組合使用："
+          code={`// 各種屬性的組合使用
+<Input
+  size="lg"
+  variant="outline"
+  status="success"
+  prefixIcon={<SearchIcon />}
+  clearable
+  placeholder="大尺寸外框成功狀態"
+  defaultValue="組合範例"
+/>
 
-        <div className="component-docs-showcase">
-          <Input
-            size="lg"
-            variant="outline"
-            status="success"
-            prefixIcon={<SearchIcon />}
-            clearable
-            placeholder="大尺寸外框成功狀態"
-            defaultValue="組合範例"
-          />
-          <Input
-            size="sm"
-            variant="filled"
-            status="warning"
-            suffixIcon={<EmailIcon />}
-            placeholder="小尺寸填充警告狀態"
-          />
-        </div>
+<Input
+  size="sm"
+  variant="filled"
+  status="warning"
+  suffixIcon={<EmailIcon />}
+  placeholder="小尺寸填充警告狀態"
+/>`}
+        >
+          <div className="space-y-4">
+            <Input
+              size="lg"
+              variant="outline"
+              status="success"
+              prefixIcon={<SearchIcon />}
+              clearable
+              placeholder="大尺寸外框成功狀態"
+              defaultValue="組合範例"
+            />
+            <Input
+              size="sm"
+              variant="filled"
+              status="warning"
+              suffixIcon={<EmailIcon />}
+              placeholder="小尺寸填充警告狀態"
+            />
+          </div>
+        </CodeExample>
       </div>
 
       {/* 使用方式 */}

@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Story, Controls, Primary } from '@storybook/addon-docs/blocks';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { CodeExample } from '../shared/CodeExample';
+
 import { Checkbox, CheckboxGroup } from './Checkbox';
 import '../../styles/component-docs.css';
 
@@ -86,78 +88,154 @@ const CheckboxDocs = () => {
 
       {/* 實際使用範例 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔄 實際使用範例</h2>
-        <p className="component-docs-section-description">
-          以下是實際的複選框範例，展示各種功能組合：
-        </p>
+        <CodeExample
+          title="🔄 實際使用範例"
+          description="以下是實際的複選框範例，展示各種功能組合："
+          code={`// 互動式 Checkbox 範例
+const [hobbies, setHobbies] = useState<(string | number)[]>(['reading', 'music']);
+const [languages, setLanguages] = useState<(string | number)[]>(['zh']);
+const [notifications, setNotifications] = useState<(string | number)[]>(['email']);
 
-        <div className="component-docs-showcase">
+return (
+  <div className="space-y-8 w-full max-w-md">
+    {/* 基本 CheckboxGroup */}
+    <div>
+      <h4 className="font-medium mb-3 text-gray-700">興趣愛好</h4>
+      <CheckboxGroup value={hobbies} onChange={setHobbies}>
+        <Checkbox value="reading">閱讀</Checkbox>
+        <Checkbox value="music">音樂</Checkbox>
+        <Checkbox value="sports">運動</Checkbox>
+        <Checkbox value="travel">旅行</Checkbox>
+      </CheckboxGroup>
+    </div>
+
+    {/* 水平排列 */}
+    <div>
+      <h4 className="font-medium mb-3 text-gray-700">語言能力</h4>
+      <CheckboxGroup
+        value={languages}
+        onChange={setLanguages}
+        direction="horizontal"
+      >
+        <Checkbox value="zh">中文</Checkbox>
+        <Checkbox value="en">英文</Checkbox>
+        <Checkbox value="ja">日文</Checkbox>
+      </CheckboxGroup>
+    </div>
+
+    {/* 不同大小 */}
+    <div>
+      <h4 className="font-medium mb-3 text-gray-700">通知設定</h4>
+      <CheckboxGroup
+        value={notifications}
+        onChange={setNotifications}
+        size="lg"
+      >
+        <Checkbox value="email">電子郵件</Checkbox>
+        <Checkbox value="sms">簡訊</Checkbox>
+        <Checkbox value="push">推播通知</Checkbox>
+        <Checkbox value="app">應用內通知</Checkbox>
+      </CheckboxGroup>
+    </div>
+  </div>
+);`}
+        >
           <InteractiveExample />
-        </div>
+        </CodeExample>
       </div>
 
       {/* 基本用法 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎯 基本用法</h2>
-        <p className="component-docs-section-description">
-          Checkbox 可以單獨使用或配合 CheckboxGroup 使用：
-        </p>
-
-        <div className="component-docs-showcase">
-          <div className="space-y-6">
-            {/* 單獨使用 */}
-            <div>
-              <h4 className="font-medium mb-3 text-gray-600">單獨使用 Checkbox</h4>
-              <div className="flex flex-col space-y-2">
-                <Checkbox
-                  value="option1"
-                  defaultChecked
-                >
-                  已選中的選項
-                </Checkbox>
-                <Checkbox value="option2">未選中的選項</Checkbox>
-                <Checkbox
-                  value="option3"
-                  indeterminate
-                >
-                  不確定狀態（部分選中）
-                </Checkbox>
-                <Checkbox
-                  value="option4"
-                  disabled
-                >
-                  禁用的選項
-                </Checkbox>
-                <Checkbox
-                  value="option5"
-                  disabled
-                  defaultChecked
-                >
-                  禁用且選中
-                </Checkbox>
-              </div>
+        <div className="space-y-6 w-full">
+          <CodeExample
+            title="🔄 單獨使用 Checkbox"
+            description="Checkbox 可以單獨使用或配合 CheckboxGroup 使用："
+            code={`// 不同狀態的 Checkbox
+<Checkbox value="option1" defaultChecked>
+  已選中的選項
+</Checkbox>
+<Checkbox value="option2">未選中的選項</Checkbox>
+<Checkbox value="option3" indeterminate>
+  不確定狀態（部分選中）
+</Checkbox>
+<Checkbox value="option4" disabled>
+  禁用的選項
+</Checkbox>
+<Checkbox value="option5" disabled defaultChecked>
+  禁用且選中
+</Checkbox>`}
+          >
+            <div className="flex flex-col space-y-2">
+              <Checkbox
+                value="option1"
+                defaultChecked
+              >
+                已選中的選項
+              </Checkbox>
+              <Checkbox value="option2">未選中的選項</Checkbox>
+              <Checkbox
+                value="option3"
+                indeterminate
+              >
+                不確定狀態（部分選中）
+              </Checkbox>
+              <Checkbox
+                value="option4"
+                disabled
+              >
+                禁用的選項
+              </Checkbox>
+              <Checkbox
+                value="option5"
+                disabled
+                defaultChecked
+              >
+                禁用且選中
+              </Checkbox>
             </div>
+          </CodeExample>
 
-            {/* CheckboxGroup */}
-            <div>
-              <h4 className="font-medium mb-3 text-gray-600">使用 CheckboxGroup</h4>
-              <CheckboxGroup defaultValue={['option1', 'option3']}>
-                <Checkbox value="option1">選項一</Checkbox>
-                <Checkbox value="option2">選項二</Checkbox>
-                <Checkbox value="option3">選項三</Checkbox>
-                <Checkbox value="option4">選項四</Checkbox>
-              </CheckboxGroup>
-            </div>
-          </div>
+          <CodeExample
+            title="使用 CheckboxGroup"
+            code={`// 群組管理多個 Checkbox
+<CheckboxGroup defaultValue={['option1', 'option3']}>
+  <Checkbox value="option1">選項一</Checkbox>
+  <Checkbox value="option2">選項二</Checkbox>
+  <Checkbox value="option3">選項三</Checkbox>
+  <Checkbox value="option4">選項四</Checkbox>
+</CheckboxGroup>`}
+          >
+            <CheckboxGroup defaultValue={['option1', 'option3']}>
+              <Checkbox value="option1">選項一</Checkbox>
+              <Checkbox value="option2">選項二</Checkbox>
+              <Checkbox value="option3">選項三</Checkbox>
+              <Checkbox value="option4">選項四</Checkbox>
+            </CheckboxGroup>
+          </CodeExample>
         </div>
       </div>
 
       {/* 大小選項 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📏 大小選項</h2>
-        <p className="component-docs-section-description">支援三種不同的大小選項：</p>
+        <CodeExample
+          title="📏 大小選項範例"
+          description="支援三種不同的大小選項："
+          code={`// 三種不同的 Checkbox 大小
+<CheckboxGroup defaultValue={['option1']} size="sm" direction="horizontal">
+  <Checkbox value="option1">小尺寸</Checkbox>
+  <Checkbox value="option2">選項二</Checkbox>
+</CheckboxGroup>
 
-        <div className="component-docs-showcase">
+<CheckboxGroup defaultValue={['option1']} size="md" direction="horizontal">
+  <Checkbox value="option1">中等尺寸</Checkbox>
+  <Checkbox value="option2">選項二</Checkbox>
+</CheckboxGroup>
+
+<CheckboxGroup defaultValue={['option1']} size="lg" direction="horizontal">
+  <Checkbox value="option1">大尺寸</Checkbox>
+  <Checkbox value="option2">選項二</Checkbox>
+</CheckboxGroup>`}
+        >
           <div className="space-y-6">
             {(['sm', 'md', 'lg'] as const).map((size) => (
               <div key={size}>
@@ -174,7 +252,7 @@ const CheckboxDocs = () => {
               </div>
             ))}
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>尺寸指南：</strong>
@@ -194,10 +272,16 @@ const CheckboxDocs = () => {
 
       {/* 顏色選項 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎨 顏色選項</h2>
-        <p className="component-docs-section-description">支援多種顏色主題：</p>
-
-        <div className="component-docs-showcase">
+        <CodeExample
+          title="🎨 顏色選項範例"
+          description="支援多種顏色主題："
+          code={`// 不同顏色主題的 Checkbox
+<Checkbox color="primary" defaultChecked>主要色</Checkbox>
+<Checkbox color="secondary" defaultChecked>次要色</Checkbox>
+<Checkbox color="success" defaultChecked>成功色</Checkbox>
+<Checkbox color="warning" defaultChecked>警告色</Checkbox>
+<Checkbox color="error" defaultChecked>錯誤色</Checkbox>`}
+        >
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {(
               [
@@ -232,19 +316,43 @@ const CheckboxDocs = () => {
               </div>
             ))}
           </div>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 不確定狀態 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">❓ 不確定狀態</h2>
-        <p className="component-docs-section-description">
-          Checkbox 支援不確定（indeterminate）狀態，常用於「全選/部分選中」的場景：
-        </p>
+        <CodeExample
+          title="❓ 不確定狀態範例"
+          description="Checkbox 支援不確定（indeterminate）狀態，常用於「全選/部分選中」的場景："
+          code={`// 不確定狀態的全選範例
+const [checkedItems, setCheckedItems] = useState(['item1', 'item3']);
+const allChecked = checkedItems.length === items.length;
+const isIndeterminate = checkedItems.length > 0 && checkedItems.length < items.length;
 
-        <div className="component-docs-showcase">
+<Checkbox
+  value="parent"
+  checked={allChecked}
+  indeterminate={isIndeterminate}
+  onChange={handleParentChange}
+>
+  全選（{checkedItems.length}/{items.length}）
+</Checkbox>
+
+<div className="ml-6 space-y-2">
+  {items.map((item) => (
+    <Checkbox
+      key={item.id}
+      value={item.id}
+      checked={checkedItems.includes(item.id)}
+      onChange={handleItemChange}
+    >
+      {item.label}
+    </Checkbox>
+  ))}
+</div>`}
+        >
           <IndeterminateExample />
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>不確定狀態說明：</strong>
@@ -264,12 +372,29 @@ const CheckboxDocs = () => {
 
       {/* 排列方向 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📐 排列方向</h2>
-        <p className="component-docs-section-description">
-          CheckboxGroup 支援垂直和水平兩種排列方向：
-        </p>
+        <CodeExample
+          title="📐 排列方向範例"
+          description="CheckboxGroup 支援垂直和水平兩種排列方向："
+          code={`// 垂直排列（預設）
+<CheckboxGroup
+  defaultValue={['vertical1']}
+  direction="vertical"
+>
+  <Checkbox value="vertical1">垂直選項一</Checkbox>
+  <Checkbox value="vertical2">垂直選項二</Checkbox>
+  <Checkbox value="vertical3">垂直選項三</Checkbox>
+</CheckboxGroup>
 
-        <div className="component-docs-showcase">
+// 水平排列
+<CheckboxGroup
+  defaultValue={['horizontal1', 'horizontal3']}
+  direction="horizontal"
+>
+  <Checkbox value="horizontal1">水平選項一</Checkbox>
+  <Checkbox value="horizontal2">水平選項二</Checkbox>
+  <Checkbox value="horizontal3">水平選項三</Checkbox>
+</CheckboxGroup>`}
+        >
           <div className="space-y-8">
             <div>
               <h4 className="font-medium mb-3 text-gray-600">垂直排列（預設）</h4>
@@ -295,17 +420,28 @@ const CheckboxDocs = () => {
               </CheckboxGroup>
             </div>
           </div>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 禁用狀態 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🚫 禁用狀態</h2>
-        <p className="component-docs-section-description">
-          支援單個 Checkbox 禁用或整個 CheckboxGroup 禁用：
-        </p>
+        <CodeExample
+          title="🚫 禁用狀態範例"
+          description="支援單個 Checkbox 禁用或整個 CheckboxGroup 禁用："
+          code={`// 單個 Checkbox 禁用
+<CheckboxGroup defaultValue={['option1']}>
+  <Checkbox value="option1">正常選項</Checkbox>
+  <Checkbox value="option2" disabled>禁用選項</Checkbox>
+  <Checkbox value="option3" disabled defaultChecked>禁用且選中</Checkbox>
+</CheckboxGroup>
 
-        <div className="component-docs-showcase">
+// 整個 CheckboxGroup 禁用
+<CheckboxGroup defaultValue={['option1', 'option3']} disabled>
+  <Checkbox value="option1">群組禁用選項一</Checkbox>
+  <Checkbox value="option2">群組禁用選項二</Checkbox>
+  <Checkbox value="option3">群組禁用選項三</Checkbox>
+</CheckboxGroup>`}
+        >
           <div className="space-y-8">
             <div>
               <h4 className="font-medium mb-3 text-gray-600">單個 Checkbox 禁用</h4>
@@ -339,15 +475,29 @@ const CheckboxDocs = () => {
               </CheckboxGroup>
             </div>
           </div>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 無標籤 Checkbox */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">⬜ 無標籤 Checkbox</h2>
-        <p className="component-docs-section-description">Checkbox 可以不帶標籤文字：</p>
+        <CodeExample
+          title="⬜ 無標籤 Checkbox 範例"
+          description="Checkbox 可以不帶標籤文字："
+          code={`// 不同大小的無標籤 Checkbox
+<CheckboxGroup defaultValue={['md']} direction="horizontal">
+  <Checkbox value="sm" size="sm" />
+  <Checkbox value="md" size="md" />
+  <Checkbox value="lg" size="lg" />
+</CheckboxGroup>
 
-        <div className="component-docs-showcase">
+// 不同顏色的無標籤 Checkbox
+<CheckboxGroup defaultValue={['primary', 'success']} direction="horizontal">
+  <Checkbox value="primary" color="primary" />
+  <Checkbox value="success" color="success" />
+  <Checkbox value="warning" color="warning" />
+  <Checkbox value="error" color="error" />
+</CheckboxGroup>`}
+        >
           <div className="space-y-4">
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-600">不同大小：</span>
@@ -395,15 +545,53 @@ const CheckboxDocs = () => {
               </CheckboxGroup>
             </div>
           </div>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 複雜範例 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔗 複雜範例</h2>
-        <p className="component-docs-section-description">展示實際應用場景的複雜範例：</p>
+        <CodeExample
+          title="🔗 複雜範例"
+          description="用戶權限設定表單："
+          code={`// 用戶權限設定表單
+<div className="border rounded-lg p-6 bg-gray-50">
+  <h3 className="text-lg font-semibold mb-4">用戶權限設定</h3>
 
-        <div className="component-docs-showcase">
+  <div className="space-y-4">
+    {/* 基本權限 */}
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">基本權限</label>
+      <CheckboxGroup defaultValue={['read', 'create']} size="sm">
+        <Checkbox value="read">讀取</Checkbox>
+        <Checkbox value="create">建立</Checkbox>
+        <Checkbox value="update">更新</Checkbox>
+        <Checkbox value="delete">刪除</Checkbox>
+      </CheckboxGroup>
+    </div>
+
+    {/* 通知偏好 */}
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">通知偏好</label>
+      <CheckboxGroup defaultValue={['email']} direction="horizontal" size="sm">
+        <Checkbox value="email">郵件</Checkbox>
+        <Checkbox value="sms">簡訊</Checkbox>
+        <Checkbox value="push">推播</Checkbox>
+      </CheckboxGroup>
+    </div>
+
+    {/* 功能模組 */}
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">功能模組</label>
+      <CheckboxGroup defaultValue={['dashboard', 'reports']}>
+        <Checkbox value="dashboard">儀表板</Checkbox>
+        <Checkbox value="users">用戶管理</Checkbox>
+        <Checkbox value="reports">報表分析</Checkbox>
+        <Checkbox value="settings">系統設定</Checkbox>
+      </CheckboxGroup>
+    </div>
+  </div>
+</div>`}
+        >
           <div className="max-w-lg space-y-6">
             {/* 表單範例 */}
             <div className="border rounded-lg p-6 bg-gray-50">
@@ -448,7 +636,7 @@ const CheckboxDocs = () => {
               </div>
             </div>
           </div>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 使用方式 */}
@@ -465,8 +653,8 @@ const CheckboxDocs = () => {
 </Checkbox>
 
 // 使用 CheckboxGroup
-<CheckboxGroup 
-  defaultValue={['option1', 'option3']} 
+<CheckboxGroup
+  defaultValue={['option1', 'option3']}
   onChange={(value) => console.log(value)}
 >
   <Checkbox value="option1">選項一</Checkbox>

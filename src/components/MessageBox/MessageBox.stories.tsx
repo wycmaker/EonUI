@@ -4,6 +4,7 @@ import { Story, Controls, Primary } from '@storybook/addon-docs/blocks';
 import type { Meta, StoryObj } from '@storybook/react';
 
 import { Button } from '../Button/Button';
+import { CodeExample } from '../shared/CodeExample';
 
 import { MessageBox } from './MessageBox';
 import { MessageBoxService } from './service';
@@ -252,22 +253,72 @@ const MessageBoxDocs = () => {
 
       {/* 實際使用範例 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔄 實際使用範例</h2>
-        <p className="component-docs-section-description">
-          以下是實際的 MessageBox 範例，展示各種功能組合：
-        </p>
+        <CodeExample
+          title="🔄 實際使用範例"
+          description="以下是實際的 MessageBox 範例，展示各種功能組合："
+          code={`// MessageBox 基本使用範例
+const [visible, setVisible] = useState(false);
+const [type, setType] = useState('info');
 
-        <div className="component-docs-showcase">
+// 顯示 MessageBox
+<MessageBox
+  visible={visible}
+  type={type}
+  title="訊息標題"
+  onClose={() => setVisible(false)}
+  onConfirm={() => {
+    console.log('用戶確認');
+    setVisible(false);
+  }}
+>
+  這是 MessageBox 的內容文字。
+</MessageBox>
+
+// 或使用 MessageBoxService 調用
+MessageBoxService.alert({
+  type: 'info',
+  title: '提示',
+  content: '這是一個資訊提示',
+});`}
+        >
           <InteractiveExample />
-        </div>
+        </CodeExample>
       </div>
 
       {/* 對話框類型 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📋 對話框類型</h2>
-        <p className="component-docs-section-description">MessageBox 提供四種不同的消息類型：</p>
+        <CodeExample
+          title="🔄 對話框類型範例"
+          description="MessageBox 提供四種不同的消息類型："
+          code={`// 不同類型的對話框
+// Info 類型
+MessageBoxService.alert({
+  type: 'info',
+  title: 'Info 提示',
+  content: '這是 info 類型的訊息提示。',
+});
 
-        <div className="component-docs-showcase">
+// Success 類型
+MessageBoxService.alert({
+  type: 'success',
+  title: 'Success 提示',
+  content: '這是 success 類型的訊息提示。',
+});
+
+// Warning 類型
+MessageBoxService.alert({
+  type: 'warning',
+  title: 'Warning 提示',
+  content: '這是 warning 類型的訊息提示。',
+});
+
+// Error 類型
+MessageBoxService.alert({
+  type: 'error',
+  title: 'Error 提示',
+  content: '這是 error 類型的訊息提示。',
+});`}
+        >
           <div className="grid grid-cols-2 gap-4">
             {(['info', 'success', 'warning', 'error'] as const).map((type) => (
               <Button
@@ -284,7 +335,7 @@ const MessageBoxDocs = () => {
               </Button>
             ))}
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>類型說明：</strong>
@@ -307,14 +358,44 @@ const MessageBoxDocs = () => {
 
       {/* MessageBoxService 使用 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔧 MessageBoxService 使用</h2>
-        <p className="component-docs-section-description">
-          透過 MessageBoxService 可以程式化控制 MessageBox，支援 Promise 回調：
-        </p>
+        <CodeExample
+          title="🔄 MessageBoxService 使用範例"
+          description="透過 MessageBoxService 可以程式化控制 MessageBox，支援 Promise 回調："
+          code={`// 使用 MessageBoxService 進行程式化控制
+const ServiceExample = () => {
+  const handleConfirm = async () => {
+    try {
+      const result = await MessageBoxService.confirm({
+        title: '確認操作',
+        content: '您確定要執行這個操作嗎？',
+        type: 'warning',
+      });
 
-        <div className="component-docs-showcase">
+      if (result) {
+        // 用戶點擊了確認
+        MessageBoxService.alert({
+          type: 'success',
+          title: '操作成功',
+          content: '您已成功執行操作！',
+        });
+      }
+    } catch (error) {
+      // 用戶點擊了取消
+      console.log('用戶取消了操作');
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <Button onClick={handleConfirm}>
+        確認對話框範例
+      </Button>
+    </div>
+  );
+};`}
+        >
           <ServiceExample />
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>MessageBoxService 功能：</strong>
@@ -337,12 +418,29 @@ const MessageBoxDocs = () => {
 
       {/* 變體展示 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎭 變體展示</h2>
-        <p className="component-docs-section-description">
-          MessageBox 支援 Alert 和 Confirm 兩種變體：
-        </p>
+        <CodeExample
+          title="🔄 變體展示範例"
+          description="MessageBox 支援 Alert 和 Confirm 兩種變體："
+          code={`// Alert 變體 - 只有確認按鈕
+MessageBoxService.alert({
+  title: 'Alert 變體',
+  content: '這是 Alert 變體，只有一個確認按鈕。',
+  type: 'info',
+});
 
-        <div className="component-docs-showcase">
+// Confirm 變體 - 有確認和取消按鈕
+MessageBoxService.confirm({
+  title: 'Confirm 變體',
+  content: '這是 Confirm 變體，有確認和取消按鈕。',
+  type: 'warning',
+}).then((result) => {
+  if (result) {
+    console.log('用戶確認了操作');
+  } else {
+    console.log('用戶取消了操作');
+  }
+});`}
+        >
           <div className="grid grid-cols-2 gap-4">
             <div>
               <h4 className="font-medium mb-2">Alert 變體</h4>
@@ -375,17 +473,49 @@ const MessageBoxDocs = () => {
               <p className="text-sm text-gray-500 mt-1">有確認和取消按鈕，不顯示右上角關閉按鈕</p>
             </div>
           </div>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 圖示功能 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎯 圖示功能</h2>
-        <p className="component-docs-section-description">
-          MessageBox 支援顯示預設圖示或自訂圖示：
-        </p>
+        <CodeExample
+          title="🔄 圖示功能範例"
+          description="MessageBox 支援顯示預設圖示或自訂圖示："
+          code={`// 預設圖示
+MessageBoxService.alert({
+  title: '預設圖示',
+  content: '這個 MessageBox 使用預設的成功圖示。',
+  type: 'success',
+  showIcon: true,
+});
 
-        <div className="component-docs-showcase">
+// 自訂圖示
+MessageBoxService.alert({
+  title: '自訂圖示',
+  content: '這個 MessageBox 使用自訂圖示。',
+  type: 'info',
+  icon: (
+    <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 20 20">
+      <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
+    </svg>
+  ),
+});
+
+// 無圖示
+MessageBoxService.alert({
+  title: '無圖示',
+  content: '這個 MessageBox 不顯示圖示。',
+  type: 'info',
+  showIcon: false,
+});
+
+// 無標題有圖示
+MessageBoxService.alert({
+  content: '這個 MessageBox 沒有標題，圖示會與內容一起顯示。',
+  type: 'warning',
+  showIcon: true,
+});`}
+        >
           <div className="grid grid-cols-2 gap-4">
             <Button
               onClick={() =>
@@ -443,7 +573,7 @@ const MessageBoxDocs = () => {
               無標題有圖示
             </Button>
           </div>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 使用方式 */}

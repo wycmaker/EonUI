@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Story, Controls, Primary } from '@storybook/addon-docs/blocks';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { CodeExample } from '../shared/CodeExample';
+
 import { Select, SelectOption } from './Select';
 import '../../styles/component-docs.css';
 
@@ -155,40 +157,80 @@ const SelectDocs = () => {
 
       {/* 實際使用範例 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔄 實際使用範例</h2>
-        <p className="component-docs-section-description">
-          以下是實際的下拉選單範例，展示各種功能組合：
-        </p>
+        <CodeExample
+          title="🔄 實際使用範例"
+          description="以下是實際的下拉選單範例，展示各種功能組合："
+          code={`// 互動式 Select 範例
+const [basicValue, setBasicValue] = useState('');
+const [multiValue, setMultiValue] = useState([]);
+const [searchValue, setSearchValue] = useState('');
 
-        <div className="component-docs-showcase">
+const fruitOptions = [
+  { value: 'apple', label: '蘋果' },
+  { value: 'banana', label: '香蕉' },
+  { value: 'orange', label: '橘子' },
+  { value: 'grape', label: '葡萄' },
+];
+
+return (
+  <div className="space-y-6 w-full max-w-md">
+    <div>
+      <h4 className="font-medium mb-2 text-gray-700">基本選擇器</h4>
+      <Select
+        value={basicValue}
+        onChange={setBasicValue}
+        options={fruitOptions}
+        placeholder="請選擇水果"
+        clearable
+      />
+    </div>
+
+    <div>
+      <h4 className="font-medium mb-2 text-gray-700">多選選擇器</h4>
+      <Select
+        value={multiValue}
+        onChange={setMultiValue}
+        options={fruitOptions}
+        placeholder="可選擇多個水果"
+        multiple
+        clearable
+      />
+    </div>
+  </div>
+);`}
+        >
           <InteractiveExample />
-        </div>
+        </CodeExample>
       </div>
 
       {/* 樣式變體 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎨 樣式變體</h2>
-        <p className="component-docs-section-description">
-          Select 組件提供了三種不同的樣式變體，與 Input 組件保持一致：
-        </p>
-
-        <div className="component-docs-showcase">
-          <Select
-            variant="default"
-            options={fruitOptions}
-            placeholder="預設樣式"
-          />
-          <Select
-            variant="filled"
-            options={fruitOptions}
-            placeholder="填充樣式"
-          />
-          <Select
-            variant="outline"
-            options={fruitOptions}
-            placeholder="外框樣式"
-          />
-        </div>
+        <CodeExample
+          title="🔄 樣式變體範例"
+          description="Select 組件提供了三種不同的樣式變體，與 Input 組件保持一致："
+          code={`// 三種不同的選擇器樣式
+<Select variant="default" options={options} placeholder="預設樣式" />
+<Select variant="filled" options={options} placeholder="填充樣式" />
+<Select variant="outline" options={options} placeholder="外框樣式" />`}
+        >
+          <div className="space-y-4">
+            <Select
+              variant="default"
+              options={fruitOptions}
+              placeholder="預設樣式"
+            />
+            <Select
+              variant="filled"
+              options={fruitOptions}
+              placeholder="填充樣式"
+            />
+            <Select
+              variant="outline"
+              options={fruitOptions}
+              placeholder="外框樣式"
+            />
+          </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>使用建議：</strong>
@@ -208,28 +250,32 @@ const SelectDocs = () => {
 
       {/* 大小選項 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📏 大小選項</h2>
-        <p className="component-docs-section-description">
-          支援三種不同的大小選項，與其他表單組件保持一致：
-        </p>
-
-        <div className="component-docs-showcase">
-          <Select
-            size="sm"
-            options={fruitOptions}
-            placeholder="小尺寸 (32px)"
-          />
-          <Select
-            size="md"
-            options={fruitOptions}
-            placeholder="中等尺寸 (40px)"
-          />
-          <Select
-            size="lg"
-            options={fruitOptions}
-            placeholder="大尺寸 (48px)"
-          />
-        </div>
+        <CodeExample
+          title="🔄 大小選項範例"
+          description="支援三種不同的大小選項，與其他表單組件保持一致："
+          code={`// 三種不同的選擇器大小
+<Select size="sm" options={options} placeholder="小尺寸 (32px)" />
+<Select size="md" options={options} placeholder="中等尺寸 (40px)" />
+<Select size="lg" options={options} placeholder="大尺寸 (48px)" />`}
+        >
+          <div className="space-y-4">
+            <Select
+              size="sm"
+              options={fruitOptions}
+              placeholder="小尺寸 (32px)"
+            />
+            <Select
+              size="md"
+              options={fruitOptions}
+              placeholder="中等尺寸 (40px)"
+            />
+            <Select
+              size="lg"
+              options={fruitOptions}
+              placeholder="大尺寸 (48px)"
+            />
+          </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>尺寸指南：</strong>
@@ -249,33 +295,38 @@ const SelectDocs = () => {
 
       {/* 狀態展示 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🚦 狀態展示</h2>
-        <p className="component-docs-section-description">
-          下拉選單支援多種狀態，提供清晰的視覺反饋：
-        </p>
-
-        <div className="component-docs-showcase">
-          <Select
-            status="default"
-            options={fruitOptions}
-            placeholder="預設狀態"
-          />
-          <Select
-            status="error"
-            options={fruitOptions}
-            placeholder="錯誤狀態"
-          />
-          <Select
-            status="success"
-            options={fruitOptions}
-            placeholder="成功狀態"
-          />
-          <Select
-            status="warning"
-            options={fruitOptions}
-            placeholder="警告狀態"
-          />
-        </div>
+        <CodeExample
+          title="🔄 狀態展示範例"
+          description="下拉選單支援多種狀態，提供清晰的視覺反饋："
+          code={`// 不同狀態的下拉選單
+<Select status="default" options={options} placeholder="預設狀態" />
+<Select status="error" options={options} placeholder="錯誤狀態" />
+<Select status="success" options={options} placeholder="成功狀態" />
+<Select status="warning" options={options} placeholder="警告狀態" />`}
+        >
+          <div className="space-y-4">
+            <Select
+              status="default"
+              options={fruitOptions}
+              placeholder="預設狀態"
+            />
+            <Select
+              status="error"
+              options={fruitOptions}
+              placeholder="錯誤狀態"
+            />
+            <Select
+              status="success"
+              options={fruitOptions}
+              placeholder="成功狀態"
+            />
+            <Select
+              status="warning"
+              options={fruitOptions}
+              placeholder="警告狀態"
+            />
+          </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>狀態說明：</strong>
@@ -298,12 +349,38 @@ const SelectDocs = () => {
 
       {/* 單選與多選 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎯 單選與多選</h2>
-        <p className="component-docs-section-description">
-          支援單選和多選兩種模式，滿足不同的使用場景：
-        </p>
+        <CodeExample
+          title="🔄 單選與多選範例"
+          description="支援單選和多選兩種模式，滿足不同的使用場景："
+          code={`// 單選模式
+<Select
+  options={countryOptions}
+  placeholder="選擇一個國家"
+  clearable
+  defaultValue="taiwan"
+/>
 
-        <div className="component-docs-showcase">
+// 多選模式（顯示數量）
+<Select
+  options={fruitOptions}
+  multiple
+  multipleDisplayMode="count"
+  placeholder="選擇多個水果"
+  clearable
+  defaultValue={['apple', 'banana', 'orange']}
+/>
+
+// 多選模式（顯示標籤）
+<Select
+  options={fruitOptions}
+  multiple
+  multipleDisplayMode="items"
+  maxTagCount={2}
+  placeholder="選擇多個水果"
+  clearable
+  defaultValue={['apple', 'banana', 'orange']}
+/>`}
+        >
           <div className="space-y-6">
             <div>
               <h4 className="font-medium mb-3 text-gray-600">單選模式</h4>
@@ -347,7 +424,7 @@ const SelectDocs = () => {
               </p>
             </div>
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>選擇模式說明：</strong>
@@ -370,12 +447,28 @@ const SelectDocs = () => {
 
       {/* 搜尋功能 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔍 搜尋功能</h2>
-        <p className="component-docs-section-description">
-          支援搜尋過濾選項，特別適合選項較多的情況：
-        </p>
+        <CodeExample
+          title="🔄 搜尋功能範例"
+          description="支援搜尋過濾選項，特別適合選項較多的情況："
+          code={`// 可搜尋單選
+<Select
+  options={cityOptions}
+  filterable
+  placeholder="搜尋並選擇城市"
+  searchPlaceholder="輸入城市名稱"
+  clearable
+/>
 
-        <div className="component-docs-showcase">
+// 可搜尋多選
+<Select
+  options={countryOptions}
+  filterable
+  multiple
+  placeholder="搜尋並選擇國家"
+  searchPlaceholder="輸入國家名稱"
+  clearable
+/>`}
+        >
           <div className="space-y-6">
             <div>
               <h4 className="font-medium mb-3 text-gray-600">可搜尋單選</h4>
@@ -400,7 +493,7 @@ const SelectDocs = () => {
               />
             </div>
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>搜尋功能特色：</strong>
@@ -423,12 +516,35 @@ const SelectDocs = () => {
 
       {/* 清除功能 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🗑️ 清除功能</h2>
-        <p className="component-docs-section-description">
-          支援一鍵清除所有選擇，提供便捷的重置操作：
-        </p>
+        <CodeExample
+          title="🔄 清除功能範例"
+          description="支援一鍵清除所有選擇，提供便捷的重置操作："
+          code={`// 可清除的單選
+<Select
+  options={fruitOptions}
+  clearable
+  placeholder="可清除的單選"
+  defaultValue="apple"
+/>
 
-        <div className="component-docs-showcase">
+// 可清除的多選
+<Select
+  options={fruitOptions}
+  multiple
+  clearable
+  placeholder="可清除的多選"
+  defaultValue={['apple', 'banana']}
+/>
+
+// 可清除的搜尋選單
+<Select
+  options={cityOptions}
+  filterable
+  clearable
+  placeholder="可清除的搜尋選單"
+  defaultValue="taipei"
+/>`}
+        >
           <div className="space-y-4">
             <Select
               options={fruitOptions}
@@ -451,7 +567,7 @@ const SelectDocs = () => {
               defaultValue="taipei"
             />
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>清除功能說明：</strong>
@@ -474,10 +590,34 @@ const SelectDocs = () => {
 
       {/* 禁用狀態 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🚫 禁用狀態</h2>
-        <p className="component-docs-section-description">展示禁用狀態下的各種樣式：</p>
+        <CodeExample
+          title="🔄 禁用狀態範例"
+          description="支援單個選項的禁用狀態："
+          code={`// 禁用的下拉選單
+<Select
+  disabled
+  options={fruitOptions}
+  placeholder="禁用的下拉選單"
+/>
 
-        <div className="component-docs-showcase">
+// 禁用的填充樣式
+<Select
+  disabled
+  variant="filled"
+  options={fruitOptions}
+  placeholder="禁用的填充樣式"
+  defaultValue="apple"
+/>
+
+// 禁用的多選模式
+<Select
+  disabled
+  multiple
+  options={fruitOptions}
+  placeholder="禁用的多選模式"
+  defaultValue={['apple', 'banana']}
+/>`}
+        >
           <div className="space-y-4">
             <Select
               disabled
@@ -499,21 +639,35 @@ const SelectDocs = () => {
               defaultValue={['apple', 'banana']}
             />
           </div>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 選項禁用 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">⚠️ 選項禁用</h2>
-        <p className="component-docs-section-description">支援單個選項的禁用狀態：</p>
+        <CodeExample
+          title="🔄 選項禁用範例"
+          description="支援單個選項的禁用狀態："
+          code={`// 部分選項被禁用的下拉選單
+const optionsWithDisabled = [
+  { label: '蘋果', value: 'apple' },
+  { label: '香蕉', value: 'banana' },
+  { label: '橘子', value: 'orange' },
+  { label: '芒果', value: 'mango', disabled: true }, // 禁用選項
+  { label: '鳳梨', value: 'pineapple' },
+];
 
-        <div className="component-docs-showcase">
+<Select
+  options={optionsWithDisabled}
+  placeholder="部分選項被禁用"
+  clearable
+/>`}
+        >
           <Select
             options={fruitOptions}
             placeholder="部分選項被禁用"
             clearable
           />
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>選項禁用說明：</strong>
@@ -527,10 +681,33 @@ const SelectDocs = () => {
 
       {/* 組合使用 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔗 組合使用</h2>
-        <p className="component-docs-section-description">展示各種屬性的組合使用：</p>
+        <CodeExample
+          title="🔄 組合使用範例"
+          description="展示各種屬性的組合使用："
+          code={`// 大尺寸外框成功狀態可搜尋
+<Select
+  size="lg"
+  variant="outline"
+  status="success"
+  options={countryOptions}
+  filterable
+  clearable
+  placeholder="大尺寸外框成功狀態可搜尋"
+  defaultValue="taiwan"
+/>
 
-        <div className="component-docs-showcase">
+// 小尺寸填充警告狀態多選
+<Select
+  size="sm"
+  variant="filled"
+  status="warning"
+  options={fruitOptions}
+  multiple
+  clearable
+  placeholder="小尺寸填充警告狀態多選"
+  defaultValue={['apple']}
+/>`}
+        >
           <div className="space-y-4">
             <Select
               size="lg"
@@ -553,7 +730,7 @@ const SelectDocs = () => {
               defaultValue={['apple']}
             />
           </div>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 使用方式 */}

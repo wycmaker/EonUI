@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Story, Controls, Primary } from '@storybook/addon-docs/blocks';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { CodeExample } from '../shared/CodeExample';
+
 import { Alert, AlertPosition } from './Alert';
 import { AlertService } from './service';
 import '../../styles/component-docs.css';
@@ -158,22 +160,65 @@ const AlertDocs = () => {
 
       {/* 實際使用範例 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔄 實際使用範例</h2>
-        <p className="component-docs-section-description">
-          以下是實際的 Alert 範例，展示各種功能組合：
-        </p>
+        <CodeExample
+          title="🔄 實際使用範例"
+          description="以下是實際的 Alert 範例，展示各種功能組合："
+          code={`const [alerts, setAlerts] = useState([
+  {
+    id: '1',
+    type: 'info' as const,
+    title: '資訊提示',
+    children: '這是一個資訊提示的範例內容。',
+    visible: true,
+  },
+  {
+    id: '2',
+    type: 'success' as const,
+    title: '成功提示',
+    children: '操作已成功完成！',
+    visible: true,
+  },
+]);
 
-        <div className="component-docs-showcase">
+const handleClose = (id: string) => {
+  setAlerts((prev) => prev.filter((alert) => alert.id !== id));
+};
+
+// 渲染 Alert 列表
+{alerts.map((alert) => (
+  <Alert
+    key={alert.id}
+    {...alert}
+    onClose={() => handleClose(alert.id)}
+  />
+))}`}
+        >
           <InteractiveExample />
-        </div>
+        </CodeExample>
       </div>
 
       {/* Alert 類型 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎨 Alert 類型</h2>
-        <p className="component-docs-section-description">Alert 提供五種不同的類型樣式：</p>
-
-        <div className="component-docs-showcase">
+        <CodeExample
+          title="🎨 Alert 類型"
+          description="Alert 提供五種不同的類型樣式："
+          code={`// 五種不同的 Alert 類型
+<Alert type="primary" title="主要提示">
+  這是主要提示樣式，用於一般資訊提示。
+</Alert>
+<Alert type="info" title="資訊提示">
+  這是資訊提示樣式，用於中性的系統訊息。
+</Alert>
+<Alert type="success" title="成功提示">
+  這是成功提示樣式，用於成功完成的操作。
+</Alert>
+<Alert type="warning" title="警告提示">
+  這是警告提示樣式，用於需要用戶注意的情況。
+</Alert>
+<Alert type="error" title="錯誤提示">
+  這是錯誤提示樣式，用於錯誤和危險的情況。
+</Alert>`}
+        >
           <div className="space-y-4">
             <Alert
               type="primary"
@@ -206,7 +251,7 @@ const AlertDocs = () => {
               這是錯誤提示樣式，用於錯誤和危險的情況。
             </Alert>
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>類型說明：</strong>
@@ -232,10 +277,36 @@ const AlertDocs = () => {
 
       {/* 關閉功能 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🗑️ 關閉功能</h2>
-        <p className="component-docs-section-description">Alert 支援手動關閉和自動關閉功能：</p>
+        <CodeExample
+          title="🗑️ 關閉功能"
+          description="Alert 支援手動關閉和自動關閉功能："
+          code={`// 可手動關閉
+<Alert
+  type="info"
+  title="可手動關閉"
+  closable={true}
+>
+  點擊右上角的 × 按鈕可以關閉這個 Alert。
+</Alert>
 
-        <div className="component-docs-showcase">
+// 不可關閉
+<Alert
+  type="warning"
+  title="不可關閉"
+  closable={false}
+>
+  這個 Alert 沒有關閉按鈕，無法手動關閉。
+</Alert>
+
+// 自動關閉
+<Alert
+  type="success"
+  title="自動關閉"
+  duration={5000}
+>
+  這個 Alert 會在 5 秒後自動關閉。
+</Alert>`}
+        >
           <div className="space-y-4">
             <Alert
               type="info"
@@ -259,7 +330,7 @@ const AlertDocs = () => {
               這個 Alert 會在 5 秒後自動關閉。
             </Alert>
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>關閉功能說明：</strong>
@@ -278,10 +349,41 @@ const AlertDocs = () => {
 
       {/* 圖示功能 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎯 圖示功能</h2>
-        <p className="component-docs-section-description">Alert 支援顯示預設圖示或自訂圖示：</p>
+        <CodeExample
+          title="🎯 圖示功能範例"
+          description="Alert 支援顯示預設圖示或自訂圖示："
+          code={`// 顯示預設圖示
+<Alert
+  type="info"
+  title="顯示預設圖示"
+  showIcon={true}
+>
+  這個 Alert 顯示預設的資訊圖示。
+</Alert>
 
-        <div className="component-docs-showcase">
+// 不顯示圖示
+<Alert
+  type="warning"
+  title="不顯示圖示"
+  showIcon={false}
+>
+  這個 Alert 不顯示任何圖示。
+</Alert>
+
+// 自訂圖示
+<Alert
+  type="success"
+  title="自訂圖示"
+  showIcon={true}
+  icon={
+    <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+  }
+>
+  這個 Alert 使用自訂的勾選圖示。
+</Alert>`}
+        >
           <div className="space-y-4">
             <Alert
               type="info"
@@ -314,19 +416,53 @@ const AlertDocs = () => {
               這個 Alert 使用自訂的勾選圖示。
             </Alert>
           </div>
-        </div>
+        </CodeExample>
       </div>
 
       {/* AlertService 使用 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔧 AlertService 使用</h2>
-        <p className="component-docs-section-description">
-          透過 AlertService 可以編程方式調用 Alert，支援全域顯示：
-        </p>
+        <CodeExample
+          title="🔧 AlertService 使用範例"
+          description="透過 AlertService 可以編程方式調用 Alert，支援全域顯示："
+          code={`// AlertService 快捷方法
+const showInfo = () => {
+  AlertService.info('這是一個資訊提示訊息', {
+    position: 'top-right',
+    duration: 3000,
+  });
+};
 
-        <div className="component-docs-showcase">
+const showSuccess = () => {
+  AlertService.success('操作成功完成！', {
+    position: 'top-right',
+    title: '成功',
+    duration: 4000,
+  });
+};
+
+const showWarning = () => {
+  AlertService.warning('請注意這個警告訊息', {
+    position: 'top-center',
+    title: '警告',
+    duration: 5000,
+  });
+};
+
+const showError = () => {
+  AlertService.error('發生了一個錯誤', {
+    position: 'top-left',
+    title: '錯誤',
+    duration: 0, // 不自動關閉
+  });
+};
+
+// 清除所有 Alert
+const clearAll = () => {
+  AlertService.clear();
+};`}
+        >
           <ServiceExample />
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>AlertService 功能：</strong>
@@ -349,10 +485,31 @@ const AlertDocs = () => {
 
       {/* 位置展示 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📍 位置展示</h2>
-        <p className="component-docs-section-description">Alert 支援 9 種不同的顯示位置：</p>
+        <CodeExample
+          title="📍 位置展示範例"
+          description="Alert 支援 9 種不同的顯示位置："
+          code={`// Alert 支援 9 種不同的顯示位置
+const positions = [
+  'top-left', 'top-center', 'top-right',
+  'middle-left', 'middle-center', 'middle-right',
+  'bottom-left', 'bottom-center', 'bottom-right'
+];
 
-        <div className="component-docs-showcase">
+// 在指定位置顯示 Alert
+positions.map((position) => (
+  <button
+    key={position}
+    onClick={() =>
+      AlertService.info(\`位置：\${position}\`, {
+        position: position as AlertPosition,
+        duration: 2000,
+      })
+    }
+  >
+    {position}
+  </button>
+));`}
+        >
           <div className="grid grid-cols-3 gap-2 text-sm">
             {[
               'top-left',
@@ -380,7 +537,7 @@ const AlertDocs = () => {
             ))}
           </div>
           <p className="text-sm text-gray-600 mt-2">點擊按鈕在對應位置顯示 Alert</p>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 使用方式 */}

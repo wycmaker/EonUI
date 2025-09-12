@@ -8,6 +8,7 @@ import { Checkbox, CheckboxGroup } from '../Checkbox';
 import { Input } from '../Input';
 import { Radio, RadioGroup } from '../Radio';
 import { Select } from '../Select';
+import { CodeExample } from '../shared/CodeExample';
 import { Table, TableColumn } from '../Table';
 import { Textarea } from '../Textarea';
 
@@ -97,120 +98,189 @@ const InteractiveExample = () => {
     <div className="space-y-8 w-full">
       {/* 基本表單 */}
       <div className="max-w-md">
-        <h4 className="font-medium mb-3 text-gray-700">基本表單</h4>
-        <Form onSubmit={handleBasicSubmit}>
-          <FormItem
-            name="basicUsername"
-            label="使用者名稱"
-            required
-          >
-            <Input placeholder="請輸入使用者名稱" />
-          </FormItem>
+        <CodeExample
+          title="🔄 基本表單"
+          description="Form 組件的基本使用方式："
+          code={`<Form onSubmit={handleBasicSubmit}>
+  <FormItem
+    name="basicUsername"
+    label="使用者名稱"
+    required
+  >
+    <Input placeholder="請輸入使用者名稱" />
+  </FormItem>
 
-          <FormItem
-            name="basicEmail"
-            label="電子郵件"
-          >
-            <Input
-              type="email"
-              placeholder="請輸入電子郵件"
-            />
-          </FormItem>
+  <FormItem
+    name="basicEmail"
+    label="電子郵件"
+  >
+    <Input
+      type="email"
+      placeholder="請輸入電子郵件"
+    />
+  </FormItem>
 
-          <Button type="submit">提交</Button>
-        </Form>
+  <Button type="submit">提交</Button>
+</Form>`}
+        >
+          <Form onSubmit={handleBasicSubmit}>
+            <FormItem
+              name="basicUsername"
+              label="使用者名稱"
+              required
+            >
+              <Input placeholder="請輸入使用者名稱" />
+            </FormItem>
+
+            <FormItem
+              name="basicEmail"
+              label="電子郵件"
+            >
+              <Input
+                type="email"
+                placeholder="請輸入電子郵件"
+              />
+            </FormItem>
+
+            <Button type="submit">提交</Button>
+          </Form>
+        </CodeExample>
       </div>
 
       {/* 驗證表單 */}
       <div className="max-w-md">
-        <h4 className="font-medium mb-3 text-gray-700">驗證功能</h4>
-        <Form onSubmit={handleValidationSubmit}>
-          <FormItem
-            name="validatedUsername"
-            label="使用者名稱"
-            required
-            rules={[
-              Rules.required('使用者名稱為必填'),
-              Rules.minLength(3, '使用者名稱至少需要3個字元'),
-            ]}
-          >
-            <Input placeholder="請輸入使用者名稱" />
-          </FormItem>
+        <CodeExample
+          title="🔄 驗證功能"
+          description="Form 組件的驗證功能："
+          code={`<Form onSubmit={handleValidationSubmit}>
+  <FormItem
+    name="validatedUsername"
+    label="使用者名稱"
+    required
+    rules={[
+      Rules.required('使用者名稱為必填'),
+      Rules.minLength(3, '使用者名稱至少需要3個字元'),
+    ]}
+  >
+    <Input placeholder="請輸入使用者名稱" />
+  </FormItem>
 
-          <FormItem
-            name="validatedEmail"
-            label="電子郵件"
-            required
-            rules={[Rules.required('電子郵件為必填'), Rules.email()]}
-          >
-            <Input
-              type="email"
-              placeholder="請輸入電子郵件"
-            />
-          </FormItem>
+  <FormItem
+    name="validatedEmail"
+    label="電子郵件"
+    required
+    rules={[Rules.required('電子郵件為必填'), Rules.email()]}
+  >
+    <Input type="email" placeholder="請輸入電子郵件" />
+  </FormItem>
 
-          <FormItem
-            name="phone"
-            label="手機號碼"
-            rules={[Rules.phone()]}
-          >
-            <Input placeholder="請輸入手機號碼（選填）" />
-          </FormItem>
+  <FormItem
+    name="gender"
+    label="性別"
+    required
+    rules={[Rules.required('請選擇性別')]}
+  >
+    <Select
+      options={[
+        { value: 'male', label: '男性' },
+        { value: 'female', label: '女性' },
+        { value: 'other', label: '其他' },
+      ]}
+      placeholder="請選擇性別"
+    />
+  </FormItem>
 
-          <FormItem
-            name="gender"
-            label="性別"
-            required
-            rules={[Rules.required('請選擇性別')]}
-          >
-            <Select
-              options={[
-                { value: 'male', label: '男性' },
-                { value: 'female', label: '女性' },
-                { value: 'other', label: '其他' },
+  <Button type="submit" variant="primary">提交</Button>
+</Form>`}
+        >
+          <Form onSubmit={handleValidationSubmit}>
+            <FormItem
+              name="validatedUsername"
+              label="使用者名稱"
+              required
+              rules={[
+                Rules.required('使用者名稱為必填'),
+                Rules.minLength(3, '使用者名稱至少需要3個字元'),
               ]}
-              placeholder="請選擇性別"
-            />
-          </FormItem>
-
-          <FormItem
-            name="interests"
-            label="興趣愛好"
-          >
-            <CheckboxGroup>
-              <Checkbox value="reading">閱讀</Checkbox>
-              <Checkbox value="music">音樂</Checkbox>
-              <Checkbox value="sports">運動</Checkbox>
-              <Checkbox value="travel">旅遊</Checkbox>
-            </CheckboxGroup>
-          </FormItem>
-
-          <FormItem
-            name="bio"
-            label="自我介紹"
-            rules={[Rules.maxLength(200, '自我介紹不能超過200字')]}
-          >
-            <Textarea
-              placeholder="請簡單介紹一下自己..."
-              rows={3}
-            />
-          </FormItem>
-
-          <div className="pt-4">
-            <Button
-              type="submit"
-              variant="primary"
             >
-              提交
-            </Button>
-          </div>
-        </Form>
-        {Object.keys(validationValues).length > 0 && (
-          <div className="mt-4 p-3 bg-gray-50 rounded text-sm">
-            <strong>提交的值：</strong>
-            <pre>{JSON.stringify(validationValues, null, 2)}</pre>
-          </div>
-        )}
+              <Input placeholder="請輸入使用者名稱" />
+            </FormItem>
+
+            <FormItem
+              name="validatedEmail"
+              label="電子郵件"
+              required
+              rules={[Rules.required('電子郵件為必填'), Rules.email()]}
+            >
+              <Input
+                type="email"
+                placeholder="請輸入電子郵件"
+              />
+            </FormItem>
+
+            <FormItem
+              name="phone"
+              label="手機號碼"
+              rules={[Rules.phone()]}
+            >
+              <Input placeholder="請輸入手機號碼（選填）" />
+            </FormItem>
+
+            <FormItem
+              name="gender"
+              label="性別"
+              required
+              rules={[Rules.required('請選擇性別')]}
+            >
+              <Select
+                options={[
+                  { value: 'male', label: '男性' },
+                  { value: 'female', label: '女性' },
+                  { value: 'other', label: '其他' },
+                ]}
+                placeholder="請選擇性別"
+              />
+            </FormItem>
+
+            <FormItem
+              name="interests"
+              label="興趣愛好"
+            >
+              <CheckboxGroup>
+                <Checkbox value="reading">閱讀</Checkbox>
+                <Checkbox value="music">音樂</Checkbox>
+                <Checkbox value="sports">運動</Checkbox>
+                <Checkbox value="travel">旅遊</Checkbox>
+              </CheckboxGroup>
+            </FormItem>
+
+            <FormItem
+              name="bio"
+              label="自我介紹"
+              rules={[Rules.maxLength(200, '自我介紹不能超過200字')]}
+            >
+              <Textarea
+                placeholder="請簡單介紹一下自己..."
+                rows={3}
+              />
+            </FormItem>
+
+            <div className="pt-4">
+              <Button
+                type="submit"
+                variant="primary"
+              >
+                提交
+              </Button>
+            </div>
+          </Form>
+          {Object.keys(validationValues).length > 0 && (
+            <div className="mt-4 p-3 bg-gray-50 rounded text-sm">
+              <strong>提交的值：</strong>
+              <pre>{JSON.stringify(validationValues, null, 2)}</pre>
+            </div>
+          )}
+        </CodeExample>
       </div>
 
       {/* 驗證時機 */}
@@ -571,14 +641,40 @@ const FormDocs = () => {
 
       {/* 實際使用範例 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔄 實際使用範例</h2>
-        <p className="component-docs-section-description">
-          以下是實際的表單範例，展示各種功能組合：
-        </p>
+        <CodeExample
+          title="🔄 實際使用範例"
+          description="以下是實際的表單範例，展示各種功能組合："
+          code={`// 互動式表單範例
+const [validationValues, setValidationValues] = useState<Record<string, unknown>>({});
+const [triggerValues, setTriggerValues] = useState<Record<string, unknown>>({});
+const [complexFormValues, setComplexFormValues] = useState<Record<string, unknown>>({});
 
-        <div className="component-docs-showcase">
+const handleBasicSubmit = (values: Record<string, unknown>) => {
+  alert(\`基本表單提交: \${JSON.stringify(values, null, 2)}\`);
+};
+
+return (
+  <div className="space-y-8 w-full">
+    {/* 基本表單 */}
+    <div className="max-w-md">
+      <h3 className="font-semibold mb-4">基本表單</h3>
+      <Form onSubmit={handleBasicSubmit}>
+        <FormItem name="basicName" label="姓名" required>
+          <Input placeholder="請輸入姓名" />
+        </FormItem>
+        <FormItem name="basicEmail" label="電子郵件" required>
+          <Input type="email" placeholder="請輸入電子郵件" />
+        </FormItem>
+        <FormItem>
+          <Button type="submit" color="primary">提交</Button>
+        </FormItem>
+      </Form>
+    </div>
+  </div>
+);`}
+        >
           <InteractiveExample />
-        </div>
+        </CodeExample>
       </div>
 
       {/* 驗證規則 */}
@@ -589,33 +685,58 @@ const FormDocs = () => {
         <div className="component-docs-showcase">
           <div className="space-y-6">
             <div>
-              <h4 className="font-medium mb-3 text-gray-600">必填驗證</h4>
-              <Form>
-                <FormItem
-                  name="required"
-                  label="必填欄位"
-                  rules={[Rules.required('此欄位為必填')]}
-                >
-                  <Input placeholder="請輸入內容" />
-                </FormItem>
-              </Form>
+              <CodeExample
+                title="🔄 必填驗證"
+                description="使用 Rules.required() 進行必填驗證："
+                code={`<FormItem
+  name="required"
+  label="必填欄位"
+  rules={[Rules.required('此欄位為必填')]}
+>
+  <Input placeholder="請輸入內容" />
+</FormItem>`}
+              >
+                <Form>
+                  <FormItem
+                    name="required"
+                    label="必填欄位"
+                    rules={[Rules.required('此欄位為必填')]}
+                  >
+                    <Input placeholder="請輸入內容" />
+                  </FormItem>
+                </Form>
+              </CodeExample>
               <p className="text-sm text-gray-500 mt-1">使用 Rules.required() 進行必填驗證</p>
             </div>
 
             <div>
-              <h4 className="font-medium mb-3 text-gray-600">長度驗證</h4>
-              <Form>
-                <FormItem
-                  name="length"
-                  label="長度限制"
-                  rules={[
-                    Rules.minLength(3, '至少需要3個字元'),
-                    Rules.maxLength(10, '最多只能10個字元'),
-                  ]}
-                >
-                  <Input placeholder="請輸入3-10個字元" />
-                </FormItem>
-              </Form>
+              <CodeExample
+                title="🔄 長度驗證"
+                description="使用 Rules.minLength() 和 Rules.maxLength() 限制長度："
+                code={`<FormItem
+  name="length"
+  label="長度限制"
+  rules={[
+    Rules.minLength(3, '至少需要3個字元'),
+    Rules.maxLength(10, '最多只能10個字元'),
+  ]}
+>
+  <Input placeholder="請輸入3-10個字元" />
+</FormItem>`}
+              >
+                <Form>
+                  <FormItem
+                    name="length"
+                    label="長度限制"
+                    rules={[
+                      Rules.minLength(3, '至少需要3個字元'),
+                      Rules.maxLength(10, '最多只能10個字元'),
+                    ]}
+                  >
+                    <Input placeholder="請輸入3-10個字元" />
+                  </FormItem>
+                </Form>
+              </CodeExample>
               <p className="text-sm text-gray-500 mt-1">
                 使用 Rules.minLength() 和 Rules.maxLength() 限制長度
               </p>
@@ -682,12 +803,49 @@ const FormDocs = () => {
 
       {/* 驗證時機 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">⏰ 驗證時機</h2>
-        <p className="component-docs-section-description">
-          支援三種不同的驗證觸發時機，可以根據需求靈活配置：
-        </p>
+        <CodeExample
+          title="🔄 驗證時機範例"
+          description="支援三種不同的驗證觸發時機，可以根據需求靈活配置："
+          code={`// 輸入時驗證 (onChange)
+<FormItem
+  name="onChangeExample"
+  label="即時驗證"
+  rules={[Rules.required('此欄位為必填', 'onChange')]}
+>
+  <Input placeholder="輸入時立即驗證" />
+</FormItem>
 
-        <div className="component-docs-showcase">
+// 失焦時驗證 (onBlur)
+<FormItem
+  name="onBlurExample"
+  label="失焦驗證"
+  rules={[Rules.email('請輸入有效的電子郵件', 'onBlur')]}
+>
+  <Input placeholder="失焦時才驗證" />
+</FormItem>
+
+// 提交時驗證 (onSubmit)
+<FormItem
+  name="onSubmitExample"
+  label="提交驗證"
+  rules={[Rules.phone('請輸入有效的手機號碼', 'onSubmit')]}
+>
+  <Input placeholder="只在提交時驗證" />
+</FormItem>
+
+// 混合驗證時機
+<FormItem
+  name="mixedExample"
+  label="混合驗證"
+  rules={[
+    Rules.required('此欄位為必填', ['onChange', 'onBlur']),
+    Rules.minLength(6, '至少需要6個字元', 'onBlur'),
+    Rules.maxLength(20, '最多20個字元', 'onSubmit'),
+  ]}
+>
+  <Input placeholder="不同規則在不同時機驗證" />
+</FormItem>`}
+        >
           <div className="space-y-6">
             <div>
               <h4 className="font-medium mb-3 text-gray-600">輸入時驗證 (onChange)</h4>
@@ -759,7 +917,7 @@ const FormDocs = () => {
               </p>
             </div>
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>驗證時機說明：</strong>
@@ -781,10 +939,40 @@ const FormDocs = () => {
 
       {/* 佈局選項 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📐 佈局選項</h2>
-        <p className="component-docs-section-description">支援垂直和水平兩種佈局方式：</p>
+        <CodeExample
+          title="🔄 佈局選項範例"
+          description="支援垂直和水平兩種佈局方式："
+          code={`// 垂直佈局（預設）
+<Form>
+  <FormItem name="verticalName" label="姓名" required>
+    <Input placeholder="請輸入姓名" />
+  </FormItem>
+  <FormItem name="verticalEmail" label="電子郵件">
+    <Input type="email" placeholder="請輸入電子郵件" />
+  </FormItem>
+</Form>
 
-        <div className="component-docs-showcase">
+// 水平佈局
+<Form>
+  <FormItem
+    name="horizontalName"
+    label="姓名"
+    required
+    layout="horizontal"
+    labelWidth="100px"
+  >
+    <Input placeholder="請輸入姓名" />
+  </FormItem>
+  <FormItem
+    name="horizontalAge"
+    label="年齡"
+    layout="horizontal"
+    labelWidth="100px"
+  >
+    <Input type="number" placeholder="請輸入年齡" />
+  </FormItem>
+</Form>`}
+        >
           <div className="space-y-8">
             <div>
               <h4 className="font-medium mb-3 text-gray-600">垂直佈局（預設）</h4>
@@ -838,7 +1026,7 @@ const FormDocs = () => {
               </div>
             </div>
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>佈局配置：</strong>
@@ -859,10 +1047,36 @@ const FormDocs = () => {
 
       {/* 初始值 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔄 初始值設定</h2>
-        <p className="component-docs-section-description">支援設定表單的初始值：</p>
+        <CodeExample
+          title="🔄 初始值設定範例"
+          description="支援設定表單的初始值："
+          code={`// 設定表單初始值
+<Form
+  initialValues={{
+    prefilledName: 'John Doe',
+    prefilledEmail: 'john@example.com',
+    prefilledBio: '這是一段預設的自我介紹',
+  }}
+>
+  <FormItem name="prefilledName" label="姓名" required>
+    <Input placeholder="請輸入姓名" />
+  </FormItem>
 
-        <div className="component-docs-showcase">
+  <FormItem name="prefilledEmail" label="電子郵件">
+    <Input type="email" placeholder="請輸入電子郵件" />
+  </FormItem>
+
+  <FormItem name="prefilledBio" label="自我介紹">
+    <Input placeholder="請輸入自我介紹" />
+  </FormItem>
+
+  <div className="pt-4">
+    <Button type="submit" variant="primary">
+      提交
+    </Button>
+  </div>
+</Form>`}
+        >
           <div className="max-w-md">
             <Form
               initialValues={{
@@ -906,7 +1120,7 @@ const FormDocs = () => {
               </div>
             </Form>
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>初始值功能：</strong>

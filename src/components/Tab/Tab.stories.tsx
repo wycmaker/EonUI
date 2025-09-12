@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Story, Controls, Primary } from '@storybook/addon-docs/blocks';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { CodeExample } from '../shared/CodeExample';
+
 import { Tab, TabPane } from './Tab';
 import type { TabItem } from './Tab';
 import '../../styles/component-docs.css';
@@ -215,14 +217,34 @@ const TabDocs = () => {
 
       {/* 基礎用法 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📝 基礎用法</h2>
-        <p className="component-docs-section-description">
-          Tab組件支援兩種定義方式：使用items配置陣列或TabPane組件。
-        </p>
+        <CodeExample
+          title="🔄 基礎用法範例"
+          description="支援兩種定義方式：使用items配置陣列或TabPane組件。"
+          code={`const [activeKey, setActiveKey] = useState('home');
 
-        <div className="component-docs-showcase">
+const items = [
+  {
+    key: 'home',
+    label: '首頁',
+    icon: <HomeIcon />,
+    children: (
+      <div className="p-4 bg-gray-50 rounded-lg">
+        <h3 className="text-lg font-semibold mb-2">歡迎來到首頁</h3>
+        <p>這是首頁的內容區域。您可以在這裡放置任何組件或內容。</p>
+      </div>
+    ),
+  },
+  // ...更多項目
+];
+
+<Tab
+  items={items}
+  activeKey={activeKey}
+  onChange={setActiveKey}
+/>`}
+        >
           <InteractiveExample />
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>配置方式：</strong>
@@ -239,12 +261,31 @@ const TabDocs = () => {
 
       {/* 樣式變體 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎨 樣式變體</h2>
-        <p className="component-docs-section-description">
-          Tab組件提供了兩種視覺樣式，適用於不同的設計需求：
-        </p>
+        <CodeExample
+          title="🔄 樣式變體範例"
+          description="支援兩種視覺樣式，適用於不同的設計需求："
+          code={`// 底線樣式
+<Tab
+  variant="underline"
+  items={[
+    { key: 'tab1', label: '標籤 1', children: <div>底線樣式內容 1</div> },
+    { key: 'tab2', label: '標籤 2', children: <div>底線樣式內容 2</div> },
+    { key: 'tab3', label: '標籤 3', children: <div>底線樣式內容 3</div> },
+  ]}
+  defaultActiveKey="tab1"
+/>
 
-        <div className="component-docs-showcase">
+// 按鈕樣式
+<Tab
+  variant="button"
+  items={[
+    { key: 'tab1', label: '標籤 1', children: <div>按鈕樣式內容 1</div> },
+    { key: 'tab2', label: '標籤 2', children: <div>按鈕樣式內容 2</div> },
+    { key: 'tab3', label: '標籤 3', children: <div>按鈕樣式內容 3</div> },
+  ]}
+  defaultActiveKey="tab1"
+/>`}
+        >
           <div className="space-y-6">
             <div>
               <h4 className="text-sm font-medium text-gray-700 mb-3">底線樣式 (underline)</h4>
@@ -296,7 +337,7 @@ const TabDocs = () => {
               />
             </div>
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>樣式建議：</strong>
@@ -313,12 +354,42 @@ const TabDocs = () => {
 
       {/* 大小選項 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📏 大小選項</h2>
-        <p className="component-docs-section-description">
-          支援三種不同的大小選項，適應不同的設計需求：
-        </p>
+        <CodeExample
+          title="🔄 大小選項範例"
+          description="支援三種不同的大小選項，適應不同的設計需求："
+          code={`// 小尺寸
+<Tab
+  size="sm"
+  variant="underline"
+  items={[
+    { key: 'tab1', label: '標籤 1', children: <div>小尺寸內容</div> },
+    { key: 'tab2', label: '標籤 2', children: <div>小尺寸內容</div> },
+  ]}
+  defaultActiveKey="tab1"
+/>
 
-        <div className="component-docs-showcase">
+// 中等尺寸（預設）
+<Tab
+  size="md"
+  variant="underline"
+  items={[
+    { key: 'tab1', label: '標籤 1', children: <div>中等尺寸內容</div> },
+    { key: 'tab2', label: '標籤 2', children: <div>中等尺寸內容</div> },
+  ]}
+  defaultActiveKey="tab1"
+/>
+
+// 大尺寸
+<Tab
+  size="lg"
+  variant="underline"
+  items={[
+    { key: 'tab1', label: '標籤 1', children: <div>大尺寸內容</div> },
+    { key: 'tab2', label: '標籤 2', children: <div>大尺寸內容</div> },
+  ]}
+  defaultActiveKey="tab1"
+/>`}
+        >
           <div className="space-y-6">
             <div>
               <h4 className="text-sm font-medium text-gray-700 mb-3">小尺寸 (sm)</h4>
@@ -383,7 +454,7 @@ const TabDocs = () => {
               />
             </div>
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>尺寸指南：</strong>
@@ -403,12 +474,34 @@ const TabDocs = () => {
 
       {/* 圖示支援 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎯 圖示支援</h2>
-        <p className="component-docs-section-description">
-          Tab組件支援在標籤中顯示圖示，提升視覺識別度：
-        </p>
-
-        <div className="component-docs-showcase">
+        <CodeExample
+          title="🔄 圖示支援範例"
+          description="支援在標籤中顯示圖示，提升視覺識別度："
+          code={`// 帶圖示的 Tab 項目
+<Tab
+  items={[
+    {
+      key: 'home',
+      label: '首頁',
+      icon: <HomeIcon />,
+      children: <div className="p-4">首頁內容</div>,
+    },
+    {
+      key: 'user',
+      label: '用戶',
+      icon: <UserIcon />,
+      children: <div className="p-4">用戶內容</div>,
+    },
+    {
+      key: 'settings',
+      label: '設定',
+      icon: <SettingsIcon />,
+      children: <div className="p-4">設定內容</div>,
+    },
+  ]}
+  defaultActiveKey="home"
+/>`}
+        >
           <Tab
             items={[
               {
@@ -432,19 +525,37 @@ const TabDocs = () => {
             ]}
             defaultActiveKey="home"
           />
-        </div>
+        </CodeExample>
       </div>
 
       {/* 路由模式 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔗 路由模式</h2>
-        <p className="component-docs-section-description">
-          啟用路由模式後，Tab組件可以用於頁面導航，並自動判斷激活狀態：
-        </p>
+        <CodeExample
+          title="🔄 路由模式範例"
+          description="啟用路由模式後，Tab組件可以用於頁面導航，並自動判斷激活狀態："
+          code={`const [currentPath, setCurrentPath] = useState('/dashboard');
 
-        <div className="component-docs-showcase">
+const routerItems = [
+  { key: 'dashboard', label: '儀表板', href: '/dashboard', icon: <HomeIcon /> },
+  { key: 'analytics', label: '數據分析', href: '/analytics', icon: <AnalyticsIcon /> },
+  { key: 'users', label: '用戶管理', href: '/users', icon: <UserIcon /> },
+  { key: 'settings', label: '系統設定', href: '/settings', icon: <SettingsIcon /> },
+];
+
+<Tab
+  items={routerItems}
+  useRouter
+  currentPath={currentPath}
+  onChange={(key) => {
+    const item = routerItems.find((item) => item.key === key);
+    if (item && item.href) {
+      setCurrentPath(item.href);
+    }
+  }}
+/>`}
+        >
           <RouterExample />
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>路由模式特點：</strong>
@@ -465,12 +576,45 @@ const TabDocs = () => {
 
       {/* TabPane 使用方式 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📝 TabPane 組件</h2>
-        <p className="component-docs-section-description">
-          使用TabPane組件可以更直觀地定義標籤頁內容：
-        </p>
+        <CodeExample
+          title="🔄 TabPane 組件範例"
+          description="使用TabPane組件可以更直觀地定義標籤頁內容："
+          code={`// 使用 TabPane 組件定義標籤
+<Tab defaultActiveKey="pane1">
+  <TabPane
+    key="pane1"
+    tab="面板 1"
+    icon={<HomeIcon />}
+  >
+    <div className="p-4 bg-gray-50 rounded-lg">
+      <h3 className="text-lg font-semibold mb-2">面板 1</h3>
+      <p>使用 TabPane 組件的方式定義標籤內容。</p>
+    </div>
+  </TabPane>
 
-        <div className="component-docs-showcase">
+  <TabPane
+    key="pane2"
+    tab="面板 2"
+    icon={<UserIcon />}
+  >
+    <div className="p-4 bg-blue-50 rounded-lg">
+      <h3 className="text-lg font-semibold mb-2">面板 2</h3>
+      <p>每個 TabPane 可以包含任意的 React 組件。</p>
+    </div>
+  </TabPane>
+
+  <TabPane
+    key="pane3"
+    tab="禁用面板"
+    disabled
+  >
+    <div className="p-4 bg-red-50 rounded-lg">
+      <h3 className="text-lg font-semibold mb-2">禁用面板</h3>
+      <p>這個面板被禁用了。</p>
+    </div>
+  </TabPane>
+</Tab>`}
+        >
           <Tab defaultActiveKey="pane1">
             <TabPane
               key="pane1"
@@ -503,17 +647,37 @@ const TabDocs = () => {
               </div>
             </TabPane>
           </Tab>
-        </div>
+        </CodeExample>
       </div>
 
       {/* 禁用狀態 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🚫 禁用狀態</h2>
-        <p className="component-docs-section-description">
-          Tab項目可以設定為禁用狀態，防止用戶點擊：
-        </p>
-
-        <div className="component-docs-showcase">
+        <CodeExample
+          title="🔄 禁用狀態範例"
+          description="Tab項目可以設定為禁用狀態，防止用戶點擊："
+          code={`// 禁用特定的 Tab 項目
+<Tab
+  items={[
+    {
+      key: 'active1',
+      label: '可用標籤',
+      children: <div className="p-4">這是一個可用的標籤內容。</div>,
+    },
+    {
+      key: 'disabled',
+      label: '禁用標籤',
+      disabled: true,
+      children: <div className="p-4">這個內容不會顯示。</div>,
+    },
+    {
+      key: 'active2',
+      label: '另一個可用標籤',
+      children: <div className="p-4">另一個可用標籤的內容。</div>,
+    },
+  ]}
+  defaultActiveKey="active1"
+/>`}
+        >
           <Tab
             items={[
               {
@@ -535,17 +699,36 @@ const TabDocs = () => {
             ]}
             defaultActiveKey="active1"
           />
-        </div>
+        </CodeExample>
       </div>
 
       {/* 自訂樣式 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎨 自訂樣式</h2>
-        <p className="component-docs-section-description">
-          Tab組件提供多個className屬性來自訂樣式：
-        </p>
-
-        <div className="component-docs-showcase">
+        <CodeExample
+          title="🔄 自訂樣式範例"
+          description="Tab組件提供多個className屬性來自訂樣式："
+          code={`// 使用各種 className 屬性自訂樣式
+<Tab
+  items={[
+    {
+      key: 'custom1',
+      label: '自訂標籤 1',
+      children: <div className="p-4 text-purple-700">自訂樣式的內容 1</div>,
+    },
+    {
+      key: 'custom2',
+      label: '自訂標籤 2',
+      children: <div className="p-4 text-green-700">自訂樣式的內容 2</div>,
+    },
+  ]}
+  defaultActiveKey="custom1"
+  className="border-2 border-purple-200 rounded-lg p-4"
+  tabsClassName="bg-purple-50 rounded-t-lg"
+  contentClassName="bg-purple-25 border-t border-purple-200"
+  tabItemClassName="text-purple-600 hover:text-purple-800"
+  activeTabItemClassName="text-purple-900 border-purple-500"
+/>`}
+        >
           <Tab
             items={[
               {
@@ -566,7 +749,7 @@ const TabDocs = () => {
             tabItemClassName="text-purple-600 hover:text-purple-800"
             activeTabItemClassName="text-purple-900 border-purple-500"
           />
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>可用的className屬性：</strong>
@@ -592,14 +775,26 @@ const TabDocs = () => {
 
       {/* 受控模式 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎛️ 受控模式</h2>
-        <p className="component-docs-section-description">
-          Tab組件支援受控和非受控兩種模式，可以通過程式控制激活狀態：
-        </p>
+        <CodeExample
+          title="🔄 受控模式範例"
+          description="Tab組件支援受控和非受控兩種模式，可以通過程式控制激活狀態："
+          code={`// 受控模式的 Tab 組件
+const [activeKey, setActiveKey] = useState('home');
 
-        <div className="component-docs-showcase">
+<Tab
+  items={items}
+  activeKey={activeKey}
+  onChange={setActiveKey}
+/>
+
+// 非受控模式（僅設定預設值）
+<Tab
+  items={items}
+  defaultActiveKey="home"
+/>`}
+        >
           <InteractiveExample />
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>控制模式：</strong>

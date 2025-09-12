@@ -3,6 +3,8 @@ import React from 'react';
 import { Story, Controls, Primary } from '@storybook/addon-docs/blocks';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { CodeExample } from '../shared/CodeExample';
+
 import { Layout } from './Layout';
 import '../../styles/component-docs.css';
 
@@ -416,14 +418,26 @@ const LayoutDocs = () => {
 
       {/* 基本佈局展示 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🏗️ 基本佈局</h2>
-        <p className="component-docs-section-description">
-          展示不同的佈局組合，從簡單的三區塊到完整的四區塊佈局：
-        </p>
+        <CodeExample
+          title="🔄 佈局範例"
+          description="展示不同的佈局組合，從簡單的三區塊到完整的四區塊佈局："
+          code={`// 基本佈局組合
+<Layout
+  header={<Header />}
+  main={<Main />}
+  footer={<Footer />}
+/>
 
-        <div className="component-docs-showcase">
+// 完整佈局組合
+<Layout
+  header={<Header />}
+  aside={<Aside />}
+  main={<Main />}
+  footer={<Footer />}
+/>`}
+        >
           <LayoutShowcase />
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>佈局組合說明：</strong>
@@ -446,14 +460,42 @@ const LayoutDocs = () => {
 
       {/* 尺寸控制 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📏 尺寸控制</h2>
-        <p className="component-docs-section-description">
-          提供多種尺寸選項，讓你精確控制各區塊的大小：
-        </p>
+        <CodeExample
+          title="🔄 尺寸選項範例"
+          description="提供多種尺寸選項，讓你精確控制各區塊的大小："
+          code={`// 不同尺寸的佈局組合
+// 小型側邊欄
+<Layout
+  aside={<Aside />}
+  asideWidth="sm"
+  header={<Header />}
+  headerHeight="sm"
+>
+  <Main />
+</Layout>
 
-        <div className="component-docs-showcase">
+// 中型側邊欄
+<Layout
+  aside={<Aside />}
+  asideWidth="md"
+  header={<Header />}
+  headerHeight="md"
+>
+  <Main />
+</Layout>
+
+// 大型側邊欄
+<Layout
+  aside={<Aside />}
+  asideWidth="lg"
+  header={<Header />}
+  headerHeight="lg"
+>
+  <Main />
+</Layout>`}
+        >
           <SizeShowcase />
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>尺寸選項說明：</strong>
@@ -476,12 +518,41 @@ const LayoutDocs = () => {
 
       {/* 固定位置功能 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📌 固定位置功能</h2>
-        <p className="component-docs-section-description">支援標題、側邊欄、頁腳的固定位置功能：</p>
+        <CodeExample
+          title="🔄 固定位置功能範例"
+          description="支援標題、側邊欄、頁腳的固定位置功能："
+          code={`// 固定標題的佈局
+<Layout
+  header={<Header />}
+  stickyHeader={true}
+  aside={<Aside />}
+  footer={<Footer />}
+>
+  <Main />
+</Layout>
 
-        <div className="component-docs-showcase">
+// 固定側邊欄的佈局
+<Layout
+  header={<Header />}
+  aside={<Aside />}
+  stickyAside={true}
+  footer={<Footer />}
+>
+  <Main />
+</Layout>
+
+// 固定頁腳的佈局
+<Layout
+  header={<Header />}
+  aside={<Aside />}
+  footer={<Footer />}
+  stickyFooter={true}
+>
+  <Main />
+</Layout>`}
+        >
           <StickyShowcase />
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>固定位置特色：</strong>
@@ -504,14 +575,31 @@ const LayoutDocs = () => {
 
       {/* 側邊欄高度模式 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📐 側邊欄高度模式</h2>
-        <p className="component-docs-section-description">
-          提供兩種側邊欄高度模式，適應不同的設計需求：
-        </p>
+        <CodeExample
+          title="🔄 側邊欄高度模式範例"
+          description="提供兩種側邊欄高度模式，適應不同的設計需求："
+          code={`// 全高模式（side）
+<Layout
+  header={<Header />}
+  aside={<Aside />}
+  asideHeight="full"
+  footer={<Footer />}
+>
+  <Main />
+</Layout>
 
-        <div className="component-docs-showcase">
+// 內容區高度模式（content）
+<Layout
+  header={<Header />}
+  aside={<Aside />}
+  asideHeight="content"
+  footer={<Footer />}
+>
+  <Main />
+</Layout>`}
+        >
           <AsideHeightShowcase />
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>高度模式說明：</strong>
@@ -534,14 +622,34 @@ const LayoutDocs = () => {
 
       {/* 響應式設計 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📱 響應式設計</h2>
-        <p className="component-docs-section-description">
-          內建響應式設計，自動適應不同螢幕尺寸，並提供手機版選單功能：
-        </p>
+        <CodeExample
+          title="🔄 響應式設計範例"
+          description="內建響應式設計，自動適應不同螢幕尺寸，並提供手機版選單功能："
+          code={`// 響應式佈局會自動適應螢幕尺寸
+<Layout
+  header={<Header />}
+  aside={<Aside />}
+  footer={<Footer />}
+  // 在小螢幕上自動隱藏側邊欄
+  // 可以通過 showMobileSidebar 控制顯示
+>
+  <Main />
+</Layout>
 
-        <div className="component-docs-showcase">
+// 手動控制手機版側邊欄
+const [showSidebar, setShowSidebar] = useState(false);
+
+<Layout
+  header={<Header onMenuClick={() => setShowSidebar(!showSidebar)} />}
+  aside={<Aside />}
+  showMobileSidebar={showSidebar}
+  onMobileSidebarClose={() => setShowSidebar(false)}
+>
+  <Main />
+</Layout>`}
+        >
           <MobileResponsiveShowcase />
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>響應式特色：</strong>

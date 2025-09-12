@@ -5,6 +5,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { Button } from '../Button/Button';
 import { Input } from '../Input/Input';
+import { CodeExample } from '../shared/CodeExample';
 import { Textarea } from '../Textarea/Textarea';
 
 import { Modal } from './Modal';
@@ -273,22 +274,88 @@ const ModalDocs = () => {
 
       {/* 實際使用範例 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔄 實際使用範例</h2>
-        <p className="component-docs-section-description">
-          以下是實際的 Modal 範例，展示各種功能組合：
-        </p>
+        <CodeExample
+          title="🔄 實際使用範例"
+          description="以下是實際的 Modal 範例，展示各種功能組合："
+          code={`// 互動式 Modal 範例
+const [visible, setVisible] = useState(false);
+const [size, setSize] = useState('md');
+const [closable, setClosable] = useState(true);
 
-        <div className="component-docs-showcase">
-          <InteractiveExample />
+return (
+  <div className="space-y-6 w-full max-w-md">
+    <div>
+      <h4 className="font-medium mb-2 text-gray-700">基本 Modal</h4>
+      <Button onClick={() => setVisible(true)}>
+        開啟 Modal
+      </Button>
+
+      <Modal
+        visible={visible}
+        onClose={() => setVisible(false)}
+        title="基本 Modal"
+        size={size}
+        closable={closable}
+      >
+        <p>這是一個基本的 Modal 範例。</p>
+        <div className="flex justify-end gap-2 mt-4">
+          <Button variant="outline" onClick={() => setVisible(false)}>
+            取消
+          </Button>
+          <Button color="primary" onClick={() => setVisible(false)}>
+            確認
+          </Button>
         </div>
+      </Modal>
+    </div>
+  </div>
+);`}
+        >
+          <InteractiveExample />
+        </CodeExample>
       </div>
 
       {/* Modal 大小 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📏 Modal 大小</h2>
-        <p className="component-docs-section-description">Modal 提供五種不同的大小選項：</p>
+        <CodeExample
+          title="🔄 Modal 大小範例"
+          description="Modal 提供五種不同的大小選項："
+          code={`// 不同大小的 Modal
+// 小型 Modal (sm)
+ModalService.open({
+  title: 'SM Modal',
+  size: 'sm',
+  children: <div>這是 sm 大小的 Modal。</div>,
+});
 
-        <div className="component-docs-showcase">
+// 中型 Modal (md) - 預設
+ModalService.open({
+  title: 'MD Modal',
+  size: 'md',
+  children: <div>這是 md 大小的 Modal。</div>,
+});
+
+// 大型 Modal (lg)
+ModalService.open({
+  title: 'LG Modal',
+  size: 'lg',
+  children: <div>這是 lg 大小的 Modal。</div>,
+});
+
+// 超大型 Modal (xl)
+ModalService.open({
+  title: 'XL Modal',
+  size: 'xl',
+  children: <div>這是 xl 大小的 Modal。</div>,
+});
+
+// 全螢幕 Modal (full)
+ModalService.open({
+  title: 'FULL Modal',
+  size: 'full',
+  children: <div>這是 full 大小的 Modal。</div>,
+});`}
+        >
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {(['sm', 'md', 'lg', 'xl', 'full'] as const).map((size) => (
               <Button
@@ -310,7 +377,7 @@ const ModalDocs = () => {
               </Button>
             ))}
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>大小說明：</strong>
@@ -336,14 +403,51 @@ const ModalDocs = () => {
 
       {/* ModalService 使用 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔧 ModalService 使用</h2>
-        <p className="component-docs-section-description">
-          透過 ModalService 可以程式化控制 Modal，支援動態建立和管理：
-        </p>
-
-        <div className="component-docs-showcase">
-          <ServiceExample />
+        <CodeExample
+          title="🔄 ModalService 使用範例"
+          description="透過 ModalService 可以程式化控制 Modal，支援動態建立和管理："
+          code={`// 使用 ModalService 進行程式化控制
+const ServiceExample = () => {
+  const handleOpenModal = () => {
+    const modalId = ModalService.open({
+      title: 'ModalService 範例',
+      size: 'md',
+      children: (
+        <div>
+          <p>這是通過 ModalService 開啟的 Modal。</p>
+          <div className="flex justify-end gap-2 mt-4">
+            <Button
+              variant="outline"
+              onClick={() => ModalService.close(modalId)}
+            >
+              關閉
+            </Button>
+            <Button
+              color="primary"
+              onClick={() => {
+                ModalService.close(modalId);
+                alert('確認操作完成！');
+              }}
+            >
+              確認
+            </Button>
+          </div>
         </div>
+      ),
+    });
+  };
+
+  return (
+    <div className="space-y-4">
+      <Button onClick={handleOpenModal}>
+        開啟 ModalService Modal
+      </Button>
+    </div>
+  );
+};`}
+        >
+          <ServiceExample />
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>ModalService 功能：</strong>
@@ -366,12 +470,30 @@ const ModalDocs = () => {
 
       {/* 動畫效果 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">✨ 動畫效果</h2>
-        <p className="component-docs-section-description">
-          Modal 支援滑入動畫效果，提供流暢的使用體驗：
-        </p>
+        <CodeExample
+          title="🔄 動畫效果範例"
+          description="Modal 支援預設、慢速和無動畫效果："
+          code={`// 預設動畫效果
+ModalService.open({
+  title: '預設動畫',
+  children: <p>使用預設的滑入動畫效果（300ms）</p>,
+  animationDuration: 300,
+});
 
-        <div className="component-docs-showcase">
+// 慢速動畫效果
+ModalService.open({
+  title: '慢速動畫',
+  children: <p>使用較慢的動畫效果（600ms）</p>,
+  animationDuration: 600,
+});
+
+// 關閉動畫效果
+ModalService.open({
+  title: '無動畫',
+  children: <p>關閉動畫效果，立即顯示</p>,
+  disableAnimation: true,
+});`}
+        >
           <div className="grid grid-cols-2 gap-4">
             <Button
               onClick={() =>
@@ -407,7 +529,7 @@ const ModalDocs = () => {
               無動畫
             </Button>
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>動畫特色：</strong>

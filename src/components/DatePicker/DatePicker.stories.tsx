@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { Story, Controls, Primary } from '@storybook/addon-docs/blocks';
 import type { Meta, StoryObj } from '@storybook/react';
 
+import { CodeExample } from '../shared/CodeExample';
+
 import { DatePicker } from './DatePicker';
 import '../../styles/component-docs.css';
 
@@ -114,22 +116,67 @@ const DatePickerDocs = () => {
 
       {/* 實際使用範例 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔄 實際使用範例</h2>
-        <p className="component-docs-section-description">
-          以下是實際的日期選擇器範例，展示各種功能組合：
-        </p>
+        <CodeExample
+          title="🔄 實際使用範例"
+          description="以下是實際的日期選擇器範例，展示各種功能組合："
+          code={`const [date, setDate] = useState(new Date());
+const [time, setTime] = useState('12:00');
+const [datetime, setDatetime] = useState(new Date());
 
-        <div className="component-docs-showcase">
+// 日期選擇
+<DatePicker
+  mode="date"
+  value={date}
+  onChange={setDate}
+  placeholder="選擇日期"
+/>
+
+// 時間選擇
+<DatePicker
+  mode="time"
+  value={time}
+  onChange={setTime}
+  placeholder="選擇時間"
+/>
+
+// 日期時間選擇
+<DatePicker
+  mode="datetime"
+  value={datetime}
+  onChange={setDatetime}
+  placeholder="選擇日期和時間"
+/>`}
+        >
           <InteractiveExample />
-        </div>
+        </CodeExample>
       </div>
 
       {/* 選擇器模式 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎯 選擇器模式</h2>
-        <p className="component-docs-section-description">DatePicker 支援三種不同的選擇模式：</p>
+        <CodeExample
+          title="🎯 選擇器模式"
+          description="DatePicker 支援三種不同的選擇模式："
+          code={`// 日期模式 - 僅選擇日期
+<DatePicker
+  mode="date"
+  placeholder="選擇日期"
+  defaultValue={new Date()}
+/>
 
-        <div className="component-docs-showcase">
+// 時間模式 - 僅選擇時間
+<DatePicker
+  mode="time"
+  placeholder="選擇時間"
+  defaultValue={new Date()}
+/>
+
+// 日期時間模式 - 同時選擇日期和時間
+<DatePicker
+  mode="datetime"
+  placeholder="選擇日期和時間"
+  defaultValue={new Date()}
+/>`}
+        >
           <div className="space-y-6">
             <div>
               <h4 className="font-medium mb-3 text-gray-600">日期模式 (date)</h4>
@@ -163,7 +210,7 @@ const DatePickerDocs = () => {
               </p>
             </div>
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>模式說明：</strong>
@@ -183,28 +230,48 @@ const DatePickerDocs = () => {
 
       {/* 樣式變體 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎨 樣式變體</h2>
-        <p className="component-docs-section-description">
-          DatePicker 組件提供了三種不同的樣式變體：
-        </p>
+        <CodeExample
+          title="🎨 樣式變體"
+          description="DatePicker 組件提供了三種不同的樣式變體："
+          code={`// 預設樣式
+<DatePicker
+  variant="default"
+  placeholder="預設樣式"
+  mode="date"
+/>
 
-        <div className="component-docs-showcase">
-          <DatePicker
-            variant="default"
-            placeholder="預設樣式"
-            mode="date"
-          />
-          <DatePicker
-            variant="filled"
-            placeholder="填充樣式"
-            mode="date"
-          />
-          <DatePicker
-            variant="outline"
-            placeholder="外框樣式"
-            mode="date"
-          />
-        </div>
+// 填充樣式
+<DatePicker
+  variant="filled"
+  placeholder="填充樣式"
+  mode="date"
+/>
+
+// 外框樣式
+<DatePicker
+  variant="outline"
+  placeholder="外框樣式"
+  mode="date"
+/>`}
+        >
+          <div className="space-y-4">
+            <DatePicker
+              variant="default"
+              placeholder="預設樣式"
+              mode="date"
+            />
+            <DatePicker
+              variant="filled"
+              placeholder="填充樣式"
+              mode="date"
+            />
+            <DatePicker
+              variant="outline"
+              placeholder="外框樣式"
+              mode="date"
+            />
+          </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>使用建議：</strong>
@@ -224,28 +291,48 @@ const DatePickerDocs = () => {
 
       {/* 大小選項 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📏 大小選項</h2>
-        <p className="component-docs-section-description">
-          支援三種不同的大小選項，所有尺寸都符合 WCAG 最小觸控目標要求：
-        </p>
+        <CodeExample
+          title="📏 大小選項"
+          description="支援三種不同的大小選項，所有尺寸都符合 WCAG 最小觸控目標要求："
+          code={`// 小尺寸 (32px)
+<DatePicker
+  size="sm"
+  placeholder="小尺寸 (32px)"
+  mode="date"
+/>
 
-        <div className="component-docs-showcase">
-          <DatePicker
-            size="sm"
-            placeholder="小尺寸 (32px)"
-            mode="date"
-          />
-          <DatePicker
-            size="md"
-            placeholder="中等尺寸 (40px)"
-            mode="date"
-          />
-          <DatePicker
-            size="lg"
-            placeholder="大尺寸 (48px)"
-            mode="date"
-          />
-        </div>
+// 中等尺寸 (40px) - 預設
+<DatePicker
+  size="md"
+  placeholder="中等尺寸 (40px)"
+  mode="date"
+/>
+
+// 大尺寸 (48px)
+<DatePicker
+  size="lg"
+  placeholder="大尺寸 (48px)"
+  mode="date"
+/>`}
+        >
+          <div className="space-y-4">
+            <DatePicker
+              size="sm"
+              placeholder="小尺寸 (32px)"
+              mode="date"
+            />
+            <DatePicker
+              size="md"
+              placeholder="中等尺寸 (40px)"
+              mode="date"
+            />
+            <DatePicker
+              size="lg"
+              placeholder="大尺寸 (48px)"
+              mode="date"
+            />
+          </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>尺寸指南：</strong>
@@ -265,33 +352,60 @@ const DatePickerDocs = () => {
 
       {/* 狀態展示 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🚦 狀態展示</h2>
-        <p className="component-docs-section-description">
-          日期選擇器支援多種狀態，提供清晰的視覺反饋：
-        </p>
+        <CodeExample
+          title="🚦 狀態展示"
+          description="日期選擇器支援多種狀態，提供清晰的視覺反饋："
+          code={`// 預設狀態
+<DatePicker
+  status="default"
+  placeholder="預設狀態"
+  mode="date"
+/>
 
-        <div className="component-docs-showcase">
-          <DatePicker
-            status="default"
-            placeholder="預設狀態"
-            mode="date"
-          />
-          <DatePicker
-            status="error"
-            placeholder="錯誤狀態"
-            mode="date"
-          />
-          <DatePicker
-            status="success"
-            placeholder="成功狀態"
-            mode="date"
-          />
-          <DatePicker
-            status="warning"
-            placeholder="警告狀態"
-            mode="date"
-          />
-        </div>
+// 錯誤狀態
+<DatePicker
+  status="error"
+  placeholder="錯誤狀態"
+  mode="date"
+/>
+
+// 成功狀態
+<DatePicker
+  status="success"
+  placeholder="成功狀態"
+  mode="date"
+/>
+
+// 警告狀態
+<DatePicker
+  status="warning"
+  placeholder="警告狀態"
+  mode="date"
+/>`}
+        >
+          <div className="space-y-4">
+            <DatePicker
+              status="default"
+              placeholder="預設狀態"
+              mode="date"
+            />
+            <DatePicker
+              status="error"
+              placeholder="錯誤狀態"
+              mode="date"
+            />
+            <DatePicker
+              status="success"
+              placeholder="成功狀態"
+              mode="date"
+            />
+            <DatePicker
+              status="warning"
+              placeholder="警告狀態"
+              mode="date"
+            />
+          </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>狀態說明：</strong>
@@ -314,12 +428,31 @@ const DatePickerDocs = () => {
 
       {/* 日期範圍限制 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">📅 日期範圍限制</h2>
-        <p className="component-docs-section-description">
-          支援最小日期、最大日期和禁用日期功能。當設置日期限制時，如果「今天」或「現在」不在允許範圍內，相應的快捷按鈕會自動隱藏：
-        </p>
+        <CodeExample
+          title="📅 日期範圍限制"
+          description="支援最小日期、最大日期和禁用日期功能。當設置日期限制時，如果「今天」或「現在」不在允許範圍內，相應的快捷按鈕會自動隱藏："
+          code={`// 最小日期限制（今天開始）
+<DatePicker
+  mode="date"
+  minDate={new Date()}
+  placeholder="只能選擇今天及以後的日期"
+/>
 
-        <div className="component-docs-showcase">
+// 最大日期限制（本月內）
+<DatePicker
+  mode="date"
+  maxDate={new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0)}
+  placeholder="只能選擇本月內的日期"
+/>
+
+// 日期範圍（未來7天）
+<DatePicker
+  mode="date"
+  minDate={new Date()}
+  maxDate={new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)}
+  placeholder="只能選擇未來7天內的日期"
+/>`}
+        >
           <div className="space-y-6">
             <div>
               <h4 className="font-medium mb-3 text-gray-600">最小日期限制（今天開始）</h4>
@@ -349,7 +482,7 @@ const DatePickerDocs = () => {
               />
             </div>
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>範圍限制功能：</strong>
@@ -370,10 +503,40 @@ const DatePickerDocs = () => {
 
       {/* 自訂格式 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🎨 自訂格式</h2>
-        <p className="component-docs-section-description">支援自訂日期時間顯示格式：</p>
+        <CodeExample
+          title="🎨 自訂格式"
+          description="支援自訂日期時間顯示格式："
+          code={`// 預設格式
+<DatePicker
+  mode="date"
+  placeholder="YYYY-MM-DD"
+  defaultValue={new Date()}
+/>
 
-        <div className="component-docs-showcase">
+// 自訂日期格式
+<DatePicker
+  mode="date"
+  format="YYYY年MM月DD日"
+  placeholder="YYYY年MM月DD日"
+  defaultValue={new Date()}
+/>
+
+// 自訂時間格式
+<DatePicker
+  mode="time"
+  format="HH時mm分"
+  placeholder="HH時mm分"
+  defaultValue={new Date()}
+/>
+
+// 自訂日期時間格式
+<DatePicker
+  mode="datetime"
+  format="YYYY/MM/DD HH:mm"
+  placeholder="YYYY/MM/DD HH:mm"
+  defaultValue={new Date()}
+/>`}
+        >
           <div className="space-y-6">
             <div>
               <h4 className="font-medium mb-3 text-gray-600">預設格式</h4>
@@ -414,7 +577,7 @@ const DatePickerDocs = () => {
               />
             </div>
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>格式化標記：</strong>
@@ -443,12 +606,44 @@ const DatePickerDocs = () => {
 
       {/* 時間選擇器進階功能 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">⏰ 時間選擇器進階功能</h2>
-        <p className="component-docs-section-description">
-          時間選擇器支援秒數顯示和下拉選單式選擇等進階功能：
-        </p>
+        <CodeExample
+          title="⏰ 時間選擇器進階功能"
+          description="時間選擇器支援秒數顯示和下拉選單式選擇等進階功能："
+          code={`// 秒數支援
+<DatePicker
+  mode="time"
+  showSeconds
+  placeholder="包含秒數的時間選擇"
+/>
 
-        <div className="component-docs-showcase">
+<DatePicker
+  mode="datetime"
+  showSeconds
+  placeholder="包含秒數的日期時間選擇"
+/>
+
+// 下拉選單式時間選擇器
+<DatePicker
+  mode="time"
+  timePickerStyle="scroll"
+  placeholder="下拉選單式時間選擇"
+/>
+
+<DatePicker
+  mode="time"
+  timePickerStyle="scroll"
+  showSeconds
+  placeholder="下拉選單式時間選擇（含秒）"
+/>
+
+// 日期時間組合（下拉選單式）
+<DatePicker
+  mode="datetime"
+  timePickerStyle="scroll"
+  showSeconds
+  placeholder="下拉選單式日期時間選擇"
+/>`}
+        >
           <div className="space-y-6">
             <div>
               <h4 className="font-medium mb-3 text-gray-600">秒數支援</h4>
@@ -512,7 +707,7 @@ const DatePickerDocs = () => {
               </p>
             </div>
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>時間選擇器功能：</strong>
@@ -540,10 +735,33 @@ const DatePickerDocs = () => {
 
       {/* 清除功能 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🗑️ 清除功能</h2>
-        <p className="component-docs-section-description">支援清除按鈕功能：</p>
+        <CodeExample
+          title="🗑️ 清除功能"
+          description="支援清除按鈕功能："
+          code={`// 可清除的日期選擇器
+<DatePicker
+  mode="date"
+  clearable
+  placeholder="可清除的日期選擇器"
+  defaultValue={new Date()}
+/>
 
-        <div className="component-docs-showcase">
+// 可清除的時間選擇器
+<DatePicker
+  mode="time"
+  clearable
+  placeholder="可清除的時間選擇器"
+  defaultValue={new Date()}
+/>
+
+// 可清除的日期時間選擇器
+<DatePicker
+  mode="datetime"
+  clearable
+  placeholder="可清除的日期時間選擇器"
+  defaultValue={new Date()}
+/>`}
+        >
           <div className="space-y-4">
             <DatePicker
               mode="date"
@@ -564,7 +782,7 @@ const DatePickerDocs = () => {
               defaultValue={new Date()}
             />
           </div>
-        </div>
+        </CodeExample>
 
         <div className="component-docs-info-card">
           <strong>清除功能說明：</strong>
@@ -581,54 +799,100 @@ const DatePickerDocs = () => {
 
       {/* 禁用狀態 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🚫 禁用狀態</h2>
-        <p className="component-docs-section-description">展示禁用狀態下的各種樣式：</p>
+        <CodeExample
+          title="🚫 禁用狀態"
+          description="展示禁用狀態下的各種樣式："
+          code={`// 禁用的日期選擇器
+<DatePicker
+  disabled
+  placeholder="禁用的日期選擇器"
+  mode="date"
+/>
 
-        <div className="component-docs-showcase">
-          <DatePicker
-            disabled
-            placeholder="禁用的日期選擇器"
-            mode="date"
-          />
-          <DatePicker
-            disabled
-            variant="filled"
-            placeholder="禁用的填充樣式"
-            mode="time"
-          />
-          <DatePicker
-            disabled
-            defaultValue={new Date()}
-            mode="datetime"
-          />
-        </div>
+// 禁用的填充樣式
+<DatePicker
+  disabled
+  variant="filled"
+  placeholder="禁用的填充樣式"
+  mode="time"
+/>
+
+// 禁用且有預設值
+<DatePicker
+  disabled
+  defaultValue={new Date()}
+  mode="datetime"
+/>`}
+        >
+          <div className="space-y-4">
+            <DatePicker
+              disabled
+              placeholder="禁用的日期選擇器"
+              mode="date"
+            />
+            <DatePicker
+              disabled
+              variant="filled"
+              placeholder="禁用的填充樣式"
+              mode="time"
+            />
+            <DatePicker
+              disabled
+              defaultValue={new Date()}
+              mode="datetime"
+            />
+          </div>
+        </CodeExample>
       </div>
 
       {/* 組合使用 */}
       <div className="component-docs-section">
-        <h2 className="component-docs-section-title">🔗 組合使用</h2>
-        <p className="component-docs-section-description">展示各種屬性的組合使用：</p>
+        <CodeExample
+          title="🔗 組合使用"
+          description="展示各種屬性的組合使用："
+          code={`// 大尺寸外框成功狀態，帶清除功能和自訂格式
+<DatePicker
+  size="lg"
+  variant="outline"
+  status="success"
+  mode="datetime"
+  clearable
+  placeholder="大尺寸外框成功狀態"
+  defaultValue={new Date()}
+  format="YYYY年MM月DD日 HH:mm"
+/>
 
-        <div className="component-docs-showcase">
-          <DatePicker
-            size="lg"
-            variant="outline"
-            status="success"
-            mode="datetime"
-            clearable
-            placeholder="大尺寸外框成功狀態"
-            defaultValue={new Date()}
-            format="YYYY年MM月DD日 HH:mm"
-          />
-          <DatePicker
-            size="sm"
-            variant="filled"
-            status="warning"
-            mode="date"
-            placeholder="小尺寸填充警告狀態"
-            minDate={new Date()}
-          />
-        </div>
+// 小尺寸填充警告狀態，帶日期限制
+<DatePicker
+  size="sm"
+  variant="filled"
+  status="warning"
+  mode="date"
+  placeholder="小尺寸填充警告狀態"
+  minDate={new Date()}
+/>`}
+        >
+          <div className="space-y-4">
+            <DatePicker
+              size="lg"
+              variant="outline"
+              status="success"
+              mode="datetime"
+              clearable
+              placeholder="大尺寸外框成功狀態"
+              defaultValue={new Date()}
+              format="YYYY年MM月DD日 HH:mm"
+            />
+            <DatePicker
+              size="sm"
+              variant="filled"
+              status="warning"
+              mode="date"
+              placeholder="小尺寸填充警告狀態"
+              minDate={new Date()}
+            />
+          </div>
+        </CodeExample>
       </div>
 
       {/* 使用方式 */}

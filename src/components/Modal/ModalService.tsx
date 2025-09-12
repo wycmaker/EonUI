@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { createRoot } from 'react-dom/client';
+// import { createRoot } from 'react-dom/client';
 
 import { Modal, ModalProps } from './Modal';
 
@@ -152,6 +152,7 @@ class ModalManager {
 }
 
 // 全域 Modal 管理器實例
+// eslint-disable-next-line react-refresh/only-export-components
 export const modalManager = new ModalManager();
 
 export { ModalProvider };
