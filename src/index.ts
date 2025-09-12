@@ -84,6 +84,9 @@ export type {
   MessageBoxServiceOptions,
 } from './components/MessageBox';
 
+export { Tab, TabPane, useTabContext } from './components/Tab';
+export type { TabProps, TabPaneProps, TabItem } from './components/Tab';
+
 // 導出工具函數
 export { cn } from './utils/cn';
 

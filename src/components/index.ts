@@ -75,3 +75,7 @@ export type {
   MessageBoxInstance,
   MessageBoxServiceOptions,
 } from './MessageBox';
+
+// Tab 組件
+export { Tab, TabPane, useTabContext } from './Tab';
+export type { TabProps, TabPaneProps, TabItem } from './Tab';
