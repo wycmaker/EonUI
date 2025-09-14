@@ -1,1 +1,0 @@
-import{r as o}from"./iframe-DtrAF50Y.js";const a=(e,s,r=!0)=>{const t=o.useCallback(c=>{(Array.isArray(e)?e:[e]).some(n=>n.current&&n.current.contains(c.target))||s()},[e,s]);o.useEffect(()=>{if(r)return document.addEventListener("mousedown",t),()=>{document.removeEventListener("mousedown",t)}},[t,r])};export{a as u};
