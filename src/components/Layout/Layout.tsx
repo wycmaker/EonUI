@@ -126,7 +126,7 @@ const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
       <button
         onClick={() => setMobileAsideOpen(!mobileAsideOpen)}
         className={cn(
-          'lg:hidden ml-1 px-2 py-1 text-current hover:bg-black hover:bg-opacity-10 focus:outline-none transition-colors duration-200 flex items-center justify-center',
+          'lg:hidden ml-1 px-2 py-1 text-current focus:outline-none transition-colors duration-200 flex items-center justify-center',
         )}
         aria-label={mobileAsideOpen ? '關閉選單' : '開啟選單'}
       >
@@ -192,6 +192,8 @@ const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
       headerHeightStyles[headerHeight],
       stickyHeader && 'sticky top-0 z-40',
       spacing > 0 && `p-${spacing}`,
+      // 透明效果：當手機版側邊欄展開時
+      mobileAsideOpen && 'lg:opacity-100 opacity-30 transition-opacity duration-300',
     );
 
     // 主要內容區域樣式（包含 aside 和 main）
@@ -217,7 +219,7 @@ const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
     // 手機版側邊欄樣式 - 使用 Bootstrap 風格的 CSS 類別
     const mobileAsideClasses = cn(
       // 基礎樣式
-      'lg:hidden fixed inset-y-0 z-50 flex flex-col bg-white shadow-2xl border-r',
+      'lg:hidden fixed inset-y-0 z-50 flex flex-col bg-white',
       // 位置
       asidePosition === 'left' ? 'left-0' : 'right-0',
       // 寬度
@@ -228,9 +230,9 @@ const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
       spacing > 0 && `p-${spacing}`,
     );
 
-    // 手機版遮罩樣式 - 類似 Bootstrap 的 modal-backdrop
+    // 手機版遮罩樣式 - 使用透明模糊效果
     const mobileOverlayClasses = cn(
-      'lg:hidden fixed inset-0 z-40 bg-black bg-opacity-50 transition-opacity duration-300',
+      'lg:hidden fixed inset-0 z-40 backdrop-blur-sm transition-all duration-300',
       mobileAsideOpen ? 'opacity-100' : 'opacity-0 pointer-events-none',
     );
 
@@ -238,6 +240,8 @@ const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
     const mainClasses = cn(
       'flex-1 min-w-0', // min-w-0 防止內容溢出
       spacing > 0 && `p-${spacing}`,
+      // 透明效果：當手機版側邊欄展開時
+      mobileAsideOpen && 'lg:opacity-100 opacity-30 transition-opacity duration-300',
     );
 
     // 頁腳樣式
@@ -245,6 +249,8 @@ const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
       'flex-shrink-0 w-full',
       footerHeightStyles[footerHeight],
       stickyFooter && 'sticky bottom-0 z-40',
+      // 透明效果：當手機版側邊欄展開時
+      mobileAsideOpen && 'lg:opacity-100 opacity-30 transition-opacity duration-300',
     );
 
     // 計算側邊欄的 top 位置（當 asideHeight 為 'content' 且有 header 時）
@@ -289,7 +295,7 @@ const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
             <button
               onClick={() => setMobileAsideOpen(false)}
               className={cn(
-                'absolute top-4 z-10 p-2 rounded-md text-current hover:text-current hover:bg-black hover:bg-opacity-10 transition-colors duration-200',
+                'absolute top-4 z-10 p-2 rounded-md text-current hover:text-current transition-colors duration-200',
                 asidePosition === 'left' ? 'right-4' : 'left-4',
               )}
               aria-label="關閉選單"
