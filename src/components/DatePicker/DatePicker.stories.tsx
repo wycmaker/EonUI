@@ -1020,7 +1020,7 @@ const [date, setDate] = useState<Date | null>(null);
 };
 
 const meta: Meta<typeof DatePicker> = {
-  title: 'Components/DatePicker',
+  title: 'Form/DatePicker',
   component: DatePicker,
   parameters: {
     layout: 'centered',

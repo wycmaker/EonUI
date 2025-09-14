@@ -445,7 +445,7 @@ const TypographyDocs = () => {
 };
 
 const meta: Meta<typeof Typography> = {
-  title: 'Components/Typography',
+  title: 'Foundation/Typography',
   component: Typography,
   parameters: {
     layout: 'centered',

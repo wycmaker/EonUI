@@ -701,7 +701,7 @@ await MessageBoxService.warning('警告訊息', {
 };
 
 const meta: Meta<typeof MessageBox> = {
-  title: 'Components/MessageBox',
+  title: 'Feedback/MessageBox',
   component: MessageBox,
   parameters: {
     layout: 'centered',

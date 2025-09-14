@@ -1109,7 +1109,7 @@ function NextMenu() {
 };
 
 const meta: Meta<typeof Menu> = {
-  title: 'Components/Menu',
+  title: 'Navigation/Menu',
   component: Menu,
   parameters: {
     layout: 'fullscreen',

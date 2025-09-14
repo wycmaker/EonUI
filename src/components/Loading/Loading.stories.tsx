@@ -420,7 +420,7 @@ loadingService.closeAll(); // 關閉所有
 };
 
 const meta: Meta<typeof Loading> = {
-  title: 'Components/Loading',
+  title: 'Data Display/Loading',
   component: Loading,
   parameters: {
     layout: 'centered',

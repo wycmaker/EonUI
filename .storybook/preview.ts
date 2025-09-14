@@ -14,7 +14,15 @@ const preview: Preview = {
     },
     options: {
       storySort: {
-        order: ['Get Started', 'Colors', 'Components'],
+        order: [
+          'Get Started',
+          'Foundation',
+          'Layout',
+          'Form',
+          'Data Display',
+          'Navigation',
+          'Feedback',
+        ],
         method: 'alphabetical',
       },
     },

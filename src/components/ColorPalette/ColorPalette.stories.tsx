@@ -239,7 +239,7 @@ const getStatusColor = (status) => {
 };
 
 const meta: Meta<typeof ColorPalette> = {
-  title: 'Colors',
+  title: 'Foundation/Colors',
   component: ColorPalette,
   parameters: {
     layout: 'fullscreen',

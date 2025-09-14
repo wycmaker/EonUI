@@ -934,7 +934,7 @@ const handlePaginationChange = async (page: number, size: number) => {
 };
 
 const meta: Meta<typeof Pagination> = {
-  title: 'Components/Pagination',
+  title: 'Data Display/Pagination',
   component: Pagination,
   parameters: {
     layout: 'centered',

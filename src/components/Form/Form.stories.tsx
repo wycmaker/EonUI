@@ -1542,7 +1542,7 @@ return (
 };
 
 const meta: Meta<typeof Form> = {
-  title: 'Components/Form',
+  title: 'Form/Form',
   component: Form,
   parameters: {
     layout: 'centered',

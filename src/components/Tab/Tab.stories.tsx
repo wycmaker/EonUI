@@ -1158,7 +1158,7 @@ const [activeKey, setActiveKey] = useState('home');
 };
 
 const meta: Meta<typeof Tab> = {
-  title: 'Components/Tab',
+  title: 'Navigation/Tab',
   component: Tab,
   parameters: {
     layout: 'padded',

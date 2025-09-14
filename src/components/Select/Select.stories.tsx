@@ -856,7 +856,7 @@ const [values, setValues] = useState<(string | number)[]>([]);
 };
 
 const meta: Meta<typeof Select> = {
-  title: 'Components/Select',
+  title: 'Form/Select',
   component: Select,
   parameters: {
     layout: 'centered',

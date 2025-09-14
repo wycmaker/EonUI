@@ -646,7 +646,7 @@ const [value, setValue] = useState('');
 };
 
 const meta: Meta<typeof Input> = {
-  title: 'Components/Input',
+  title: 'Form/Input',
   component: Input,
   parameters: {
     layout: 'centered',

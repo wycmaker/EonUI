@@ -821,7 +821,7 @@ const BlogLayout = ({ children }) => (
 };
 
 const meta: Meta<typeof Layout> = {
-  title: 'Components/Layout',
+  title: 'Layout/Layout',
   component: Layout,
   parameters: {
     layout: 'fullscreen',

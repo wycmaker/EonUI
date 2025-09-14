@@ -354,7 +354,7 @@ const ButtonDocs = () => {
 };
 
 const meta: Meta<typeof Button> = {
-  title: 'Components/Button',
+  title: 'Foundation/Button',
   component: Button,
   parameters: {
     layout: 'centered',

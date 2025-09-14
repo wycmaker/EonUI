@@ -671,7 +671,7 @@ ModalService.update(modalId, { title: '新標題' }); // 更新內容`}</pre>
 };
 
 const meta: Meta<typeof Modal> = {
-  title: 'Components/Modal',
+  title: 'Feedback/Modal',
   component: Modal,
   parameters: {
     layout: 'centered',

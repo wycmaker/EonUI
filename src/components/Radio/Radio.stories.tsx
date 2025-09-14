@@ -650,7 +650,7 @@ const [gender, setGender] = useState('male');
 };
 
 const meta: Meta<typeof Radio> = {
-  title: 'Components/Radio',
+  title: 'Form/Radio',
   component: Radio,
   parameters: {
     layout: 'centered',

@@ -659,7 +659,7 @@ const [value, setValue] = useState('');
 };
 
 const meta: Meta<typeof Textarea> = {
-  title: 'Components/Textarea',
+  title: 'Form/Textarea',
   component: Textarea,
   parameters: {
     layout: 'centered',

@@ -338,7 +338,7 @@ xxl: 1536px+ (超超大螢幕)
 };
 
 const meta: Meta<typeof Grid> = {
-  title: 'Components/Grid',
+  title: 'Layout/Grid',
   component: Grid,
   parameters: {
     layout: 'fullscreen',

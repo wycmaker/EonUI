@@ -1577,7 +1577,7 @@ const [sortConfig, setSortConfig] = useState<SortConfig>({ key: '', direction: n
 };
 
 const meta: Meta<typeof Table> = {
-  title: 'Components/Table',
+  title: 'Data Display/Table',
   component: Table,
   parameters: {
     layout: 'fullscreen',

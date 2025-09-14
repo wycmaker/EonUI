@@ -625,7 +625,7 @@ AlertService.clearByPosition('top-right'); // 清除指定位置`}</pre>
 };
 
 const meta: Meta<typeof Alert> = {
-  title: 'Components/Alert',
+  title: 'Feedback/Alert',
   component: Alert,
   parameters: {
     layout: 'centered',
