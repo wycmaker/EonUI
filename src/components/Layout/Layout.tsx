@@ -2,6 +2,13 @@ import React, { useState } from 'react';
 
 import { cn } from '@/utils/cn';
 
+/*
+  Tailwind CSS Safelist - 確保所有動態 CSS 類別被包含在最終 CSS 中
+
+  Layout 組件動態 spacing 類別：
+  p-0 p-1 p-2 p-3 p-4 p-5 p-6 p-8
+*/
+
 export interface LayoutProps extends React.HTMLAttributes<HTMLDivElement> {
   /**
    * 頁面標題區域內容

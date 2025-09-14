@@ -2,6 +2,16 @@ import React from 'react';
 
 import { cn } from '@/utils/cn';
 
+/*
+  Tailwind CSS Safelist - 確保所有動態 CSS 類別被包含在最終 CSS 中
+
+  Typography 組件動態 line-clamp 類別：
+  line-clamp-1 line-clamp-2 line-clamp-3 line-clamp-4 line-clamp-5 line-clamp-6
+  line-clamp-7 line-clamp-8 line-clamp-9 line-clamp-10 line-clamp-11 line-clamp-12
+
+  注意：clamp 屬性可以是任意數字，但常用的是 1-12
+*/
+
 // Typography 元素類型定義
 type TypographyVariant = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'content';
 
