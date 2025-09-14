@@ -705,6 +705,109 @@ const menuItems = [
         </CodeExample>
       </div>
 
+      {/* 自定義樣式 */}
+      <div className="component-docs-section">
+        <CodeExample
+          title="🎨 自定義樣式"
+          description="使用 customClassName 屬性來完全自定義選單的外觀，支援層級選擇器："
+          code={`// 使用 customClassName 自定義樣式
+<Menu
+  items={menuItems}
+  currentPath="/users/detail/123"
+  customClassName="my-custom-menu"
+/>
+
+/* CSS 樣式定義 */
+.my-custom-menu {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 8px;
+}
+
+/* 第一層選單項目 */
+.my-custom-menu li > div {
+  color: white;
+  border-radius: 6px;
+  margin: 2px 6px;
+  transition: all 0.2s ease;
+}
+
+/* Hover 效果 */
+.my-custom-menu li > div:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(2px);
+}
+
+/* Active 狀態 */
+.my-custom-menu li > div[aria-current="page"] {
+  background: rgba(255, 255, 255, 0.25);
+  font-weight: 600;
+}
+
+/* 子選單樣式 */
+.my-custom-menu ul ul li > div {
+  background: rgba(0, 0, 0, 0.1);
+  margin-left: 16px;
+  font-size: 0.875rem;
+}`}
+        >
+          <div className="space-y-4">
+            <div className="p-4 bg-purple-50 border border-purple-200 rounded-lg">
+              <h4 className="font-medium text-purple-900 mb-2">自定義樣式特色</h4>
+              <ul className="text-sm text-purple-800 space-y-1">
+                <li>
+                  • <strong>層級選擇器：</strong>使用 <code>.your-class li &gt; div</code>{' '}
+                  精確控制樣式
+                </li>
+                <li>
+                  • <strong>狀態樣式：</strong>支援 hover、active、disabled 等狀態自定義
+                </li>
+                <li>
+                  • <strong>子選單樣式：</strong>使用 <code>ul ul li &gt; div</code> 定義子選單樣式
+                </li>
+                <li>
+                  • <strong>完全覆蓋：</strong>可以完全覆蓋預設樣式，實現任何設計需求
+                </li>
+              </ul>
+            </div>
+
+            <style>{`
+              .demo-custom-menu {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border: none;
+                border-radius: 8px;
+              }
+
+              .demo-custom-menu li > div {
+                color: white;
+                border-radius: 6px;
+                margin: 2px 6px;
+                transition: all 0.2s ease;
+              }
+
+              .demo-custom-menu li > div:hover {
+                background: rgba(255, 255, 255, 0.15);
+                transform: translateX(2px);
+              }
+
+              .demo-custom-menu li > div[aria-current="page"] {
+                background: rgba(255, 255, 255, 0.25);
+                font-weight: 600;
+              }
+            `}</style>
+
+            <div className="w-64 border border-gray-200 rounded-lg overflow-hidden">
+              <Menu
+                items={sampleMenuItems.slice(0, 3)}
+                currentPath="/users/detail/123"
+                customClassName="demo-custom-menu"
+              />
+            </div>
+            <p className="text-sm text-gray-600">↑ 使用漸層背景和自定義 hover 效果的選單範例</p>
+          </div>
+        </CodeExample>
+      </div>
+
       {/* API 參考 */}
       <div className="component-docs-section">
         <h2 className="component-docs-section-title">📖 API 參考</h2>
@@ -766,13 +869,20 @@ const menuItems = [
                   <td className="text-sm">子選單的縮排像素值</td>
                 </tr>
                 <tr>
+                  <td className="font-mono text-sm">customClassName</td>
+                  <td className="text-sm">string</td>
+                  <td className="text-sm">否</td>
+                  <td className="text-sm">-</td>
+                  <td className="text-sm">自定義 CSS 類別名稱，用於覆蓋預設樣式</td>
+                </tr>
+                <tr className="bg-gray-50">
                   <td className="font-mono text-sm">onSelect</td>
                   <td className="text-sm">(key: string, item: MenuItem) =&gt; void</td>
                   <td className="text-sm">否</td>
                   <td className="text-sm">-</td>
                   <td className="text-sm">點擊選單項目時的回調函數</td>
                 </tr>
-                <tr className="bg-gray-50">
+                <tr>
                   <td className="font-mono text-sm">onOpenChange</td>
                   <td className="text-sm">(openKeys: string[]) =&gt; void</td>
                   <td className="text-sm">否</td>
@@ -1060,6 +1170,15 @@ const meta: Meta<typeof Menu> = {
       description: '展開/收合項目時的回調',
       table: {
         type: { summary: '(openKeys: string[]) => void' },
+      },
+    },
+    customClassName: {
+      control: { type: 'text' },
+      description:
+        '自定義 CSS 類別名稱，可用於覆蓋預設樣式。支援使用 CSS 選擇器如 .your-class li > div 來定義不同層級樣式',
+      table: {
+        type: { summary: 'string' },
+        defaultValue: { summary: 'undefined' },
       },
     },
   },

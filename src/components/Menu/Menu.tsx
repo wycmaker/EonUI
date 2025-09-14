@@ -75,6 +75,11 @@ export interface MenuProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'o
    */
   theme?: 'light' | 'dark';
   /**
+   * 自定義 CSS 類別名稱，可用於覆蓋預設樣式
+   * 支援使用 CSS 選擇器如 .your-class li > div 來定義不同層級樣式
+   */
+  customClassName?: string;
+  /**
    * 點擊選單項目時的回調
    */
   onSelect?: (key: string, item: MenuItem) => void;
@@ -366,6 +371,7 @@ export const Menu = React.forwardRef<HTMLDivElement, MenuProps>(
       collapsed = false,
       indent = 16,
       theme = 'light',
+      customClassName,
       className,
       onSelect,
       onOpenChange,
@@ -547,6 +553,7 @@ export const Menu = React.forwardRef<HTMLDivElement, MenuProps>(
       'bg-white border-r border-gray-200 h-full overflow-auto',
       theme === 'dark' && 'bg-gray-800 border-gray-700',
       mode === 'horizontal' && 'border-r-0 border-b',
+      customClassName,
       className,
     );
 
