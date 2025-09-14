@@ -13,22 +13,6 @@
   border: 0;
 }
 
-/*
- * EonUI 設計系統
- *
- * 🎨 主要顏色變數已在 src/styles/tailwind.css 的 @theme 區塊中定義
- *
- * 🛠️ 外部專案可以透過覆蓋 :root 中的 CSS 變數來自定義主題：
- *
- * :root {
- *   --color-primary-500: #ef4444;    // 將主色改為紅色
- *   --color-success-500: #10b981;    // 自定義成功色
- *   --color-warning-500: #f59e0b;    // 自定義警告色
- * }
- *
- * 📚 完整的變數列表請參考文檔
- */
-
 /* 暗色主題支援 */
 @media (prefers-color-scheme: dark) {
   :root {

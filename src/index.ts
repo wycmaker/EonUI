@@ -89,6 +89,20 @@ export type { TabProps, TabPaneProps, TabItem } from './components/Tab';
 
 export { Menu } from './components/Menu';
 export type { MenuProps, MenuItem } from './components/Menu';
+export {
+  Loading,
+  LoadingProvider,
+  useLoading,
+  loadingService,
+  LoadingService,
+} from './components/Loading';
+export type {
+  LoadingProps,
+  LoadingContextValue,
+  LoadingProviderProps,
+  LoadingServiceOptions,
+  LoadingInstance,
+} from './components/Loading';
 
 // 導出工具函數
 export { cn } from './utils/cn';

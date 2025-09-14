@@ -83,3 +83,11 @@ export type { TabProps, TabPaneProps, TabItem } from './Tab';
 // Menu 組件
 export { Menu } from './Menu';
 export type { MenuProps, MenuItem } from './Menu';
+export { Loading, LoadingProvider, useLoading, loadingService, LoadingService } from './Loading';
+export type {
+  LoadingProps,
+  LoadingContextValue,
+  LoadingProviderProps,
+  LoadingServiceOptions,
+  LoadingInstance,
+} from './Loading';
