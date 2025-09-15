@@ -31,6 +31,9 @@ export interface FormContextValue {
   // 欄位註冊
   registerField: (name: string, rules?: ValidationRule[]) => void;
   unregisterField: (name: string) => void;
+
+  // 表單重置
+  resetForm: () => void;
 }
 
 /**

@@ -79,7 +79,7 @@ export interface DatePickerProps
   /**
    * 值改變時的回調
    */
-  onChange?: (date: Date | null, dateString: string) => void;
+  onChange?: (dateString: string) => void;
   /**
    * 清除按鈕的回調函數
    */
@@ -857,7 +857,7 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
         }
 
         const dateString = formatDate(newValue, format || '', mode, showSeconds);
-        onChange?.(newValue, dateString);
+        onChange?.(dateString);
 
         // 清除暫存值
         setTempTimeValue(null);
@@ -937,7 +937,7 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
       }
 
       const dateString = formatDate(newValue, format || '', mode, showSeconds);
-      onChange?.(newValue, dateString);
+      onChange?.(dateString);
 
       if (mode === 'date') {
         setIsOpen(false);
@@ -969,7 +969,7 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
         }
 
         const dateString = formatDate(newValue, format || '', mode, showSeconds);
-        onChange?.(newValue, dateString);
+        onChange?.(dateString);
       }
     };
 
@@ -990,7 +990,7 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
         setInternalValue(null);
       }
       setInputValue('');
-      onChange?.(null, '');
+      onChange?.('');
       onClear?.();
       setIsOpen(false);
     };

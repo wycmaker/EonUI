@@ -10,10 +10,10 @@ import '../../styles/component-docs.css';
 
 // 互動式範例組件
 const InteractiveExample = () => {
-  const [dateValue, setDateValue] = useState<Date | null>(null);
-  const [timeValue, setTimeValue] = useState<Date | null>(null);
-  const [datetimeValue, setDatetimeValue] = useState<Date | null>(null);
-  const [rangeStart, setRangeStart] = useState<Date | null>(null);
+  const [dateValue, setDateValue] = useState<string | null>(null);
+  const [timeValue, setTimeValue] = useState<string | null>(null);
+  const [datetimeValue, setDatetimeValue] = useState<string | null>(null);
+  const [rangeStart, setRangeStart] = useState<string | null>(null);
 
   return (
     <div className="space-y-8 w-full max-w-md">
@@ -27,11 +27,7 @@ const InteractiveExample = () => {
           clearable
           placeholder="選擇日期"
         />
-        {dateValue && (
-          <p className="text-sm text-gray-600 mt-2">
-            選中日期：{dateValue.toLocaleDateString('zh-TW')}
-          </p>
-        )}
+        {dateValue && <p className="text-sm text-gray-600 mt-2">選中日期：{dateValue}</p>}
       </div>
 
       {/* 時間選擇 */}
@@ -47,10 +43,7 @@ const InteractiveExample = () => {
         {timeValue && (
           <p className="text-sm text-gray-600 mt-2">
             選中時間：
-            {timeValue.toLocaleTimeString('zh-TW', {
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
+            {timeValue}
           </p>
         )}
       </div>
@@ -66,9 +59,7 @@ const InteractiveExample = () => {
           placeholder="選擇日期和時間"
         />
         {datetimeValue && (
-          <p className="text-sm text-gray-600 mt-2">
-            選中日期時間：{datetimeValue.toLocaleString('zh-TW')}
-          </p>
+          <p className="text-sm text-gray-600 mt-2">選中日期時間：{datetimeValue}</p>
         )}
       </div>
 

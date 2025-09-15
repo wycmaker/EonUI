@@ -1,6 +1,14 @@
 import { useState, useEffect } from 'react';
 
-export type PaginationLayoutItem = 'prev' | 'next' | 'pages' | 'jumper' | 'total' | 'sizes';
+export type PaginationLayoutItem =
+  | 'first'
+  | 'prev'
+  | 'next'
+  | 'last'
+  | 'pages'
+  | 'jumper'
+  | 'total'
+  | 'sizes';
 
 /**
  * 響應式分頁數量計算 Hook

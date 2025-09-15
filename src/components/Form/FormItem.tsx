@@ -31,6 +31,10 @@ export interface FormItemProps {
    */
   labelWidth?: string;
   /**
+   * 控制項寬度（水平佈局時使用）
+   */
+  controlWidth?: string;
+  /**
    * 自訂 CSS 類名
    */
   className?: string;
@@ -47,6 +51,7 @@ const FormItemComponent: React.FC<FormItemProps> = ({
   rules = [],
   layout = 'vertical',
   labelWidth = '120px',
+  controlWidth,
   className,
   children,
 }) => {
@@ -199,12 +204,21 @@ const FormItemComponent: React.FC<FormItemProps> = ({
 
   // 水平佈局
   return (
-    <div className={cn('space-y-1', className)}>
-      <div className="flex items-center space-x-4">
+    <div className={cn('inline-block', className)}>
+      <div className="inline-flex items-center space-x-2">
         <div style={{ width: labelWidth, flexShrink: 0 }}>{renderLabel()}</div>
-        <div className="flex-1">{renderedControl}</div>
+        <div style={controlWidth ? { minWidth: controlWidth, flexShrink: 0 } : undefined}>
+          {renderedControl}
+        </div>
       </div>
-      {hasError && <div style={{ marginLeft: `calc(${labelWidth} + 1rem)` }}>{renderError()}</div>}
+      {hasError && (
+        <div
+          className="mt-1"
+          style={{ marginLeft: `calc(${labelWidth} + 1rem)` }}
+        >
+          {renderError()}
+        </div>
+      )}
     </div>
   );
 };

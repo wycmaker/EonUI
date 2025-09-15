@@ -5,7 +5,7 @@ import { Select } from '@/components/Select';
 import { useControlledValue, useResponsivePageCount, type PaginationLayoutItem } from '@/hooks';
 import { cn } from '@/utils/cn';
 import { getSizeStyles } from '@/utils/formStyles';
-import { PrevIcon, NextIcon } from '@/utils/icons';
+import { PrevIcon, NextIcon, FirstPageIcon, LastPageIcon } from '@/utils/icons';
 
 // 重新導出類型
 export type { PaginationLayoutItem };
@@ -218,7 +218,7 @@ const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
       prevText,
       nextText,
       disabled = false,
-      layout = ['prev', 'pages', 'next'],
+      layout = ['first', 'prev', 'pages', 'next', 'last'],
       size = 'md',
       showTotalText,
       onChange,
@@ -243,19 +243,25 @@ const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
 
     // 計算當前頁的資料範圍
     const range: [number, number] = useMemo(() => {
+      if (total === 0) {
+        return [0, 0];
+      }
       const start = (safePage - 1) * safePageSize + 1;
       const end = Math.min(safePage * safePageSize, total);
       return [start, end];
     }, [safePage, safePageSize, total]);
 
+    // 當 total 為 0 時，仍然顯示分頁組件但限制為第1頁
+    const adjustedTotalPages = Math.max(totalPages, 1);
+
     // 計算顯示的頁碼
     const pageNumbers = useMemo(() => {
-      return calculatePageRange(safePage, totalPages, maxVisible);
-    }, [safePage, totalPages, maxVisible]);
+      return calculatePageRange(safePage, adjustedTotalPages, maxVisible);
+    }, [safePage, adjustedTotalPages, maxVisible]);
 
     // 頁碼變更處理
     const handlePageChange = (page: number) => {
-      if (page < 1 || page > totalPages || page === safePage || disabled) {
+      if (page < 1 || page > adjustedTotalPages || page === safePage || disabled) {
         return;
       }
 
@@ -289,6 +295,19 @@ const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
     // 渲染佈局元素
     const renderLayoutItem = (item: PaginationLayoutItem) => {
       switch (item) {
+        case 'first':
+          return (
+            <NavigationButton
+              key="first"
+              direction="first"
+              disabled={disabled || safePage <= 1}
+              size={size}
+              onClick={() => handlePageChange(1)}
+            >
+              <FirstPageIcon />
+            </NavigationButton>
+          );
+
         case 'prev':
           return (
             <NavigationButton
@@ -307,7 +326,7 @@ const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
             <NavigationButton
               key="next"
               direction="next"
-              disabled={disabled || safePage >= totalPages}
+              disabled={disabled || safePage >= adjustedTotalPages}
               size={size}
               onClick={() => handlePageChange(safePage + 1)}
             >
@@ -315,11 +334,24 @@ const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
             </NavigationButton>
           );
 
+        case 'last':
+          return (
+            <NavigationButton
+              key="last"
+              direction="last"
+              disabled={disabled || safePage >= adjustedTotalPages}
+              size={size}
+              onClick={() => handlePageChange(adjustedTotalPages)}
+            >
+              <LastPageIcon />
+            </NavigationButton>
+          );
+
         case 'pages':
           return (
             <div
               key="pages"
-              className="flex items-center space-x-1"
+              className="flex items-center space-x-1 flex-shrink-0"
             >
               {pageNumbers.map((page, index) => {
                 if (page === 'ellipsis') {
@@ -347,21 +379,25 @@ const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
 
         case 'jumper':
           return layout.includes('jumper') ? (
-            <QuickJumper
+            <div
               key="jumper"
-              current={safePage}
-              totalPages={totalPages}
-              disabled={disabled}
-              size={size}
-              onJump={handlePageChange}
-            />
+              className="flex-shrink-0"
+            >
+              <QuickJumper
+                current={safePage}
+                totalPages={adjustedTotalPages}
+                disabled={disabled}
+                size={size}
+                onJump={handlePageChange}
+              />
+            </div>
           ) : null;
 
         case 'total':
           return layout.includes('total') ? (
             <div
               key="total"
-              className="text-sm text-gray-600"
+              className="text-sm text-gray-600 flex-shrink-0"
             >
               {showTotalText
                 ? showTotalText(total, range)
@@ -371,28 +407,30 @@ const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
 
         case 'sizes':
           return layout.includes('sizes') ? (
-            <Select
+            <div
               key="sizes"
-              size={size}
-              value={safePageSize}
-              options={pageSizeOptions.map((option) => ({
-                label: `${option}/頁`,
-                value: option,
-              }))}
-              onChange={handlePageSizeChange}
-              disabled={disabled}
-              className="w-20"
-            />
+              className="flex-shrink-0 flex items-center gap-2 ml-4"
+            >
+              <span className="text-lg text-gray-600 font-black">每頁顯示</span>
+              <Select
+                size={size}
+                value={safePageSize}
+                options={pageSizeOptions.map((option) => ({
+                  label: `${option}`,
+                  value: option,
+                }))}
+                onChange={handlePageSizeChange}
+                disabled={disabled}
+                className="w-20"
+              />
+              <span className="text-lg text-gray-600 font-black">筆結果</span>
+            </div>
           ) : null;
 
         default:
           return null;
       }
     };
-
-    if (total === 0) {
-      return null;
-    }
 
     return (
       <div
@@ -405,7 +443,8 @@ const Pagination = React.forwardRef<HTMLDivElement, PaginationProps>(
           containerRef.current = node;
         }}
         className={cn(
-          'flex items-center justify-between flex-wrap gap-4',
+          'flex items-center justify-center gap-2 overflow-x-auto whitespace-nowrap',
+          'scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100',
           disabled && 'pointer-events-none opacity-50',
           className,
         )}

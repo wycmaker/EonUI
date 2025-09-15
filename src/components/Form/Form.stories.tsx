@@ -14,7 +14,7 @@ import { Textarea } from '../Textarea';
 
 import { Form } from './Form';
 import { FormItem } from './FormItem';
-import { Rules } from './Rules';
+import { Rules, useForm } from './hooks';
 import '../../styles/component-docs.css';
 
 // 示例用戶資料
@@ -94,6 +94,114 @@ const InteractiveExample = () => {
     setComplexFormValues(values);
   };
 
+  // 使用 useForm hook 的範例組件
+  const UseFormExample = () => {
+    const handleSubmit = (values: Record<string, unknown>) => {
+      alert(`表單提交: ${JSON.stringify(values, null, 2)}`);
+    };
+
+    // 內部組件，可以使用 useForm hook
+    const FormContent = () => {
+      const form = useForm();
+
+      const handleClear = () => {
+        form.clearFields();
+        alert('表單已清空');
+      };
+
+      const handleReset = () => {
+        form.resetFields();
+        alert('表單已重置到初始值');
+      };
+
+      const handleFillDemo = () => {
+        form.setFieldsValue({
+          hookUsername: '示範用戶',
+          hookEmail: 'demo@example.com',
+          hookAge: '25',
+        });
+      };
+
+      return (
+        <>
+          <FormItem
+            name="hookUsername"
+            label="使用者名稱"
+            required
+            rules={[Rules.required('使用者名稱為必填')]}
+          >
+            <Input placeholder="請輸入使用者名稱" />
+          </FormItem>
+
+          <FormItem
+            name="hookEmail"
+            label="電子郵件"
+            rules={[Rules.email('請輸入正確的電子郵件格式')]}
+          >
+            <Input
+              type="email"
+              placeholder="請輸入電子郵件"
+            />
+          </FormItem>
+
+          <FormItem
+            name="hookAge"
+            label="年齡"
+            rules={[Rules.number('請輸入有效的年齡')]}
+          >
+            <Input
+              type="number"
+              placeholder="請輸入年齡"
+            />
+          </FormItem>
+
+          <div className="flex gap-2 flex-wrap">
+            <Button
+              type="submit"
+              variant="primary"
+            >
+              提交
+            </Button>
+            <Button
+              type="reset"
+              variant="outline"
+              onClick={handleReset}
+            >
+              重置
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleClear}
+            >
+              清空
+            </Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={handleFillDemo}
+            >
+              填入示範資料
+            </Button>
+          </div>
+        </>
+      );
+    };
+
+    return (
+      <Form
+        onSubmit={handleSubmit}
+        initialValues={{
+          hookUsername: '初始用戶名',
+          hookEmail: '',
+          hookAge: '',
+        }}
+      >
+        <FormContent />
+      </Form>
+    );
+  };
+
   return (
     <div className="space-y-8 w-full">
       {/* 基本表單 */}
@@ -142,8 +250,59 @@ const InteractiveExample = () => {
               />
             </FormItem>
 
-            <Button type="submit">提交</Button>
+            <div className="flex gap-2">
+              <Button type="submit">提交</Button>
+              <Button
+                type="reset"
+                variant="outline"
+              >
+                重置
+              </Button>
+            </div>
           </Form>
+        </CodeExample>
+      </div>
+
+      {/* useForm Hook 範例 */}
+      <div className="max-w-md">
+        <CodeExample
+          title="🔄 useForm Hook 使用"
+          description="使用 useForm hook 來程式化控制表單："
+          code={`const UseFormExample = () => {
+  const form = useForm();
+
+  const handleClear = () => {
+    form.clearFields(); // 清空所有欄位
+  };
+
+  const handleReset = () => {
+    form.resetFields(); // 重置到初始值
+  };
+
+  const handleFillDemo = () => {
+    form.setFieldsValue({
+      username: '示範用戶',
+      email: 'demo@example.com',
+    });
+  };
+
+  return (
+    <Form initialValues={{ username: '初始值' }}>
+      <FormItem name="username" label="使用者名稱">
+        <Input />
+      </FormItem>
+      <FormItem name="email" label="電子郵件">
+        <Input type="email" />
+      </FormItem>
+      
+      <Button onClick={handleReset}>重置</Button>
+      <Button onClick={handleClear}>清空</Button>
+      <Button onClick={handleFillDemo}>填入示範資料</Button>
+    </Form>
+  );
+};`}
+        >
+          <UseFormExample />
         </CodeExample>
       </div>
 
@@ -653,25 +812,28 @@ const handleBasicSubmit = (values: Record<string, unknown>) => {
   alert(\`基本表單提交: \${JSON.stringify(values, null, 2)}\`);
 };
 
-return (
-  <div className="space-y-8 w-full">
-    {/* 基本表單 */}
-    <div className="max-w-md">
-      <h3 className="font-semibold mb-4">基本表單</h3>
-      <Form onSubmit={handleBasicSubmit}>
-        <FormItem name="basicName" label="姓名" required>
-          <Input placeholder="請輸入姓名" />
-        </FormItem>
-        <FormItem name="basicEmail" label="電子郵件" required>
-          <Input type="email" placeholder="請輸入電子郵件" />
-        </FormItem>
-        <FormItem>
-          <Button type="submit" color="primary">提交</Button>
-        </FormItem>
-      </Form>
+// 基本表單範例
+const BasicFormExample = () => {
+  return (
+    <div className="space-y-8 w-full">
+      {/* 基本表單 */}
+      <div className="max-w-md">
+        <h3 className="font-semibold mb-4">基本表單</h3>
+        <Form onSubmit={handleBasicSubmit}>
+          <FormItem name="basicName" label="姓名" required>
+            <Input placeholder="請輸入姓名" />
+          </FormItem>
+          <FormItem name="basicEmail" label="電子郵件" required>
+            <Input type="email" placeholder="請輸入電子郵件" />
+          </FormItem>
+          <FormItem>
+            <Button type="submit" color="primary">提交</Button>
+          </FormItem>
+        </Form>
+      </div>
     </div>
-  </div>
-);`}
+  );
+};`}
         >
           <InteractiveExample />
         </CodeExample>
@@ -960,6 +1122,7 @@ return (
     required
     layout="horizontal"
     labelWidth="100px"
+    controlWidth="200px"
   >
     <Input placeholder="請輸入姓名" />
   </FormItem>
@@ -968,8 +1131,48 @@ return (
     label="年齡"
     layout="horizontal"
     labelWidth="100px"
+    controlWidth="150px"
   >
     <Input type="number" placeholder="請輸入年齡" />
+  </FormItem>
+  <FormItem
+    name="horizontalEmail"
+    label="電子郵件"
+    layout="horizontal"
+    labelWidth="100px"
+  >
+    <Input type="email" placeholder="不設定 controlWidth 使用自然寬度" />
+  </FormItem>
+</Form>
+
+// 自動換行佈局範例
+<Form>
+  <FormItem
+    name="firstName"
+    label="名"
+    layout="horizontal"
+    labelWidth="40px"
+    controlWidth="120px"
+  >
+    <Input placeholder="名" />
+  </FormItem>
+  <FormItem
+    name="lastName"
+    label="姓"
+    layout="horizontal"
+    labelWidth="40px"
+    controlWidth="120px"
+  >
+    <Input placeholder="姓" />
+  </FormItem>
+  <FormItem
+    name="email"
+    label="電子郵件"
+    layout="horizontal"
+    labelWidth="80px"
+    controlWidth="250px"
+  >
+    <Input type="email" placeholder="電子郵件" />
   </FormItem>
 </Form>`}
         >
@@ -1000,7 +1203,7 @@ return (
 
             <div>
               <h4 className="font-medium mb-3 text-gray-600">水平佈局</h4>
-              <div className="max-w-lg">
+              <div className="max-w-lg space-y-4">
                 <Form>
                   <FormItem
                     name="horizontalName"
@@ -1008,6 +1211,7 @@ return (
                     required
                     layout="horizontal"
                     labelWidth="100px"
+                    controlWidth="200px"
                   >
                     <Input placeholder="請輸入姓名" />
                   </FormItem>
@@ -1016,10 +1220,96 @@ return (
                     label="年齡"
                     layout="horizontal"
                     labelWidth="100px"
+                    controlWidth="150px"
                   >
                     <Input
                       type="number"
                       placeholder="請輸入年齡"
+                    />
+                  </FormItem>
+                  <FormItem
+                    name="horizontalEmail"
+                    label="電子郵件"
+                    layout="horizontal"
+                    labelWidth="100px"
+                  >
+                    <Input
+                      type="email"
+                      placeholder="不設定 controlWidth 使用自然寬度"
+                    />
+                  </FormItem>
+                </Form>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="font-medium mb-3 text-gray-600">自動換行水平佈局</h4>
+              <div className="max-w-lg">
+                <Form>
+                  <FormItem
+                    name="firstName"
+                    label="名"
+                    layout="horizontal"
+                    labelWidth="40px"
+                    controlWidth="120px"
+                  >
+                    <Input placeholder="名" />
+                  </FormItem>
+                  <FormItem
+                    name="lastName"
+                    label="姓"
+                    layout="horizontal"
+                    labelWidth="40px"
+                    controlWidth="120px"
+                  >
+                    <Input placeholder="姓" />
+                  </FormItem>
+                  <FormItem
+                    name="birthYear"
+                    label="出生年"
+                    layout="horizontal"
+                    labelWidth="60px"
+                    controlWidth="100px"
+                  >
+                    <Input
+                      type="number"
+                      placeholder="年"
+                    />
+                  </FormItem>
+                  <FormItem
+                    name="birthMonth"
+                    label="月"
+                    layout="horizontal"
+                    labelWidth="30px"
+                    controlWidth="80px"
+                  >
+                    <Input
+                      type="number"
+                      placeholder="月"
+                    />
+                  </FormItem>
+                  <FormItem
+                    name="birthDay"
+                    label="日"
+                    layout="horizontal"
+                    labelWidth="30px"
+                    controlWidth="80px"
+                  >
+                    <Input
+                      type="number"
+                      placeholder="日"
+                    />
+                  </FormItem>
+                  <FormItem
+                    name="email"
+                    label="電子郵件"
+                    layout="horizontal"
+                    labelWidth="80px"
+                    controlWidth="250px"
+                  >
+                    <Input
+                      type="email"
+                      placeholder="電子郵件"
                     />
                   </FormItem>
                 </Form>
@@ -1035,10 +1325,16 @@ return (
               <strong>vertical：</strong>垂直佈局，標籤在上方（預設）
             </li>
             <li>
-              <strong>horizontal：</strong>水平佈局，標籤在左側
+              <strong>horizontal：</strong>水平佈局，標籤在左側，使用 inline-block 容器
             </li>
             <li>
-              <strong>labelWidth：</strong>水平佈局時的標籤寬度
+              <strong>labelWidth：</strong>水平佈局時的標籤寬度（預設 120px）
+            </li>
+            <li>
+              <strong>controlWidth：</strong>水平佈局時的控制項寬度，不設定則使用控制項的自然寬度
+            </li>
+            <li>
+              <strong>自動換行：</strong>Form 使用 flex-wrap，FormItem 會根據容器寬度自動換行
             </li>
             <li>支援 required 標記，自動顯示紅色星號</li>
           </ul>
@@ -1218,6 +1514,17 @@ return (
                   <td className="border border-gray-300 px-4 py-2 text-sm">否</td>
                   <td className="border border-gray-300 px-4 py-2 text-sm">'120px'</td>
                   <td className="border border-gray-300 px-4 py-2 text-sm">水平佈局時標籤的寬度</td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2 font-mono text-sm">
+                    controlWidth
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm">string</td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm">否</td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm">-</td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm">
+                    水平佈局時控制項的寬度，不設定則使用控制項的自然寬度
+                  </td>
                 </tr>
                 <tr>
                   <td className="border border-gray-300 px-4 py-2 font-mono text-sm">className</td>
@@ -1495,6 +1802,7 @@ return (
   label="姓名"
   layout="horizontal"
   labelWidth="120px"
+  controlWidth="200px"
   required
 >
   <Input placeholder="請輸入姓名" />

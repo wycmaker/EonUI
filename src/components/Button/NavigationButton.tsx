@@ -7,7 +7,7 @@ export interface NavigationButtonProps extends React.ButtonHTMLAttributes<HTMLBu
   /**
    * 按鈕方向（用於無障礙標籤）
    */
-  direction?: 'prev' | 'next' | 'up' | 'down' | 'left' | 'right';
+  direction?: 'first' | 'prev' | 'next' | 'last' | 'up' | 'down' | 'left' | 'right';
   /**
    * 按鈕大小
    */
@@ -42,8 +42,10 @@ const NavigationButton = React.forwardRef<HTMLButtonElement, NavigationButtonPro
   ) => {
     // 預設的無障礙標籤
     const defaultAriaLabels = {
+      first: '第一頁',
       prev: '上一頁',
       next: '下一頁',
+      last: '最後一頁',
       up: '向上',
       down: '向下',
       left: '向左',

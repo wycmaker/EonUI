@@ -104,6 +104,9 @@ export type {
   LoadingInstance,
 } from './components/Loading';
 
+export { Breadcrumb } from './components/Breadcrumb';
+export type { BreadcrumbProps, BreadcrumbItem } from './components/Breadcrumb';
+
 // 導出工具函數
 export { cn } from './utils/cn';
 

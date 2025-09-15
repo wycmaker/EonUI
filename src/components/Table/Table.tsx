@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback, useEffect } from 'react';
 
 import { cn } from '@/utils/cn';
-import { SpinnerIcon, SortAscIcon, SortDescIcon, EmptyDataIcon } from '@/utils/icons';
+import { SpinnerIcon, SortAscIcon, SortDescIcon } from '@/utils/icons';
 
 // 常量配置 - 移到組件外部避免重複創建
 const TABLE_VARIANTS = {
@@ -194,22 +194,6 @@ const SortIcon: React.FC<{ direction: 'asc' | 'desc' | null }> = ({ direction })
       )}
     />
   </span>
-);
-
-// 載入組件
-const LoadingSpinner: React.FC = () => (
-  <div className="flex items-center justify-center py-8">
-    <SpinnerIcon className="h-8 w-8 text-primary-600 animate-spin" />
-    <span className="ml-2 text-gray-600 animate-pulse">載入中...</span>
-  </div>
-);
-
-// 空資料組件
-const EmptyData: React.FC<{ text: string }> = ({ text }) => (
-  <div className="flex items-center justify-center py-8 text-gray-500">
-    <EmptyDataIcon className="mr-2" />
-    {text}
-  </div>
 );
 
 // TableColumn 組件
@@ -469,64 +453,98 @@ export const Table = <T extends Record<string, unknown>>({
   );
 
   // 渲染表身
-  const renderBody = () => (
-    <tbody className="divide-y divide-gray-200">
-      {sortedData.map((record, rowIndex) => (
-        <tr
-          key={`row-${rowIndex}-${record.id || rowIndex}`}
-          className={cn(
-            hasVariant(variant, 'striped') && rowIndex % 2 === 1 && 'bg-gray-100',
-            hover && hasVariant(variant, 'striped') && 'hover:bg-gray-200 transition-colors',
-            hover && !hasVariant(variant, 'striped') && 'hover:bg-gray-50 transition-colors',
-          )}
-        >
-          {finalColumns.map((column, colIndex) => {
-            const value = record[column.key];
-            const cellContent = defaultRenderCell(value, record, rowIndex, column.key);
+  const renderBody = () => {
+    // 如果是 loading 狀態，顯示 loading 行
+    if (loading) {
+      return (
+        <tbody>
+          <tr>
+            <td
+              colSpan={finalColumns.length}
+              className={cn(CELL_PADDING[size], 'border-b border-gray-200')}
+            >
+              <div className="flex items-center justify-center py-8">
+                <SpinnerIcon className="h-8 w-8 text-primary-600 animate-spin" />
+                <span className="ml-2 text-gray-600 animate-pulse">載入中...</span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      );
+    }
 
-            return (
-              <td
-                key={`cell-${rowIndex}-${colIndex}-${String(column.key)}`}
-                className={cn(
-                  CELL_PADDING[size],
-                  'border-b border-gray-200',
-                  hasVariant(variant, 'bordered') && 'border-r border-gray-200 last:border-r-0',
-                  'break-words',
-                  hasVariant(variant, 'striped') && rowIndex % 2 === 1 ? 'bg-gray-100' : 'bg-white',
-                  column.align === 'center' && 'text-center',
-                  column.align === 'right' && 'text-right',
-                  column.fixed === 'left' && 'sticky left-0 z-10',
-                  column.fixed === 'right' && 'sticky right-0 z-10',
-                )}
-                style={{ width: column.width }}
-              >
-                <div className="w-full">{cellContent}</div>
-              </td>
-            );
-          })}
-        </tr>
-      ))}
-    </tbody>
-  );
+    // 如果沒有資料，顯示空資料行
+    if (sortedData.length === 0) {
+      return (
+        <tbody>
+          <tr>
+            <td
+              colSpan={finalColumns.length}
+              className={cn(CELL_PADDING[size], 'border-b border-gray-200')}
+            >
+              <div className="flex items-center justify-center py-8 text-gray-500">{emptyText}</div>
+            </td>
+          </tr>
+        </tbody>
+      );
+    }
+
+    // 正常資料顯示
+    return (
+      <tbody className="divide-y divide-gray-200">
+        {sortedData.map((record, rowIndex) => (
+          <tr
+            key={`row-${rowIndex}-${record.id || rowIndex}`}
+            className={cn(
+              hasVariant(variant, 'striped') && rowIndex % 2 === 1 && 'bg-gray-100',
+              hover && hasVariant(variant, 'striped') && 'hover:bg-gray-200 transition-colors',
+              hover && !hasVariant(variant, 'striped') && 'hover:bg-gray-50 transition-colors',
+            )}
+          >
+            {finalColumns.map((column, colIndex) => {
+              const value = record[column.key];
+              const cellContent = defaultRenderCell(value, record, rowIndex, column.key);
+
+              return (
+                <td
+                  key={`cell-${rowIndex}-${colIndex}-${String(column.key)}`}
+                  className={cn(
+                    CELL_PADDING[size],
+                    'border-b border-gray-200',
+                    hasVariant(variant, 'bordered') && 'border-r border-gray-200 last:border-r-0',
+                    'break-words',
+                    hasVariant(variant, 'striped') && rowIndex % 2 === 1
+                      ? 'bg-gray-100'
+                      : 'bg-white',
+                    column.align === 'center' && 'text-center',
+                    column.align === 'right' && 'text-right',
+                    column.fixed === 'left' && 'sticky left-0 z-10',
+                    column.fixed === 'right' && 'sticky right-0 z-10',
+                  )}
+                  style={{ width: column.width }}
+                >
+                  <div className="w-full">{cellContent}</div>
+                </td>
+              );
+            })}
+          </tr>
+        ))}
+      </tbody>
+    );
+  };
 
   return (
     <div
       className={containerStyles}
       onBlur={handleTableBlur}
     >
-      {loading ? (
-        <LoadingSpinner />
-      ) : sortedData.length === 0 ? (
-        <EmptyData text={emptyText} />
-      ) : (
-        <table
-          className={tableStyles}
-          role="table"
-        >
-          {renderHeader()}
-          {renderBody()}
-        </table>
-      )}
+      <table
+        className={tableStyles}
+        role="table"
+      >
+        {renderHeader()}
+        {renderBody()}
+      </table>
     </div>
   );
 };

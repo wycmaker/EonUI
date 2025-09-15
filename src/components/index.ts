@@ -22,6 +22,9 @@ export type { GridProps } from './Grid';
 export { Layout } from './Layout';
 export type { LayoutProps } from './Layout';
 
+export { Breadcrumb } from './Breadcrumb';
+export type { BreadcrumbProps, BreadcrumbItem } from './Breadcrumb';
+
 export { Pagination } from './Pagination';
 export type { PaginationProps, PaginationLayoutItem } from './Pagination';
 

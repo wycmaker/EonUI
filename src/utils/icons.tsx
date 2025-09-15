@@ -324,6 +324,46 @@ export const NextIcon: React.FC<IconProps> = ({
   </svg>
 );
 
+export const FirstPageIcon: React.FC<IconProps> = ({
+  className = 'w-4 h-4',
+  'aria-hidden': ariaHidden = true,
+}) => (
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    aria-hidden={ariaHidden}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M18 19l-7-7 7-7M12 19l-7-7 7-7"
+    />
+  </svg>
+);
+
+export const LastPageIcon: React.FC<IconProps> = ({
+  className = 'w-4 h-4',
+  'aria-hidden': ariaHidden = true,
+}) => (
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+    aria-hidden={ariaHidden}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M6 5l7 7-7 7M12 5l7 7-7 7"
+    />
+  </svg>
+);
+
 // 空資料圖示
 export const EmptyDataIcon: React.FC<IconProps> = ({
   className = 'h-8 w-8',

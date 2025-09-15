@@ -59,7 +59,8 @@ interface FormState {
 }
 
 // Form Props
-export interface FormProps extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
+export interface FormProps
+  extends Omit<React.FormHTMLAttributes<HTMLFormElement>, 'onSubmit' | 'onReset'> {
   /**
    * 初始值
    */
@@ -268,6 +269,15 @@ export const Form: React.FC<FormProps> = ({
     return isValid;
   }, [formState.fields, validateField]);
 
+  // 重置表單
+  const resetForm = useCallback(() => {
+    setFormState((prev) => ({
+      ...prev,
+      values: { ...initialValues },
+      errors: {},
+    }));
+  }, [initialValues]);
+
   // 表單提交處理
   const handleSubmit = useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
@@ -283,6 +293,15 @@ export const Form: React.FC<FormProps> = ({
     [onSubmit, formState.values, validateForm],
   );
 
+  // 表單重置處理
+  const handleReset = useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      resetForm();
+    },
+    [resetForm],
+  );
+
   // Context 值（簡化依賴避免循環引用）
   const contextValue: FormContextValue = {
     values: formState.values,
@@ -295,13 +314,15 @@ export const Form: React.FC<FormProps> = ({
     validateForm,
     registerField,
     unregisterField,
+    resetForm,
   };
 
   return (
     <FormContext.Provider value={contextValue}>
       <form
         onSubmit={handleSubmit}
-        className={cn('space-y-4', className)}
+        onReset={handleReset}
+        className={cn('flex flex-wrap gap-4', className)}
         {...props}
       >
         {children}

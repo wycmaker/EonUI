@@ -24,8 +24,11 @@ export const useForm = () => {
     // 驗證所有欄位
     validateFields: context.validateForm,
 
-    // 重置表單
-    resetFields: () => {
+    // 重置表單（重置到初始值）
+    resetFields: context.resetForm,
+
+    // 清空表單（清空所有欄位）
+    clearFields: () => {
       Object.keys(context.values).forEach((name) => {
         context.setValue(name, '');
         context.setFieldError(name, null);
