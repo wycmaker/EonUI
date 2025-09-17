@@ -1211,7 +1211,8 @@ const BasicFormExample = () => {
                     required
                     layout="horizontal"
                     labelWidth="100px"
-                    controlWidth="200px"
+                    labelAlign="right"
+                    width="300px"
                   >
                     <Input placeholder="請輸入姓名" />
                   </FormItem>
@@ -1220,7 +1221,8 @@ const BasicFormExample = () => {
                     label="年齡"
                     layout="horizontal"
                     labelWidth="100px"
-                    controlWidth="150px"
+                    labelAlign="right"
+                    width="250px"
                   >
                     <Input
                       type="number"
@@ -1232,10 +1234,12 @@ const BasicFormExample = () => {
                     label="電子郵件"
                     layout="horizontal"
                     labelWidth="100px"
+                    labelAlign="right"
+                    width="350px"
                   >
                     <Input
                       type="email"
-                      placeholder="不設定 controlWidth 使用自然寬度"
+                      placeholder="children 佔滿剩餘寬度"
                     />
                   </FormItem>
                 </Form>
@@ -1243,77 +1247,132 @@ const BasicFormExample = () => {
             </div>
 
             <div>
-              <h4 className="font-medium mb-3 text-gray-600">自動換行水平佈局</h4>
-              <div className="max-w-lg">
+              <h4 className="font-medium mb-3 text-gray-600">標籤對齊方式</h4>
+              <div className="max-w-lg space-y-4">
                 <Form>
                   <FormItem
-                    name="firstName"
-                    label="名"
+                    name="leftAlign"
+                    label="靠左對齊"
                     layout="horizontal"
-                    labelWidth="40px"
-                    controlWidth="120px"
+                    labelWidth="120px"
+                    labelAlign="left"
+                    width="300px"
                   >
-                    <Input placeholder="名" />
+                    <Input placeholder="標籤靠左對齊" />
                   </FormItem>
                   <FormItem
-                    name="lastName"
-                    label="姓"
+                    name="centerAlign"
+                    label="置中對齊"
                     layout="horizontal"
-                    labelWidth="40px"
-                    controlWidth="120px"
+                    labelWidth="120px"
+                    labelAlign="center"
+                    width="300px"
                   >
-                    <Input placeholder="姓" />
+                    <Input placeholder="標籤置中對齊" />
                   </FormItem>
                   <FormItem
-                    name="birthYear"
-                    label="出生年"
+                    name="rightAlign"
+                    label="靠右對齊"
                     layout="horizontal"
-                    labelWidth="60px"
-                    controlWidth="100px"
+                    labelWidth="120px"
+                    labelAlign="right"
+                    width="300px"
+                  >
+                    <Input placeholder="標籤靠右對齊（預設）" />
+                  </FormItem>
+                </Form>
+              </div>
+            </div>
+
+            <div>
+              <h4 className="font-medium mb-3 text-gray-600">響應式寬度佈局</h4>
+              <div className="max-w-2xl">
+                <Form>
+                  <FormItem
+                    name="flexName"
+                    label="姓名"
+                    layout="horizontal"
+                    labelWidth="80px"
+                    width="200px"
+                    minWidth="160px"
+                  >
+                    <Input placeholder="姓名" />
+                  </FormItem>
+                  <FormItem
+                    name="flexAge"
+                    label="年齡"
+                    layout="horizontal"
+                    labelWidth="80px"
+                    width="120px"
+                    minWidth="100px"
                   >
                     <Input
                       type="number"
-                      placeholder="年"
+                      placeholder="年齡"
                     />
                   </FormItem>
                   <FormItem
-                    name="birthMonth"
-                    label="月"
+                    name="flexGender"
+                    label="性別"
                     layout="horizontal"
-                    labelWidth="30px"
-                    controlWidth="80px"
+                    labelWidth="80px"
+                    width="140px"
+                    minWidth="120px"
                   >
-                    <Input
-                      type="number"
-                      placeholder="月"
+                    <Select
+                      options={[
+                        { value: 'male', label: '男' },
+                        { value: 'female', label: '女' },
+                      ]}
+                      placeholder="選擇"
                     />
                   </FormItem>
                   <FormItem
-                    name="birthDay"
-                    label="日"
-                    layout="horizontal"
-                    labelWidth="30px"
-                    controlWidth="80px"
-                  >
-                    <Input
-                      type="number"
-                      placeholder="日"
-                    />
-                  </FormItem>
-                  <FormItem
-                    name="email"
+                    name="flexEmail"
                     label="電子郵件"
                     layout="horizontal"
                     labelWidth="80px"
-                    controlWidth="250px"
+                    width="300px"
+                    minWidth="250px"
                   >
                     <Input
                       type="email"
                       placeholder="電子郵件"
                     />
                   </FormItem>
+                  <FormItem
+                    name="flexPhone"
+                    label="電話"
+                    layout="horizontal"
+                    labelWidth="80px"
+                    width="200px"
+                    minWidth="160px"
+                  >
+                    <Input placeholder="手機號碼" />
+                  </FormItem>
+                  <FormItem
+                    name="flexDepartment"
+                    label="部門"
+                    layout="horizontal"
+                    labelWidth="80px"
+                    width="180px"
+                    minWidth="140px"
+                  >
+                    <Select
+                      options={[
+                        { value: 'tech', label: '技術部' },
+                        { value: 'design', label: '設計部' },
+                        { value: 'product', label: '產品部' },
+                      ]}
+                      placeholder="選擇部門"
+                    />
+                  </FormItem>
                 </Form>
               </div>
+              <p className="text-sm text-gray-500 mt-2">
+                調整視窗大小觀察 FormItem 的自動換行效果。每個 FormItem 有固定的 labelWidth，
+                children 佔滿剩餘寬度，並在空間不足時自動換行。
+              </p>
             </div>
           </div>
         </CodeExample>
@@ -1331,7 +1390,22 @@ const BasicFormExample = () => {
               <strong>labelWidth：</strong>水平佈局時的標籤寬度（預設 120px）
             </li>
             <li>
-              <strong>controlWidth：</strong>水平佈局時的控制項寬度，不設定則使用控制項的自然寬度
+              <strong>labelAlign：</strong>水平佈局時的標籤對齊方式（預設 right）
+            </li>
+            <li>
+              <strong>width：</strong>FormItem 整體寬度，支援響應式
+            </li>
+            <li>
+              <strong>minWidth：</strong>FormItem 最小寬度，用於自動換行控制
+            </li>
+            <li>
+              <strong>佈局特性：</strong>
+              <ul className="ml-4 mt-1">
+                <li>• labelWidth 固定寬度，children 佔滿剩餘寬度</li>
+                <li>• 支援響應式調整，優化 RWD 體驗</li>
+                <li>• minWidth 控制自動換行的觸發點</li>
+                <li>• flex-1 min-w-0 確保內容不會溢出</li>
+              </ul>
             </li>
             <li>
               <strong>自動換行：</strong>Form 使用 flex-wrap，FormItem 會根據容器寬度自動換行
@@ -1516,14 +1590,32 @@ const BasicFormExample = () => {
                   <td className="border border-gray-300 px-4 py-2 text-sm">水平佈局時標籤的寬度</td>
                 </tr>
                 <tr>
-                  <td className="border border-gray-300 px-4 py-2 font-mono text-sm">
-                    controlWidth
+                  <td className="border border-gray-300 px-4 py-2 font-mono text-sm">labelAlign</td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm">
+                    'left' | 'center' | 'right'
                   </td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm">否</td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm">'right'</td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm">
+                    水平佈局時標籤的對齊方式
+                  </td>
+                </tr>
+                <tr className="bg-gray-50">
+                  <td className="border border-gray-300 px-4 py-2 font-mono text-sm">width</td>
                   <td className="border border-gray-300 px-4 py-2 text-sm">string</td>
                   <td className="border border-gray-300 px-4 py-2 text-sm">否</td>
                   <td className="border border-gray-300 px-4 py-2 text-sm">-</td>
                   <td className="border border-gray-300 px-4 py-2 text-sm">
-                    水平佈局時控制項的寬度，不設定則使用控制項的自然寬度
+                    FormItem 整體寬度，支援響應式（如 '200px', '100%', '20rem'）
+                  </td>
+                </tr>
+                <tr>
+                  <td className="border border-gray-300 px-4 py-2 font-mono text-sm">minWidth</td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm">string</td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm">否</td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm">-</td>
+                  <td className="border border-gray-300 px-4 py-2 text-sm">
+                    FormItem 最小寬度，用於控制自動換行的觸發點
                   </td>
                 </tr>
                 <tr>
@@ -1802,10 +1894,32 @@ const BasicFormExample = () => {
   label="姓名"
   layout="horizontal"
   labelWidth="120px"
-  controlWidth="200px"
+  labelAlign="right"
+  width="320px"
   required
 >
   <Input placeholder="請輸入姓名" />
+</FormItem>
+
+// 不同對齊方式
+<FormItem
+  name="leftAlign"
+  label="靠左標籤"
+  layout="horizontal"
+  labelAlign="left"
+  width="300px"
+>
+  <Input />
+</FormItem>
+
+<FormItem
+  name="centerAlign"
+  label="置中標籤"
+  layout="horizontal"
+  labelAlign="center"
+  width="300px"
+>
+  <Input />
 </FormItem>
 
 // 初始值

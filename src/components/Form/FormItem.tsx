@@ -31,9 +31,17 @@ export interface FormItemProps {
    */
   labelWidth?: string;
   /**
-   * 控制項寬度（水平佈局時使用）
+   * 標籤對齊方式（水平佈局時使用）
    */
-  controlWidth?: string;
+  labelAlign?: 'left' | 'center' | 'right';
+  /**
+   * FormItem 整體寬度
+   */
+  width?: string;
+  /**
+   * FormItem 最小寬度（用於自動換行）
+   */
+  minWidth?: string;
   /**
    * 自訂 CSS 類名
    */
@@ -51,7 +59,9 @@ const FormItemComponent: React.FC<FormItemProps> = ({
   rules = [],
   layout = 'vertical',
   labelWidth = '120px',
-  controlWidth,
+  labelAlign = 'right',
+  width,
+  minWidth,
   className,
   children,
 }) => {
@@ -167,7 +177,7 @@ const FormItemComponent: React.FC<FormItemProps> = ({
     return (
       <label
         className={cn(
-          'block text-sm font-medium text-gray-700',
+          'block text-base font-bold text-gray-700',
           required && 'after:content-["*"] after:text-red-500 after:ml-1',
           hasError && 'text-red-600',
         )}
@@ -203,18 +213,34 @@ const FormItemComponent: React.FC<FormItemProps> = ({
   }
 
   // 水平佈局
+  const containerStyles: React.CSSProperties = {
+    ...(width && { width }),
+    ...(minWidth && { minWidth }),
+  };
+
   return (
-    <div className={cn('inline-block', className)}>
-      <div className="inline-flex items-center space-x-2">
-        <div style={{ width: labelWidth, flexShrink: 0 }}>{renderLabel()}</div>
-        <div style={controlWidth ? { minWidth: controlWidth, flexShrink: 0 } : undefined}>
-          {renderedControl}
+    <div
+      className={cn('inline-block', className)}
+      style={containerStyles}
+    >
+      <div className="flex items-center space-x-2">
+        <div
+          className={cn(
+            'flex-shrink-0',
+            labelAlign === 'left' && 'text-left',
+            labelAlign === 'center' && 'text-center',
+            labelAlign === 'right' && 'text-right',
+          )}
+          style={{ width: labelWidth }}
+        >
+          {renderLabel()}
         </div>
+        <div className="flex-1 min-w-0">{renderedControl}</div>
       </div>
       {hasError && (
         <div
           className="mt-1"
-          style={{ marginLeft: `calc(${labelWidth} + 1rem)` }}
+          style={{ marginLeft: `calc(${labelWidth} + 0.5rem)` }}
         >
           {renderError()}
         </div>
