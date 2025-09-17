@@ -379,67 +379,35 @@ export const Menu = React.forwardRef<HTMLDivElement, MenuProps>(
     },
     ref,
   ) => {
-    // 內部狀態管理
-    const [internalOpenKeys, setInternalOpenKeys] = useState<string[]>(defaultOpenKeys);
-    const currentOpenKeys = openKeys ?? internalOpenKeys;
-    const lastActiveKeyRef = useRef<string>('');
+    // 同步版本的 getActiveKey（避免 useCallback 依賴問題）
+    const getActiveKeySync = useCallback((menuItems: MenuItem[], path: string): string => {
+      if (!Array.isArray(menuItems)) return '';
 
-    // 判斷項目是否活躍
-    const isItemActive = useCallback(
-      (item: MenuItem, path: string, manualActiveKey?: string): boolean => {
-        // 如果有手動設定的 activeKey，優先使用
-        if (manualActiveKey) {
-          return item.key === manualActiveKey;
-        }
-
+      for (const item of menuItems) {
         // 檢查 activePatterns
         if (item.activePatterns && item.activePatterns.length > 0) {
-          return item.activePatterns.some((pattern) => path.includes(pattern));
-        }
-
-        // 檢查 href
-        if (item.href) {
-          return path.includes(item.href);
-        }
-
-        return false;
-      },
-      [],
-    );
-
-    // 獲取當前活躍的項目key
-    const getActiveKey = useCallback(
-      (menuItems: MenuItem[], path: string): string => {
-        if (!Array.isArray(menuItems)) {
-          return '';
-        }
-        for (const item of menuItems) {
-          if (isItemActive(item, path)) {
+          if (item.activePatterns.some((pattern) => path.includes(pattern))) {
             return item.key;
           }
-          if (item.children && Array.isArray(item.children)) {
-            const childActiveKey = getActiveKey(item.children, path);
-            if (childActiveKey) {
-              return childActiveKey;
-            }
-          }
         }
-        return '';
-      },
-      [isItemActive],
-    );
+        // 檢查 href
+        if (item.href && path.includes(item.href)) {
+          return item.key;
+        }
+        // 檢查子項目
+        if (item.children && Array.isArray(item.children)) {
+          const childActiveKey = getActiveKeySync(item.children, path);
+          if (childActiveKey) return childActiveKey;
+        }
+      }
+      return '';
+    }, []);
 
-    // 計算當前活躍的項目
-    const computedActiveKey = useMemo(() => {
-      return activeKey || getActiveKey(items, currentPath);
-    }, [activeKey, items, currentPath, getActiveKey]);
-
-    // 自動展開包含活躍項目的父級選單
-    const getParentKeys = useCallback(
+    // 同步版本的 getParentKeys
+    const getParentKeysSync = useCallback(
       (menuItems: MenuItem[], targetKey: string, parents: string[] = []): string[] => {
-        if (!Array.isArray(menuItems)) {
-          return [];
-        }
+        if (!Array.isArray(menuItems)) return [];
+
         for (const item of menuItems) {
           const currentPath = [...parents, item.key];
 
@@ -448,7 +416,7 @@ export const Menu = React.forwardRef<HTMLDivElement, MenuProps>(
           }
 
           if (item.children && Array.isArray(item.children)) {
-            const result = getParentKeys(item.children, targetKey, currentPath);
+            const result = getParentKeysSync(item.children, targetKey, currentPath);
             if (result.length > 0 || item.children.some((child) => child.key === targetKey)) {
               return currentPath;
             }
@@ -459,71 +427,77 @@ export const Menu = React.forwardRef<HTMLDivElement, MenuProps>(
       [],
     );
 
-    // 當活躍項目變化時，自動展開相關的父級選單（僅在 active key 變化時觸發）
+    // 使用懶初始化計算初始展開狀態
+    const [internalOpenKeys, setInternalOpenKeys] = useState<string[]>(() => {
+      // 如果是受控模式，直接返回 defaultOpenKeys
+      if (openKeys !== undefined) {
+        return defaultOpenKeys;
+      }
+
+      // 計算當前活躍的項目
+      const currentActiveKey = activeKey || getActiveKeySync(items, currentPath);
+
+      if (currentActiveKey) {
+        // 獲取需要展開的父級選單
+        const parentKeys = getParentKeysSync(items, currentActiveKey);
+        // 合併預設展開的選單和需要展開的父級選單
+        return Array.from(new Set([...defaultOpenKeys, ...parentKeys]));
+      }
+
+      return defaultOpenKeys;
+    });
+    const currentOpenKeys = openKeys ?? internalOpenKeys;
+    const lastActiveKeyRef = useRef<string>('');
+
+    // 原有的 useCallback 版本保持不變（用於後續更新）
+    const isItemActive = useCallback(
+      (item: MenuItem, path: string, manualActiveKey?: string): boolean => {
+        if (manualActiveKey) return item.key === manualActiveKey;
+        if (item.activePatterns && item.activePatterns.length > 0) {
+          return item.activePatterns.some((pattern) => path.includes(pattern));
+        }
+        if (item.href) return path.includes(item.href);
+        return false;
+      },
+      [],
+    );
+
+    const getActiveKey = useCallback(
+      (menuItems: MenuItem[], path: string): string => {
+        return getActiveKeySync(menuItems, path);
+      },
+      [getActiveKeySync],
+    );
+
+    const getParentKeys = useCallback(
+      (menuItems: MenuItem[], targetKey: string, parents: string[] = []): string[] => {
+        return getParentKeysSync(menuItems, targetKey, parents);
+      },
+      [getParentKeysSync],
+    );
+
+    // 計算當前活躍的項目
+    const computedActiveKey = useMemo(() => {
+      return activeKey || getActiveKey(items, currentPath);
+    }, [activeKey, items, currentPath, getActiveKey]);
+
+    // 簡化的 useEffect - 只處理後續的路由變化
     useEffect(() => {
       if (computedActiveKey && computedActiveKey !== lastActiveKeyRef.current) {
         lastActiveKeyRef.current = computedActiveKey;
         const parentKeys = getParentKeys(items, computedActiveKey);
-        if (parentKeys.length > 0) {
-          // 使用函數式更新避免依賴問題
-          if (openKeys === undefined) {
-            setInternalOpenKeys((prevKeys) => {
-              // 只添加尚未打開的父級選單，避免不必要的狀態更新
-              const unopenedParentKeys = parentKeys.filter((key) => !prevKeys.includes(key));
-              if (unopenedParentKeys.length > 0) {
-                return Array.from(new Set([...prevKeys, ...unopenedParentKeys]));
-              }
-              return prevKeys; // 沒有變化時返回原狀態，避免重新渲染
-            });
-          } else {
-            // 受控模式下，只添加尚未打開的父級選單
-            const currentKeys = currentOpenKeys; // 讀取當前值，但不作為依賴
-            const unopenedParentKeys = parentKeys.filter((key) => !currentKeys.includes(key));
-            if (unopenedParentKeys.length > 0) {
-              const newOpenKeys = Array.from(new Set([...currentKeys, ...unopenedParentKeys]));
-              onOpenChange?.(newOpenKeys);
-            }
-          }
-        }
-      }
-    }, [computedActiveKey, items, getParentKeys, openKeys, onOpenChange]); // eslint-disable-line react-hooks/exhaustive-deps
 
-    // 收合模式變化時的處理
-    useEffect(() => {
-      if (collapsed) {
-        // 收合時關閉所有子選單
-        if (openKeys === undefined) {
-          setInternalOpenKeys([]);
-        } else {
-          onOpenChange?.([]);
-        }
-      } else {
-        // 展開時重新打開包含 active 項目的父級選單
-        if (computedActiveKey) {
-          const parentKeys = getParentKeys(items, computedActiveKey);
-          if (parentKeys.length > 0) {
-            if (openKeys === undefined) {
-              setInternalOpenKeys((prevKeys) => {
-                // 只添加尚未打開的父級選單
-                const unopenedParentKeys = parentKeys.filter((key) => !prevKeys.includes(key));
-                if (unopenedParentKeys.length > 0) {
-                  return Array.from(new Set([...prevKeys, ...unopenedParentKeys]));
-                }
-                return prevKeys;
-              });
-            } else {
-              // 受控模式下，讀取當前值但不作為依賴
-              const currentKeys = currentOpenKeys;
-              const unopenedParentKeys = parentKeys.filter((key) => !currentKeys.includes(key));
-              if (unopenedParentKeys.length > 0) {
-                const newOpenKeys = Array.from(new Set([...currentKeys, ...unopenedParentKeys]));
-                onOpenChange?.(newOpenKeys);
-              }
+        if (parentKeys.length > 0 && openKeys === undefined) {
+          setInternalOpenKeys((prevKeys) => {
+            const unopenedParentKeys = parentKeys.filter((key) => !prevKeys.includes(key));
+            if (unopenedParentKeys.length > 0) {
+              return Array.from(new Set([...prevKeys, ...unopenedParentKeys]));
             }
-          }
+            return prevKeys;
+          });
         }
       }
-    }, [collapsed, computedActiveKey, items, getParentKeys, openKeys, onOpenChange]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [computedActiveKey, items, getParentKeys, openKeys]);
 
     // 處理選單項目點擊
     const handleSelect = useCallback(
