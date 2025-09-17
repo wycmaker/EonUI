@@ -210,14 +210,10 @@ const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
     const asideClasses = cn(
       'flex-shrink-0',
       asideWidthStyles[asideWidth],
-      // 高度模式
-      asideHeight === 'full' &&
-        (stickyAside ? 'sticky top-0 h-screen overflow-y-auto' : 'h-screen overflow-y-auto'),
-      asideHeight === 'content' &&
-        stickyAside &&
-        (header
-          ? 'sticky h-[calc(100vh-theme(spacing.16))] overflow-y-auto'
-          : 'sticky top-0 h-screen overflow-y-auto'),
+      // sticky 定位
+      stickyAside && 'sticky overflow-y-auto',
+      // 非 sticky 的高度
+      !stickyAside && (asideHeight === 'full' ? 'h-screen overflow-y-auto' : 'h-auto'),
       // 響應式處理
       responsiveAside && 'hidden lg:block',
       spacing > 0 && `p-${spacing}`,
@@ -246,6 +242,8 @@ const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
     // 主要內容樣式
     const mainClasses = cn(
       'flex-1 min-w-0', // min-w-0 防止內容溢出
+      // 當所有區塊都是 sticky 時，main 需要有固定高度和獨立滾動
+      stickyHeader && stickyFooter && stickyAside && 'overflow-y-auto',
       spacing > 0 && `p-${spacing}`,
       // 透明效果：當手機版側邊欄展開時
       mobileAsideOpen && 'lg:opacity-100 opacity-30 transition-opacity duration-300',
@@ -260,11 +258,68 @@ const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
       mobileAsideOpen && 'lg:opacity-100 opacity-30 transition-opacity duration-300',
     );
 
-    // 計算側邊欄的 top 位置（當 asideHeight 為 'content' 且有 header 時）
-    const asideTopOffset =
-      asideHeight === 'content' && header && stickyAside
-        ? `top-[${headerHeightStyles[headerHeight].replace('h-', '')}]`
-        : '';
+    // 計算 aside 的樣式
+    const getAsideStyles = (): React.CSSProperties => {
+      if (!stickyAside) return {};
+
+      const styles: React.CSSProperties = {};
+
+      // 簡化高度計算邏輯
+      let topValue = '0px';
+      let heightValue = '100vh';
+
+      // 計算 header 高度偏移
+      if (header && stickyHeader) {
+        switch (headerHeight) {
+          case 'sm':
+            topValue = '3rem';
+            heightValue = 'calc(100vh - 3rem)';
+            break;
+          case 'md':
+            topValue = '4rem';
+            heightValue = 'calc(100vh - 4rem)';
+            break;
+          case 'lg':
+            topValue = '5rem';
+            heightValue = 'calc(100vh - 5rem)';
+            break;
+          default:
+            topValue = '4rem';
+            heightValue = 'calc(100vh - 4rem)';
+            break;
+        }
+      }
+
+      // 如果 footer 也是 sticky，需要再減去 footer 高度
+      if (footer && stickyFooter) {
+        let footerHeightValue = '4rem';
+        switch (footerHeight) {
+          case 'sm':
+            footerHeightValue = '3rem';
+            break;
+          case 'md':
+            footerHeightValue = '4rem';
+            break;
+          case 'lg':
+            footerHeightValue = '5rem';
+            break;
+          default:
+            footerHeightValue = '4rem';
+            break;
+        }
+
+        if (header && stickyHeader) {
+          heightValue = heightValue.replace(')', ` - ${footerHeightValue})`);
+        } else {
+          heightValue = `calc(100vh - ${footerHeightValue})`;
+        }
+      }
+
+      styles.top = topValue;
+      styles.height = heightValue;
+
+      return styles;
+    };
 
     // 判斷是否使用全高度佈局
     const useFullHeightLayout = aside && asideHeight === 'full';
@@ -331,7 +386,12 @@ const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
           /* 全高度佈局：aside 與 header/main/footer 並排 */
           <div className={cn('flex flex-1', asidePosition === 'right' && 'flex-row-reverse')}>
             {/* 桌面版全高度側邊欄 */}
-            <aside className={asideClasses}>{aside}</aside>
+            <aside
+              className={asideClasses}
+              style={getAsideStyles()}
+            >
+              {aside}
+            </aside>
 
             {/* 右側內容區域 */}
             <div className="flex flex-col flex-1 min-w-0">
@@ -362,7 +422,14 @@ const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
             {/* 主要內容區域 */}
             <div className={contentClasses}>
               {/* 桌面版側邊欄 */}
-              {aside && <aside className={cn(asideClasses, asideTopOffset)}>{aside}</aside>}
+              {aside && (
+                <aside
+                  className={asideClasses}
+                  style={getAsideStyles()}
+                >
+                  {aside}
+                </aside>
+              )}
 
               {/* 主要內容 */}
               <main className={mainClasses}>{main}</main>
