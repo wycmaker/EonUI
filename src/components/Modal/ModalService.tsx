@@ -14,9 +14,53 @@ interface ModalContainerProps {
   onClose: (id: string) => void;
 }
 
-class ModalContainer extends Component<ModalContainerProps> {
+interface ModalContainerState {
+  visibleModals: Set<string>;
+}
+
+class ModalContainer extends Component<ModalContainerProps, ModalContainerState> {
+  state: ModalContainerState = {
+    visibleModals: new Set<string>(),
+  };
+
+  componentDidUpdate(prevProps: ModalContainerProps) {
+    const { modals } = this.props;
+    const prevModals = prevProps.modals;
+
+    // 檢查新增的 Modal
+    const newModalIds = modals
+      .filter((modal) => !prevModals.find((prev) => prev.id === modal.id))
+      .map((modal) => modal.id);
+
+    // 為新 Modal 添加動畫延遲 - 使用更長的延遲確保 DOM 完全渲染
+    if (newModalIds.length > 0) {
+      // 使用 requestAnimationFrame 確保在下一個繪制幀觸發
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          // 雙重 RAF 確保 DOM 完全渲染
+          setTimeout(() => {
+            this.setState((prevState: ModalContainerState) => ({
+              visibleModals: new Set([...prevState.visibleModals, ...newModalIds]),
+            }));
+          }, 50); // 增加延遲時間
+        });
+      });
+    }
+
+    // 移除已關閉的 Modal
+    const currentModalIds = new Set(modals.map((modal) => modal.id));
+    const visibleModals = new Set(
+      Array.from(this.state.visibleModals).filter((id) => currentModalIds.has(id)),
+    );
+
+    if (visibleModals.size !== this.state.visibleModals.size) {
+      this.setState({ visibleModals });
+    }
+  }
+
   render() {
     const { modals, onClose } = this.props;
+    const { visibleModals } = this.state;
 
     return (
       <>
@@ -27,7 +71,7 @@ class ModalContainer extends Component<ModalContainerProps> {
               key={key}
               id={id}
               {...modalProps}
-              visible={true}
+              visible={visibleModals.has(id)}
               onClose={() => onClose(id)}
             />
           );
@@ -62,7 +106,21 @@ class ModalProvider extends Component<ModalProviderProps> {
   }
 
   handleClose = (id: string) => {
-    modalManager.close(id);
+    const { modals } = this.state;
+    const modal = modals.find((m) => m.id === id);
+    const animationDuration = modal?.animationDuration || 300;
+
+    // 先觸發關閉動畫
+    this.setState((prevState: ModalContainerState) => ({
+      visibleModals: new Set(
+        Array.from(prevState.visibleModals).filter((modalId) => modalId !== id),
+      ),
+    }));
+
+    // 延遲移除 Modal，等待動畫完成
+    setTimeout(() => {
+      modalManager.close(id);
+    }, animationDuration);
   };
 
   render() {
@@ -134,15 +192,15 @@ class ModalManager {
     this.notify();
   }
 
+  // 獲取所有 Modal
+  getAll(): ModalInstance[] {
+    return [...this.modals];
+  }
+
   // 更新 Modal
   update(id: string, options: Partial<ModalProps>) {
     this.modals = this.modals.map((modal) => (modal.id === id ? { ...modal, ...options } : modal));
     this.notify();
-  }
-
-  // 獲取所有 Modal
-  getAll() {
-    return [...this.modals];
   }
 
   // 檢查 Modal 是否存在

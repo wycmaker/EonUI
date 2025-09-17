@@ -102,7 +102,7 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
     _ref,
   ) => {
     const [internalVisible, setInternalVisible] = useState(defaultVisible);
-    const [isAnimating, setIsAnimating] = useState(false);
+    const [isAnimating, setIsAnimating] = useState(true); // 初始設為 true，確保動畫狀態
     const [shouldRender, setShouldRender] = useState(visible ?? defaultVisible);
     const modalRef = useRef<HTMLDivElement>(null);
     const animationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -139,22 +139,22 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
           onOpen?.();
           onAnimationEnd?.('enter');
         } else {
-          // 啟用動畫：先確保 DOM 渲染，再開始動畫
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              // 雙重 requestAnimationFrame 確保 DOM 完全渲染
-              setIsAnimating(false); // 觸發進入動畫
-            });
-          });
-
           onOpen?.();
 
-          // 動畫結束回調
+          // 使用 setTimeout 而不是 requestAnimationFrame，確保更可靠的時機
           const timer = setTimeout(() => {
-            onAnimationEnd?.('enter');
-          }, animationDuration);
+            setIsAnimating(false); // 觸發進入動畫
+          }, 10); // 給一個小延遲確保 DOM 渲染
 
-          return () => clearTimeout(timer);
+          // 動畫結束回調
+          const endTimer = setTimeout(() => {
+            onAnimationEnd?.('enter');
+          }, animationDuration + 50); // 稍微延遲確保動畫完成
+
+          return () => {
+            clearTimeout(timer);
+            clearTimeout(endTimer);
+          };
         }
       } else {
         // 關閉 Modal
@@ -162,11 +162,11 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
           setShouldRender(false);
           onAnimationEnd?.('exit');
         } else {
-          setIsAnimating(true);
+          setIsAnimating(true); // 立即設為退出動畫狀態
+
           // 動畫結束後隱藏
           animationTimeoutRef.current = setTimeout(() => {
             setShouldRender(false);
-            setIsAnimating(false);
             onAnimationEnd?.('exit');
           }, animationDuration);
         }
@@ -301,12 +301,11 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
         {/* 遮罩背景 */}
         <div
           className={cn(
-            'absolute inset-0 bg-black transition-opacity',
+            'absolute inset-0 bg-black',
             disableAnimation ? 'opacity-50' : isAnimating ? 'opacity-0' : 'opacity-50',
           )}
           style={{
-            transitionDuration: disableAnimation ? '0ms' : `${animationDuration}ms`,
-            transitionTimingFunction: 'ease-out',
+            transition: disableAnimation ? 'none' : `opacity ${animationDuration}ms ease-out`,
           }}
         />
 
@@ -314,7 +313,8 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
         <div
           ref={modalRef}
           className={cn(
-            'relative bg-white rounded-lg shadow-xl flex flex-col transition-all max-h-full max-w-[95vw]',
+            'relative bg-white rounded-lg shadow-xl flex flex-col max-h-full max-w-[95vw]',
+            'focus:outline-none',
             disableAnimation
               ? 'translate-y-0 opacity-100 scale-100'
               : isAnimating
@@ -324,9 +324,10 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
           )}
           style={{
             ...modalStyles,
-            transitionDuration: disableAnimation ? '0ms' : `${animationDuration}ms`,
-            transitionTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)',
-            transformOrigin: 'center top',
+            transition: disableAnimation
+              ? 'none'
+              : `all ${animationDuration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`,
+            transformOrigin: 'center center',
           }}
           onClick={(e) => e.stopPropagation()}
           data-modal-id={id}
@@ -338,11 +339,11 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
         >
           {/* 標題列 */}
           {(title || closable) && (
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 modal-title">
               {title && (
                 <h2
                   id={`modal-title-${id}`}
-                  className="text-lg font-semibold text-gray-900 flex-1 pr-4"
+                  className="text-lg font-semibold flex-1 pr-4"
                 >
                   {title}
                 </h2>
@@ -350,7 +351,7 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
               {closable && (
                 <CloseButton
                   onClick={handleClose}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-gray-600 modal-close"
                   size="md"
                   ariaLabel="關閉對話框"
                 />
@@ -361,14 +362,14 @@ const Modal = React.forwardRef<HTMLDivElement, ModalProps>(
           {/* 內容區域 */}
           <div
             id={`modal-content-${id}`}
-            className="flex-1 px-6 py-4 overflow-auto"
+            className="flex-1 px-6 py-4 overflow-auto modal-body"
           >
             {children}
           </div>
 
           {/* 頁腳 */}
           {footer && (
-            <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 rounded-b-lg">
+            <div className="px-6 py-4 border-t border-gray-200 bg-gray-50 rounded-b-lg modal-footer">
               {footer}
             </div>
           )}

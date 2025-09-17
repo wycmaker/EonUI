@@ -7,6 +7,9 @@ import { ModalInstance, modalManager } from './ModalService';
 
 // 自動初始化 Modal Provider
 let isProviderMounted = false;
+let visibleModals = new Set<string>();
+let globalRoot: ReturnType<typeof createRoot> | null = null;
+let globalRenderModals: ((modals: ModalInstance[]) => React.ReactElement) | null = null;
 
 const ensureProvider = () => {
   if (!isProviderMounted && typeof document !== 'undefined') {
@@ -14,9 +17,10 @@ const ensureProvider = () => {
     container.id = 'eonui-modal-provider';
     document.body.appendChild(container);
 
-    const root = createRoot(container);
-    // 初始為空
-    const renderModals = (modals: ModalInstance[]) => {
+    globalRoot = createRoot(container);
+
+    // 渲染 Modal 的函數
+    globalRenderModals = (modals: ModalInstance[]) => {
       return React.createElement(
         React.Fragment,
         null,
@@ -26,22 +30,62 @@ const ensureProvider = () => {
             key,
             id,
             ...modalProps,
-            visible: true,
-            onClose: () => modalManager.close(id),
+            visible: visibleModals.has(id),
+            onClose: () => handleGlobalModalClose(id),
           });
         }),
       );
     };
 
-    root.render(renderModals([]));
+    globalRoot.render(globalRenderModals([]));
 
-    // 替換為實際的 Provider
+    // 訂閱 Modal 變化
     modalManager.subscribe((modals) => {
-      root.render(renderModals(modals));
+      const currentModalIds = new Set(modals.map((modal) => modal.id));
+
+      // 檢查新增的 Modal
+      const newModalIds = modals
+        .filter((modal) => !visibleModals.has(modal.id))
+        .map((modal) => modal.id);
+
+      // 移除已關閉的 Modal
+      visibleModals = new Set(Array.from(visibleModals).filter((id) => currentModalIds.has(id)));
+
+      // 立即渲染新的 Modal（但 visible=false）
+      globalRoot?.render(globalRenderModals?.(modals));
+
+      // 為新 Modal 添加動畫延遲 - 使用更精確的時機控制
+      if (newModalIds.length > 0) {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            // 雙重 RAF 確保 DOM 完全渲染
+            setTimeout(() => {
+              visibleModals = new Set([...visibleModals, ...newModalIds]);
+              globalRoot?.render(globalRenderModals?.(modals));
+            }, 50); // 增加延遲時間
+          });
+        });
+      }
     });
 
     isProviderMounted = true;
   }
+};
+
+// 全域 Modal 關閉處理函數
+const handleGlobalModalClose = (id: string) => {
+  const allModals = modalManager.getAll();
+  const modal = allModals.find((m) => m.id === id);
+  const animationDuration = modal?.animationDuration || 300;
+
+  // 先觸發關閉動畫
+  visibleModals.delete(id);
+  globalRoot?.render(globalRenderModals?.(allModals));
+
+  // 延遲移除 Modal，等待動畫完成
+  setTimeout(() => {
+    modalManager.close(id);
+  }, animationDuration);
 };
 
 // 導出的 Modal Service API
@@ -58,14 +102,24 @@ export const ModalService = {
    * 關閉指定 Modal
    */
   close: (id: string) => {
-    modalManager.close(id);
+    handleGlobalModalClose(id);
   },
 
   /**
    * 關閉所有 Modal
    */
   closeAll: () => {
-    modalManager.closeAll();
+    const allModals = modalManager.getAll();
+    const maxAnimationDuration = Math.max(...allModals.map((m) => m.animationDuration || 300), 300);
+
+    // 先觸發所有 Modal 的關閉動畫
+    visibleModals.clear();
+    globalRoot?.render(globalRenderModals?.(allModals));
+
+    // 延遲移除所有 Modal，等待動畫完成
+    setTimeout(() => {
+      modalManager.closeAll();
+    }, maxAnimationDuration);
   },
 
   /**
