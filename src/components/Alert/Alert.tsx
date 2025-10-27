@@ -91,145 +91,147 @@ const AlertIcon: React.FC<{ type: AlertType; className?: string }> = ({ type, cl
   return icons[type] || icons.info;
 };
 
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(
-  (
-    {
-      type = 'info',
-      position = 'top-right',
-      closable = true,
-      duration = 3000,
-      showIcon = true,
-      icon,
-      title,
-      children,
-      onClose,
-      visible = true,
-      id,
-      className,
-      ...props
-    },
-    ref,
-  ) => {
-    const [isVisible, setIsVisible] = useState(visible);
-    const [isAnimating, setIsAnimating] = useState(false);
-    const timerRef = useRef<NodeJS.Timeout | null>(null);
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) => {
+  const {
+    type = 'info',
+    position = 'top-right',
+    closable = true,
+    duration = 3000,
+    showIcon = true,
+    icon,
+    title,
+    children,
+    onClose,
+    visible = true,
+    id,
+    className,
+    ...restProps
+  } = props;
 
-    // 使用共用樣式系統
-    const currentStyles = getAlertTypeStyles(type);
+  // 過濾掉不應該傳遞給 DOM 的屬性
+  const domProps = Object.fromEntries(
+    Object.entries(restProps).filter(([key]) => !['maxCount'].includes(key)),
+  );
 
-    const handleClose = useCallback(() => {
-      setIsAnimating(true);
-      setTimeout(() => {
-        setIsVisible(false);
-        onClose?.();
-      }, 300); // 動畫持續時間
-    }, [onClose]);
+  const [isVisible, setIsVisible] = useState(visible);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-    // 處理自動關閉
-    useEffect(() => {
-      if (visible && duration > 0) {
-        timerRef.current = setTimeout(() => {
-          handleClose();
-        }, duration);
+  // 使用共用樣式系統
+  const currentStyles = getAlertTypeStyles(type);
 
-        return () => {
-          if (timerRef.current) {
-            clearTimeout(timerRef.current);
-          }
-        };
-      }
-      return undefined;
-    }, [visible, duration, handleClose]);
+  const handleClose = useCallback(() => {
+    setIsAnimating(true);
+    setTimeout(() => {
+      setIsVisible(false);
+      onClose?.();
+    }, 300); // 動畫持續時間
+  }, [onClose]);
 
-    // 處理 visible 屬性變化
-    useEffect(() => {
-      if (visible !== isVisible) {
-        if (visible) {
-          setIsVisible(true);
-          setIsAnimating(true);
-          // 觸發進入動畫
-          setTimeout(() => setIsAnimating(false), 10);
-        } else {
-          handleClose();
+  // 處理自動關閉
+  useEffect(() => {
+    if (visible && duration > 0) {
+      timerRef.current = setTimeout(() => {
+        handleClose();
+      }, duration);
+
+      return () => {
+        if (timerRef.current) {
+          clearTimeout(timerRef.current);
         }
-      }
-    }, [visible, isVisible, handleClose]);
-
-    const clearTimer = () => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-        timerRef.current = null;
-      }
-    };
-
-    const handleMouseEnter = () => {
-      clearTimer();
-    };
-
-    const handleMouseLeave = () => {
-      if (duration > 0) {
-        timerRef.current = setTimeout(() => {
-          handleClose();
-        }, duration);
-      }
-    };
-
-    if (!isVisible) {
-      return null;
+      };
     }
+    return undefined;
+  }, [visible, duration, handleClose]);
 
-    return (
-      <div
-        ref={ref}
-        className={cn(
-          getBaseAlertStyles(),
-          currentStyles.container,
-          isAnimating ? 'translate-x-full opacity-0' : 'translate-x-0 opacity-100',
-          position.includes('left') && isAnimating && '-translate-x-full',
-          position.includes('right') && isAnimating && 'translate-x-full',
-          position.includes('top') && isAnimating && '-translate-y-2',
-          position.includes('bottom') && isAnimating && 'translate-y-2',
-          className,
-        )}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        data-alert-id={id}
-        {...props}
-      >
-        {/* 圖示 */}
-        {showIcon && (
-          <div className="flex-shrink-0">
-            {icon ? (
-              <div className={cn('h-5 w-5', currentStyles.icon)}>{icon}</div>
-            ) : (
-              <AlertIcon
-                type={type}
-                className={cn('h-5 w-5', currentStyles.icon)}
-              />
-            )}
-          </div>
-        )}
+  // 處理 visible 屬性變化
+  useEffect(() => {
+    if (visible !== isVisible) {
+      if (visible) {
+        setIsVisible(true);
+        setIsAnimating(true);
+        // 觸發進入動畫
+        setTimeout(() => setIsAnimating(false), 10);
+      } else {
+        handleClose();
+      }
+    }
+  }, [visible, isVisible, handleClose]);
 
-        {/* 內容區域 */}
-        <div className={cn('flex-1', showIcon && 'ml-3')}>
-          {title && <h4 className="text-sm font-medium mb-1">{title}</h4>}
-          {children && <div className="text-sm">{children}</div>}
-        </div>
+  const clearTimer = () => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+  };
 
-        {/* 關閉按鈕 */}
-        {closable && (
-          <div className="flex-shrink-0 ml-4">
-            <CloseButton
-              onClick={handleClose}
-              className={currentStyles.closeButton}
-              size="md"
+  const handleMouseEnter = () => {
+    clearTimer();
+  };
+
+  const handleMouseLeave = () => {
+    if (duration > 0) {
+      timerRef.current = setTimeout(() => {
+        handleClose();
+      }, duration);
+    }
+  };
+
+  if (!isVisible) {
+    return null;
+  }
+
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        getBaseAlertStyles(),
+        currentStyles.container,
+        isAnimating ? 'translate-x-full opacity-0' : 'translate-x-0 opacity-100',
+        position.includes('left') && isAnimating && '-translate-x-full',
+        position.includes('right') && isAnimating && 'translate-x-full',
+        position.includes('top') && isAnimating && '-translate-y-2',
+        position.includes('bottom') && isAnimating && 'translate-y-2',
+        className,
+      )}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      data-alert-id={id}
+      {...domProps}
+    >
+      {/* 圖示 */}
+      {showIcon && (
+        <div className="flex-shrink-0">
+          {icon ? (
+            <div className={cn('h-5 w-5', currentStyles.icon)}>{icon}</div>
+          ) : (
+            <AlertIcon
+              type={type}
+              className={cn('h-5 w-5', currentStyles.icon)}
             />
-          </div>
-        )}
+          )}
+        </div>
+      )}
+
+      {/* 內容區域 */}
+      <div className={cn('flex-1', showIcon && 'ml-3')}>
+        {title && <h4 className="text-sm font-medium mb-1">{title}</h4>}
+        {children && <div className="text-sm">{children}</div>}
       </div>
-    );
-  },
-);
+
+      {/* 關閉按鈕 */}
+      {closable && (
+        <div className="flex-shrink-0 ml-4">
+          <CloseButton
+            onClick={handleClose}
+            className={currentStyles.closeButton}
+            size="md"
+          />
+        </div>
+      )}
+    </div>
+  );
+});
 
 Alert.displayName = 'Alert';
 
