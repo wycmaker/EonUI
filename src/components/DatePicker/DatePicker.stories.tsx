@@ -88,8 +88,9 @@ const DatePickerDocs = () => {
         <h1 className="component-docs-title">DatePicker 日期選擇器</h1>
         <p className="component-docs-description">
           EonUI 的日期選擇器組件，支援日期、時間、日期時間三種模式。
-          提供豐富的自訂選項，包括日期範圍限制、禁用日期、自訂格式等功能。 設計風格與其他 Input
-          組件保持一致，支援多種樣式變體和狀態。
+          提供豐富的自訂選項，包括日期範圍限制、禁用日期、自訂格式等功能。
+          設計風格與其他 Input 組件保持一致，支援多種樣式變體和狀態。
+          <strong>新功能：</strong>支援手動輸入日期時間，以及點擊年月標題快速切換到年份或月份選擇器！
         </p>
       </div>
 
@@ -590,6 +591,173 @@ const [datetime, setDatetime] = useState(new Date());
             </li>
             <li>
               <strong>ss：</strong>兩位數秒數
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* 手動輸入 */}
+      <div className="component-docs-section">
+        <CodeExample
+          title="⌨️ 手動輸入"
+          description="DatePicker 支援直接在輸入框中手動輸入日期、時間或日期時間："
+          code={`// 日期模式 - 支援多種格式
+<DatePicker
+  mode="date"
+  placeholder="可直接輸入日期，如：2024-12-25"
+/>
+
+// 時間模式 - HH:mm 或 HH:mm:ss
+<DatePicker
+  mode="time"
+  placeholder="可直接輸入時間，如：14:30"
+/>
+
+// 日期時間模式
+<DatePicker
+  mode="datetime"
+  placeholder="可直接輸入日期時間，如：2024-12-25 14:30"
+/>`}
+        >
+          <div className="space-y-6">
+            <div>
+              <h4 className="font-medium mb-3 text-gray-600">日期輸入</h4>
+              <DatePicker
+                mode="date"
+                placeholder="可直接輸入日期，如：2024-12-25"
+              />
+              <p className="text-sm text-gray-500 mt-1">
+                支援格式：YYYY-MM-DD 或 YYYY/MM/DD
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-medium mb-3 text-gray-600">時間輸入</h4>
+              <DatePicker
+                mode="time"
+                placeholder="可直接輸入時間，如：14:30"
+              />
+              <p className="text-sm text-gray-500 mt-1">支援格式：HH:mm 或 HH:mm:ss</p>
+            </div>
+
+            <div>
+              <h4 className="font-medium mb-3 text-gray-600">日期時間輸入</h4>
+              <DatePicker
+                mode="datetime"
+                placeholder="可直接輸入日期時間，如：2024-12-25 14:30"
+              />
+              <p className="text-sm text-gray-500 mt-1">
+                支援格式：YYYY-MM-DD HH:mm 或 YYYY-MM-DD HH:mm:ss
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-medium mb-3 text-gray-600">輸入驗證</h4>
+              <DatePicker
+                mode="date"
+                minDate={new Date()}
+                placeholder="試試輸入過去的日期"
+              />
+              <p className="text-sm text-gray-500 mt-1">
+                輸入無效或超出範圍的日期時，會自動恢復原值
+              </p>
+            </div>
+          </div>
+        </CodeExample>
+
+        <div className="component-docs-info-card">
+          <strong>手動輸入功能說明：</strong>
+          <ul>
+            <li>
+              <strong>雙模式操作：</strong>點擊或聚焦輸入框時，會同時打開選擇面板並允許手動輸入
+            </li>
+            <li>
+              <strong>面板選擇：</strong>可以在面板中點擊選擇日期/時間
+            </li>
+            <li>
+              <strong>手動輸入：</strong>也可以直接在輸入框中輸入日期/時間
+            </li>
+            <li>
+              <strong>Enter 確認：</strong>按 Enter 鍵確認輸入並驗證
+            </li>
+            <li>
+              <strong>Esc 取消：</strong>按 Esc 鍵取消輸入、恢復原值並關閉面板
+            </li>
+            <li>
+              <strong>失焦驗證：</strong>輸入框失焦時自動驗證並格式化輸入
+            </li>
+            <li>
+              <strong>格式支援：</strong>支援破折號（-）和斜線（/）作為日期分隔符
+            </li>
+            <li>
+              <strong>範圍檢查：</strong>自動檢查 minDate、maxDate 和 disabledDates 限制
+            </li>
+            <li>
+              <strong>錯誤處理：</strong>無效輸入會自動恢復為上一個有效值
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* 快速年月選擇 */}
+      <div className="component-docs-section">
+        <CodeExample
+          title="📅 快速年月選擇"
+          description="在 date 或 datetime 模式下，點擊日曆頂部的年月標題可快速切換到年份或月份選擇器："
+          code={`// 日期模式 - 點擊年份或月份快速選擇
+<DatePicker
+  mode="date"
+  placeholder="點擊年月標題快速選擇"
+/>
+
+// 日期時間模式 - 同樣支援快速年月選擇
+<DatePicker
+  mode="datetime"
+  placeholder="點擊年月標題快速選擇"
+/>`}
+        >
+          <div className="space-y-6">
+            <div>
+              <h4 className="font-medium mb-3 text-gray-600">日期模式</h4>
+              <DatePicker
+                mode="date"
+                placeholder="點擊年月標題快速選擇"
+              />
+              <p className="text-sm text-gray-500 mt-1">
+                打開日曆後，點擊頂部的「年份」或「月份」文字即可切換到對應的選擇器
+              </p>
+            </div>
+
+            <div>
+              <h4 className="font-medium mb-3 text-gray-600">日期時間模式</h4>
+              <DatePicker
+                mode="datetime"
+                placeholder="點擊年月標題快速選擇"
+              />
+              <p className="text-sm text-gray-500 mt-1">
+                日期時間模式下同樣支援快速年月選擇功能
+              </p>
+            </div>
+          </div>
+        </CodeExample>
+
+        <div className="component-docs-info-card">
+          <strong>快速選擇功能說明：</strong>
+          <ul>
+            <li>
+              <strong>點擊年份：</strong>切換到年份選擇器，可快速選擇年份（顯示 10 年範圍）
+            </li>
+            <li>
+              <strong>點擊月份：</strong>切換到月份選擇器，可快速選擇月份（顯示 12 個月）
+            </li>
+            <li>
+              <strong>選擇年份後：</strong>自動切換到月份選擇器
+            </li>
+            <li>
+              <strong>選擇月份後：</strong>自動返回日期選擇器
+            </li>
+            <li>
+              <strong>視覺提示：</strong>年月標題在 hover 時會變色，提示可點擊
             </li>
           </ul>
         </div>

@@ -137,10 +137,6 @@ const MenuItemComponent: React.FC<MenuItemComponentProps> = ({
         onToggle(item.key);
       } else {
         onSelect(item.key, item);
-        // 如果有 href，進行路由跳轉
-        if (item.href) {
-          window.location.href = item.href;
-        }
       }
     },
     [item, hasChildren, collapsed, onSelect, onToggle],

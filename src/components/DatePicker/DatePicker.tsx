@@ -138,7 +138,7 @@ const parseDate = (dateString: string, mode: DatePickerMode): Date | null => {
     if (mode === 'time') {
       // 時間格式 HH:mm 或 HH:mm:ss
       const today = new Date();
-      const timeParts = dateString.split(':');
+      const timeParts = dateString.trim().split(':');
       if (timeParts.length >= 2) {
         date = new Date(today);
         date.setHours(parseInt(timeParts[0] || '0', 10));
@@ -149,7 +149,24 @@ const parseDate = (dateString: string, mode: DatePickerMode): Date | null => {
       }
     } else {
       // 日期或日期時間格式
-      date = new Date(dateString);
+      const trimmed = dateString.trim();
+
+      // 支援多種日期格式
+      // 1. YYYY-MM-DD 或 YYYY/MM/DD
+      // 2. YYYY-MM-DD HH:mm 或 YYYY-MM-DD HH:mm:ss
+      // 3. YYYY/MM/DD HH:mm 或 YYYY/MM/DD HH:mm:ss
+
+      // 替換斜線為破折號以統一格式
+      const normalized = trimmed.replace(/\//g, '-');
+
+      // 嘗試解析
+      date = new Date(normalized);
+
+      // 如果解析失敗，嘗試其他格式
+      if (isNaN(date.getTime())) {
+        // 嘗試 ISO 格式
+        date = new Date(trimmed);
+      }
     }
 
     return isNaN(date.getTime()) ? null : date;
@@ -207,6 +224,8 @@ interface CalendarProps {
   showToday?: boolean;
 }
 
+type CalendarView = 'date' | 'month' | 'year';
+
 const Calendar: React.FC<CalendarProps> = ({
   currentDate,
   selectedDate,
@@ -217,6 +236,7 @@ const Calendar: React.FC<CalendarProps> = ({
   showToday = true,
 }) => {
   const [viewDate, setViewDate] = useState(currentDate);
+  const [calendarView, setCalendarView] = useState<CalendarView>('date');
 
   const year = viewDate.getFullYear();
   const month = viewDate.getMonth();
@@ -269,113 +289,341 @@ const Calendar: React.FC<CalendarProps> = ({
     onDateSelect(today);
   };
 
+  // 年份選擇處理
+  const handleYearSelect = (selectedYear: number) => {
+    setViewDate(new Date(selectedYear, month, 1));
+    setCalendarView('month');
+  };
+
+  // 月份選擇處理
+  const handleMonthSelect = (selectedMonth: number) => {
+    setViewDate(new Date(year, selectedMonth, 1));
+    setCalendarView('date');
+  };
+
+  // 切換到年份視圖
+  const switchToYearView = () => {
+    setCalendarView('year');
+  };
+
+  // 切換到月份視圖
+  const switchToMonthView = () => {
+    setCalendarView('month');
+  };
+
+  // 返回到日期視圖（保留以備未來使用）
+  // const backToDateView = () => {
+  //   setCalendarView('date');
+  // };
+
+  // 年份視圖導航
+  const goToPreviousDecade = () => {
+    setViewDate(new Date(year - 10, month, 1));
+  };
+
+  const goToNextDecade = () => {
+    setViewDate(new Date(year + 10, month, 1));
+  };
+
   // 檢查今天是否在允許的日期範圍內
   const isTodayAllowed = showToday && !isDateDisabled(new Date(), minDate, maxDate, disabledDates);
 
-  return (
-    <div className="p-4 bg-white border rounded-lg shadow-lg w-full">
-      {/* 月份導航 */}
-      <div className="flex items-center justify-between mb-4">
-        <button
-          type="button"
-          onClick={goToPreviousMonth}
-          className="p-1 hover:bg-gray-100 rounded"
-        >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-        </button>
+  // 渲染年份選擇器
+  const renderYearPicker = () => {
+    const startYear = Math.floor(year / 10) * 10;
+    const years = Array.from({ length: 12 }, (_, i) => startYear - 1 + i);
 
-        <div className="text-lg font-semibold">
-          {year}年 {monthNames[month]}
-        </div>
-
-        <button
-          type="button"
-          onClick={goToNextMonth}
-          className="p-1 hover:bg-gray-100 rounded"
-        >
-          <svg
-            className="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
-        </button>
-      </div>
-
-      {/* 星期標題 */}
-      <div className="grid grid-cols-7 gap-1 mb-2">
-        {weekDays.map((day) => (
-          <div
-            key={day}
-            className="p-2 text-center text-sm font-medium text-gray-500"
-          >
-            {day}
-          </div>
-        ))}
-      </div>
-
-      {/* 日期網格 */}
-      <div className="grid grid-cols-7 gap-1">
-        {calendarDates.map((date, index) => {
-          const isCurrentMonth = date.getMonth() === month;
-          const isToday = isSameDay(date, new Date());
-          const isSelected = selectedDate && isSameDay(date, selectedDate);
-          const disabled = isDateDisabled(date, minDate, maxDate, disabledDates);
-
-          return (
-            <button
-              key={index}
-              type="button"
-              onClick={() => !disabled && onDateSelect(date)}
-              disabled={disabled}
-              className={cn(
-                'p-2 text-sm rounded hover:bg-gray-100 transition-colors',
-                !isCurrentMonth && 'text-gray-400',
-                isCurrentMonth && 'text-gray-900',
-                isToday && 'bg-blue-100 text-blue-600 font-semibold',
-                isSelected && 'bg-primary-600 text-white hover:bg-primary-700',
-                disabled && 'cursor-not-allowed opacity-50 hover:bg-transparent',
-              )}
-            >
-              {date.getDate()}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* 今天按鈕 - 只有當今天在允許範圍內時才顯示 */}
-      {isTodayAllowed && (
-        <div className="mt-4 pt-4 border-t">
+    return (
+      <div className="p-4 bg-white border rounded-lg shadow-lg w-full">
+        {/* 年份導航 */}
+        <div className="flex items-center justify-between mb-4">
           <button
             type="button"
-            onClick={goToToday}
-            className="w-full px-3 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded transition-colors"
+            onClick={goToPreviousDecade}
+            className="p-1 hover:bg-gray-100 rounded"
           >
-            今天
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+
+          <div className="text-lg font-semibold">
+            {startYear} - {startYear + 9}
+          </div>
+
+          <button
+            type="button"
+            onClick={goToNextDecade}
+            className="p-1 hover:bg-gray-100 rounded"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
           </button>
         </div>
-      )}
-    </div>
-  );
+
+        {/* 年份網格 */}
+        <div className="grid grid-cols-3 gap-2">
+          {years.map((y) => {
+            const isCurrentYear = y === new Date().getFullYear();
+            const isSelectedYear = y === year;
+            const isOutOfRange = y < startYear || y > startYear + 9;
+
+            return (
+              <button
+                key={y}
+                type="button"
+                onClick={() => handleYearSelect(y)}
+                className={cn(
+                  'p-3 text-sm rounded hover:bg-gray-100 transition-colors',
+                  isOutOfRange && 'text-gray-400',
+                  !isOutOfRange && 'text-gray-900',
+                  isCurrentYear && 'bg-blue-100 text-blue-600 font-semibold',
+                  isSelectedYear && 'bg-primary-600 text-white hover:bg-primary-700',
+                )}
+              >
+                {y}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  // 渲染月份選擇器
+  const renderMonthPicker = () => {
+    return (
+      <div className="p-4 bg-white border rounded-lg shadow-lg w-full">
+        {/* 月份導航 */}
+        <div className="flex items-center justify-between mb-4">
+          <button
+            type="button"
+            onClick={() => setViewDate(new Date(year - 1, month, 1))}
+            className="p-1 hover:bg-gray-100 rounded"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+
+          <button
+            type="button"
+            onClick={switchToYearView}
+            className="text-lg font-semibold hover:text-primary-600 transition-colors cursor-pointer"
+          >
+            {year}年
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setViewDate(new Date(year + 1, month, 1))}
+            className="p-1 hover:bg-gray-100 rounded"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+        </div>
+
+        {/* 月份網格 */}
+        <div className="grid grid-cols-3 gap-2">
+          {monthNames.map((monthName, idx) => {
+            const isCurrentMonth =
+              idx === new Date().getMonth() && year === new Date().getFullYear();
+            const isSelectedMonth = idx === month;
+
+            return (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => handleMonthSelect(idx)}
+                className={cn(
+                  'p-3 text-sm rounded hover:bg-gray-100 transition-colors text-gray-900',
+                  isCurrentMonth && 'bg-blue-100 text-blue-600 font-semibold',
+                  isSelectedMonth && 'bg-primary-600 text-white hover:bg-primary-700',
+                )}
+              >
+                {monthName}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  };
+
+  // 渲染日期選擇器
+  const renderDatePicker = () => {
+    return (
+      <div className="p-4 bg-white border rounded-lg shadow-lg w-full">
+        {/* 月份導航 */}
+        <div className="flex items-center justify-between mb-4">
+          <button
+            type="button"
+            onClick={goToPreviousMonth}
+            className="p-1 hover:bg-gray-100 rounded"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+
+          <div className="flex items-center space-x-1">
+            <button
+              type="button"
+              onClick={switchToYearView}
+              className="text-lg font-semibold hover:text-primary-600 transition-colors cursor-pointer px-1"
+            >
+              {year}年
+            </button>
+            <button
+              type="button"
+              onClick={switchToMonthView}
+              className="text-lg font-semibold hover:text-primary-600 transition-colors cursor-pointer px-1"
+            >
+              {monthNames[month]}
+            </button>
+          </div>
+
+          <button
+            type="button"
+            onClick={goToNextMonth}
+            className="p-1 hover:bg-gray-100 rounded"
+          >
+            <svg
+              className="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+        </div>
+
+        {/* 星期標題 */}
+        <div className="grid grid-cols-7 gap-1 mb-2">
+          {weekDays.map((day) => (
+            <div
+              key={day}
+              className="p-2 text-center text-sm font-medium text-gray-500"
+            >
+              {day}
+            </div>
+          ))}
+        </div>
+
+        {/* 日期網格 */}
+        <div className="grid grid-cols-7 gap-1">
+          {calendarDates.map((date, index) => {
+            const isCurrentMonth = date.getMonth() === month;
+            const isToday = isSameDay(date, new Date());
+            const isSelected = selectedDate && isSameDay(date, selectedDate);
+            const disabled = isDateDisabled(date, minDate, maxDate, disabledDates);
+
+            return (
+              <button
+                key={index}
+                type="button"
+                onClick={() => !disabled && onDateSelect(date)}
+                disabled={disabled}
+                className={cn(
+                  'p-2 text-sm rounded hover:bg-gray-100 transition-colors',
+                  !isCurrentMonth && 'text-gray-400',
+                  isCurrentMonth && 'text-gray-900',
+                  isToday && 'bg-blue-100 text-blue-600 font-semibold',
+                  isSelected && 'bg-primary-600 text-white hover:bg-primary-700',
+                  disabled && 'cursor-not-allowed opacity-50 hover:bg-transparent',
+                )}
+              >
+                {date.getDate()}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* 今天按鈕 - 只有當今天在允許範圍內時才顯示 */}
+        {isTodayAllowed && (
+          <div className="mt-4 pt-4 border-t">
+            <button
+              type="button"
+              onClick={goToToday}
+              className="w-full px-3 py-2 text-sm bg-gray-100 hover:bg-gray-200 rounded transition-colors"
+            >
+              今天
+            </button>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  // 根據當前視圖渲染對應的選擇器
+  if (calendarView === 'year') {
+    return renderYearPicker();
+  }
+
+  if (calendarView === 'month') {
+    return renderMonthPicker();
+  }
+
+  return renderDatePicker();
 };
 
 // 時間選擇器組件
@@ -832,6 +1080,7 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
     const [tempTimeValue, setTempTimeValue] = useState<Date | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
 
     const currentValue =
       value !== undefined
@@ -997,14 +1246,90 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
 
     const handleInputClick = () => {
       if (!disabled) {
+        // 如果面板未打開，則打開面板
         if (!isOpen) {
           calculatePosition();
+          setIsOpen(true);
+          // time 模式下，初始化暫存值為當前值
+          if (mode === 'time') {
+            setTempTimeValue(currentValue);
+          }
         }
-        setIsOpen(!isOpen);
+      }
+    };
+
+    // 處理手動輸入
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const newInputValue = e.target.value;
+      setInputValue(newInputValue);
+    };
+
+    // 處理輸入框失焦
+    const handleInputBlur = () => {
+      // 嘗試解析輸入的日期
+      if (inputValue.trim()) {
+        const parsedDate = parseDate(inputValue, mode);
+
+        if (parsedDate && !isNaN(parsedDate.getTime())) {
+          // 檢查是否在允許的範圍內
+          const isDisabled = isDateDisabled(parsedDate, minDate, maxDate, disabledDates);
+
+          if (!isDisabled) {
+            // 有效日期，更新值
+            if (value === undefined) {
+              setInternalValue(parsedDate);
+            }
+
+            const dateString = formatDate(parsedDate, format || '', mode, showSeconds);
+            onChange?.(dateString);
+            setInputValue(dateString);
+          } else {
+            // 日期被禁用，恢復原值
+            const displayValue = formatDate(currentValue, format || '', mode, showSeconds);
+            setInputValue(displayValue);
+          }
+        } else {
+          // 無效日期，恢復原值
+          const displayValue = formatDate(currentValue, format || '', mode, showSeconds);
+          setInputValue(displayValue);
+        }
+      } else {
+        // 空值，清除選擇
+        if (clearable) {
+          handleClear();
+        } else {
+          // 不允許清除，恢復原值
+          const displayValue = formatDate(currentValue, format || '', mode, showSeconds);
+          setInputValue(displayValue);
+        }
+      }
+    };
+
+    // 處理輸入框聚焦
+    const handleInputFocus = () => {
+      // 聚焦時打開面板（如果尚未打開）
+      if (!isOpen && !disabled) {
+        calculatePosition();
+        setIsOpen(true);
         // time 模式下，初始化暫存值為當前值
-        if (!isOpen && mode === 'time') {
+        if (mode === 'time') {
           setTempTimeValue(currentValue);
         }
+      }
+    };
+
+    // 處理鍵盤事件
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        inputRef.current?.blur(); // 觸發失焦事件來驗證輸入
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        // 恢復原值並關閉面板
+        const displayValue = formatDate(currentValue, format || '', mode, showSeconds);
+        setInputValue(displayValue);
+        setIsOpen(false);
+        inputRef.current?.blur();
       }
     };
 
@@ -1043,12 +1368,22 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
         {/* 輸入框 */}
         <div className="relative">
           <input
-            ref={ref}
+            ref={(node) => {
+              inputRef.current = node;
+              if (typeof ref === 'function') {
+                ref(node);
+              } else if (ref) {
+                (ref as React.MutableRefObject<HTMLInputElement | null>).current = node;
+              }
+            }}
             type="text"
             value={inputValue}
             placeholder={placeholder || getDefaultPlaceholder()}
             onClick={handleInputClick}
-            readOnly
+            onChange={handleInputChange}
+            onFocus={handleInputFocus}
+            onBlur={handleInputBlur}
+            onKeyDown={handleKeyDown}
             disabled={disabled}
             className={inputStyles}
             aria-invalid={status === 'error'}

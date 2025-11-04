@@ -184,12 +184,6 @@ const TabItem: React.FC<{
     e.preventDefault();
     if (item.disabled) return;
 
-    if (useRouter && item.href) {
-      // 在路由模式下，讓瀏覽器處理導航
-      window.location.href = item.href;
-      return;
-    }
-
     onClick();
   };
 
