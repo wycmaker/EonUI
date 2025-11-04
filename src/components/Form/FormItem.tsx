@@ -137,7 +137,8 @@ const FormItemComponent: React.FC<FormItemProps> = ({
   // 處理失焦事件
   const handleBlur = useCallback(
     (_e: React.FocusEvent<HTMLInputElement>) => {
-      handleValidation('onBlur');
+      const newValue = _e.target.type === 'checkbox' ? _e.target.checked : _e.target.value;
+      handleValidation('onBlur', newValue);
     },
     [handleValidation],
   );
@@ -226,7 +227,7 @@ const FormItemComponent: React.FC<FormItemProps> = ({
       <div className="flex items-center space-x-2">
         <div
           className={cn(
-            'flex-shrink-0',
+            'shrink-0',
             labelAlign === 'left' && 'text-left',
             labelAlign === 'center' && 'text-center',
             labelAlign === 'right' && 'text-right',
