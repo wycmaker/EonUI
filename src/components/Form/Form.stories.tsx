@@ -5,6 +5,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 
 import { Button } from '../Button';
 import { Checkbox, CheckboxGroup } from '../Checkbox';
+import { DatePicker } from '../DatePicker';
 import { Input } from '../Input';
 import { Radio, RadioGroup } from '../Radio';
 import { Select } from '../Select';
@@ -722,9 +723,13 @@ const InteractiveExample = () => {
                 required
                 rules={[Rules.required('請選擇截止日期')]}
               >
-                <Input
-                  type="date"
-                  min={new Date().toISOString().split('T')[0]}
+                <DatePicker
+                  mode="date"
+                  placeholder="請選擇日期"
+                  size="md"
+                  status="default"
+                  variant="default"
+                  clearable
                 />
               </FormItem>
 

@@ -84,6 +84,10 @@ export interface DatePickerProps
    * 清除按鈕的回調函數
    */
   onClear?: () => void;
+  /**
+   * 失焦時的回調
+   */
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 // 日期工具函數
@@ -1058,6 +1062,7 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
       timePickerStyle = 'button',
       autoComplete = 'off',
       onChange,
+      onBlur,
       onClear,
       disabled,
       placeholder,
@@ -1265,7 +1270,14 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
     };
 
     // 處理輸入框失焦
-    const handleInputBlur = () => {
+    const handleInputBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+      // 檢查焦點是否轉移到 dropdown 內
+      const relatedTarget = e.relatedTarget as Node;
+      if (dropdownRef.current && relatedTarget && dropdownRef.current.contains(relatedTarget)) {
+        // 焦點轉移到 dropdown 內，不執行 blur 邏輯
+        return;
+      }
+
       // 嘗試解析輸入的日期
       if (inputValue.trim()) {
         const parsedDate = parseDate(inputValue, mode);
@@ -1303,6 +1315,9 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
           setInputValue(displayValue);
         }
       }
+
+      // 調用外部傳入的 onBlur（如果有）
+      onBlur?.(e);
     };
 
     // 處理輸入框聚焦
@@ -1459,6 +1474,10 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
                 top: dropdownPosition.top,
                 left: dropdownPosition.left,
                 width: 'max-content',
+              }}
+              onMouseDown={(e) => {
+                // 阻止面板上的點擊導致 input 失焦
+                e.preventDefault();
               }}
             >
               {mode === 'date' && (
