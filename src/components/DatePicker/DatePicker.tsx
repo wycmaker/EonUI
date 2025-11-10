@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 import { useClickOutside, usePortal } from '@/hooks';
 import { cn } from '@/utils/cn';
 
-export type DatePickerMode = 'date' | 'time' | 'datetime';
+export type DatePickerMode = 'date' | 'time' | 'datetime' | 'year';
 
 export interface DatePickerProps
   extends Omit<
@@ -117,6 +117,8 @@ const formatDate = (
         return showSeconds
           ? `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`
           : `${year}-${month}-${day} ${hours}:${minutes}`;
+      case 'year':
+        return `${year}`;
       default:
         return `${year}-${month}-${day}`;
     }
@@ -151,6 +153,14 @@ const parseDate = (dateString: string, mode: DatePickerMode): Date | null => {
       } else {
         return null;
       }
+    } else if (mode === 'year') {
+      // 年份格式 YYYY
+      const trimmed = dateString.trim();
+      const year = parseInt(trimmed, 10);
+      if (isNaN(year) || year < 1000 || year > 9999) {
+        return null;
+      }
+      date = new Date(year, 0, 1); // 設定為該年的 1 月 1 日
     } else {
       // 日期或日期時間格式
       const trimmed = dateString.trim();
@@ -226,6 +236,7 @@ interface CalendarProps {
   maxDate?: Date | string;
   disabledDates?: Date[] | ((date: Date) => boolean);
   showToday?: boolean;
+  mode?: DatePickerMode;
 }
 
 type CalendarView = 'date' | 'month' | 'year';
@@ -238,9 +249,11 @@ const Calendar: React.FC<CalendarProps> = ({
   maxDate,
   disabledDates,
   showToday = true,
+  mode = 'date',
 }) => {
   const [viewDate, setViewDate] = useState(currentDate);
-  const [calendarView, setCalendarView] = useState<CalendarView>('date');
+  // 根據 mode 決定初始視圖
+  const [calendarView, setCalendarView] = useState<CalendarView>(mode === 'year' ? 'year' : 'date');
 
   const year = viewDate.getFullYear();
   const month = viewDate.getMonth();
@@ -295,8 +308,15 @@ const Calendar: React.FC<CalendarProps> = ({
 
   // 年份選擇處理
   const handleYearSelect = (selectedYear: number) => {
-    setViewDate(new Date(selectedYear, month, 1));
-    setCalendarView('month');
+    if (mode === 'year') {
+      // year 模式：直接選擇年份並關閉
+      const newDate = new Date(selectedYear, 0, 1);
+      onDateSelect(newDate);
+    } else {
+      // 其他模式：切換到月份視圖
+      setViewDate(new Date(selectedYear, month, 1));
+      setCalendarView('month');
+    }
   };
 
   // 月份選擇處理
@@ -630,6 +650,98 @@ const Calendar: React.FC<CalendarProps> = ({
   return renderDatePicker();
 };
 
+// 下拉選單式選擇器組件（獨立組件，避免重新渲染問題）
+const DropdownPicker: React.FC<{
+  value: number;
+  max: number;
+  onChange: (value: number) => void;
+  label: string;
+}> = React.memo(({ value, max, onChange, label }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const options = Array.from({ length: max }, (_, i) => i);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // 點擊外部關閉下拉選單
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      const clickedOnScrollContainer = target.closest('.overflow-y-auto');
+
+      if (dropdownRef.current?.contains(target) || clickedOnScrollContainer) {
+        return;
+      }
+
+      setIsOpen(false);
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
+
+  const handleSelect = (newValue: number) => {
+    onChange(newValue);
+    setIsOpen(false);
+  };
+
+  return (
+    <div className="flex flex-col items-center">
+      <div className="text-xs text-gray-500 mb-2">{label}</div>
+      <div
+        className="relative"
+        ref={dropdownRef}
+      >
+        {/* 選擇器按鈕 */}
+        <button
+          type="button"
+          className="my-2 w-16 h-10 px-2 py-1 text-lg font-mono bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-primary-600 flex items-center justify-center"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {String(value).padStart(2, '0')}
+          <svg
+            className={`w-4 h-4 ml-1 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
+        </button>
+
+        {/* 下拉選項 */}
+        {isOpen && (
+          <div className="absolute top-full left-0 mt-1 w-16 max-h-48 bg-white border border-gray-300 rounded-md shadow-lg z-50 overflow-y-auto">
+            {options.map((option) => (
+              <button
+                key={option}
+                type="button"
+                className={`w-full px-2 py-1 text-lg font-mono text-left hover:bg-gray-50 focus:outline-none focus:bg-gray-50 ${
+                  option === value
+                    ? 'bg-primary-600 text-white hover:bg-primary-700'
+                    : 'text-gray-700'
+                }`}
+                onClick={() => handleSelect(option)}
+              >
+                {String(option).padStart(2, '0')}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+});
+
+DropdownPicker.displayName = 'DropdownPicker';
+
 // 時間選擇器組件
 interface TimePickerProps {
   selectedTime: Date | null;
@@ -710,92 +822,6 @@ const TimePicker: React.FC<TimePickerProps> = ({
 
   // 檢查現在時間是否在允許範圍內
   const isNowAllowed = showNow && !isDateDisabled(new Date(), minDate, maxDate, disabledDates);
-
-  // 下拉選單式選擇器組件
-  const DropdownPicker: React.FC<{
-    value: number;
-    max: number;
-    onChange: (value: number) => void;
-    label: string;
-  }> = ({ value, max, onChange, label }) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const options = Array.from({ length: max }, (_, i) => i);
-    const dropdownRef = useRef<HTMLDivElement>(null);
-
-    // 點擊外部關閉下拉選單
-    useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-          setIsOpen(false);
-        }
-      };
-
-      if (isOpen) {
-        document.addEventListener('mousedown', handleClickOutside);
-      }
-
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }, [isOpen]);
-
-    const handleSelect = (newValue: number) => {
-      onChange(newValue);
-      setIsOpen(false);
-    };
-
-    return (
-      <div className="flex flex-col items-center">
-        <div className="text-xs text-gray-500 mb-2">{label}</div>
-        <div
-          className="relative"
-          ref={dropdownRef}
-        >
-          {/* 選擇器按鈕 */}
-          <button
-            type="button"
-            className="my-2 w-16 h-10 px-2 py-1 text-lg font-mono bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-600 focus:border-primary-600 flex items-center justify-center"
-            onClick={() => setIsOpen(!isOpen)}
-          >
-            {String(value).padStart(2, '0')}
-            <svg
-              className={`w-4 h-4 ml-1 transition-transform ${isOpen ? 'rotate-180' : ''}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M19 9l-7 7-7-7"
-              />
-            </svg>
-          </button>
-
-          {/* 下拉選項 */}
-          {isOpen && (
-            <div className="absolute top-full left-0 mt-1 w-16 max-h-48 bg-white border border-gray-300 rounded-md shadow-lg z-50 overflow-y-auto">
-              {options.map((option) => (
-                <button
-                  key={option}
-                  type="button"
-                  className={`w-full px-2 py-1 text-lg font-mono text-left hover:bg-gray-50 focus:outline-none focus:bg-gray-50 ${
-                    option === value
-                      ? 'bg-primary-600 text-white hover:bg-primary-700'
-                      : 'text-gray-700'
-                  }`}
-                  onClick={() => handleSelect(option)}
-                >
-                  {String(option).padStart(2, '0')}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  };
 
   if (style === 'scroll') {
     return (
@@ -1120,9 +1146,11 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
 
     // 更新輸入框顯示值
     useEffect(() => {
-      const displayValue = formatDate(currentValue, format || '', mode, showSeconds);
+      // time 模式下，如果有暫存值，優先顯示暫存值
+      const valueToDisplay = mode === 'time' && tempTimeValue ? tempTimeValue : currentValue;
+      const displayValue = formatDate(valueToDisplay, format || '', mode, showSeconds);
       setInputValue(displayValue);
-    }, [currentValue, format, mode, showSeconds]);
+    }, [currentValue, tempTimeValue, format, mode, showSeconds]);
 
     // 點擊外部關閉下拉選單
     useClickOutside(
@@ -1193,7 +1221,7 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
       const dateString = formatDate(newValue, format || '', mode, showSeconds);
       onChange?.(dateString);
 
-      if (mode === 'date') {
+      if (mode === 'date' || mode === 'year') {
         setIsOpen(false);
       }
     };
@@ -1370,6 +1398,8 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
           return '請選擇時間';
         case 'datetime':
           return '請選擇日期時間';
+        case 'year':
+          return '請選擇年份';
         default:
           return '請選擇';
       }
@@ -1480,7 +1510,7 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
                 e.preventDefault();
               }}
             >
-              {mode === 'date' && (
+              {(mode === 'date' || mode === 'year') && (
                 <div className="w-80">
                   <Calendar
                     currentDate={currentValue || new Date()}
@@ -1489,6 +1519,7 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
                     minDate={minDate}
                     maxDate={maxDate}
                     disabledDates={disabledDates}
+                    mode={mode}
                   />
                 </div>
               )}

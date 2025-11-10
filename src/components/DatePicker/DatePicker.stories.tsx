@@ -13,6 +13,7 @@ const InteractiveExample = () => {
   const [dateValue, setDateValue] = useState<string | null>(null);
   const [timeValue, setTimeValue] = useState<string | null>(null);
   const [datetimeValue, setDatetimeValue] = useState<string | null>(null);
+  const [yearValue, setYearValue] = useState<string | null>(null);
   const [rangeStart, setRangeStart] = useState<string | null>(null);
 
   return (
@@ -63,6 +64,19 @@ const InteractiveExample = () => {
         )}
       </div>
 
+      {/* 年份選擇 */}
+      <div>
+        <h4 className="font-medium mb-3 text-gray-700">年份選擇</h4>
+        <DatePicker
+          mode="year"
+          value={yearValue}
+          onChange={(year) => setYearValue(year)}
+          clearable
+          placeholder="選擇年份"
+        />
+        {yearValue && <p className="text-sm text-gray-600 mt-2">選中年份：{yearValue}</p>}
+      </div>
+
       {/* 限制範圍的日期選擇 */}
       <div>
         <h4 className="font-medium mb-3 text-gray-700">限制範圍（未來30天）</h4>
@@ -87,10 +101,11 @@ const DatePickerDocs = () => {
       <div className="component-docs-header">
         <h1 className="component-docs-title">DatePicker 日期選擇器</h1>
         <p className="component-docs-description">
-          EonUI 的日期選擇器組件，支援日期、時間、日期時間三種模式。
-          提供豐富的自訂選項，包括日期範圍限制、禁用日期、自訂格式等功能。
-          設計風格與其他 Input 組件保持一致，支援多種樣式變體和狀態。
-          <strong>新功能：</strong>支援手動輸入日期時間，以及點擊年月標題快速切換到年份或月份選擇器！
+          EonUI 的日期選擇器組件，支援日期、時間、日期時間、年份四種模式。
+          提供豐富的自訂選項，包括日期範圍限制、禁用日期、自訂格式等功能。 設計風格與其他 Input
+          組件保持一致，支援多種樣式變體和狀態。
+          <strong>新功能：</strong>
+          支援手動輸入日期時間、點擊年月標題快速切換到年份或月份選擇器，以及全新的年份選擇模式！
         </p>
       </div>
 
@@ -114,6 +129,7 @@ const DatePickerDocs = () => {
           code={`const [date, setDate] = useState(new Date());
 const [time, setTime] = useState('12:00');
 const [datetime, setDatetime] = useState(new Date());
+const [year, setYear] = useState(new Date());
 
 // 日期選擇
 <DatePicker
@@ -137,6 +153,14 @@ const [datetime, setDatetime] = useState(new Date());
   value={datetime}
   onChange={setDatetime}
   placeholder="選擇日期和時間"
+/>
+
+// 年份選擇
+<DatePicker
+  mode="year"
+  value={year}
+  onChange={setYear}
+  placeholder="選擇年份"
 />`}
         >
           <InteractiveExample />
@@ -147,7 +171,7 @@ const [datetime, setDatetime] = useState(new Date());
       <div className="component-docs-section">
         <CodeExample
           title="🎯 選擇器模式"
-          description="DatePicker 支援三種不同的選擇模式："
+          description="DatePicker 支援四種不同的選擇模式："
           code={`// 日期模式 - 僅選擇日期
 <DatePicker
   mode="date"
@@ -166,6 +190,13 @@ const [datetime, setDatetime] = useState(new Date());
 <DatePicker
   mode="datetime"
   placeholder="選擇日期和時間"
+  defaultValue={new Date()}
+/>
+
+// 年份模式 - 僅選擇年份
+<DatePicker
+  mode="year"
+  placeholder="選擇年份"
   defaultValue={new Date()}
 />`}
         >
@@ -201,6 +232,16 @@ const [datetime, setDatetime] = useState(new Date());
                 同時選擇日期和時間，格式：YYYY-MM-DD HH:mm
               </p>
             </div>
+
+            <div>
+              <h4 className="font-medium mb-3 text-gray-600">年份模式 (year)</h4>
+              <DatePicker
+                mode="year"
+                placeholder="選擇年份"
+                defaultValue={new Date()}
+              />
+              <p className="text-sm text-gray-500 mt-1">僅選擇年份，格式：YYYY</p>
+            </div>
           </div>
         </CodeExample>
 
@@ -215,6 +256,9 @@ const [datetime, setDatetime] = useState(new Date());
             </li>
             <li>
               <strong>datetime：</strong>日期和時間選擇，同時顯示日曆和時間選擇器
+            </li>
+            <li>
+              <strong>year：</strong>僅年份選擇，直接顯示年份選擇面板
             </li>
           </ul>
         </div>
@@ -626,9 +670,7 @@ const [datetime, setDatetime] = useState(new Date());
                 mode="date"
                 placeholder="可直接輸入日期，如：2024-12-25"
               />
-              <p className="text-sm text-gray-500 mt-1">
-                支援格式：YYYY-MM-DD 或 YYYY/MM/DD
-              </p>
+              <p className="text-sm text-gray-500 mt-1">支援格式：YYYY-MM-DD 或 YYYY/MM/DD</p>
             </div>
 
             <div>
@@ -734,9 +776,7 @@ const [datetime, setDatetime] = useState(new Date());
                 mode="datetime"
                 placeholder="點擊年月標題快速選擇"
               />
-              <p className="text-sm text-gray-500 mt-1">
-                日期時間模式下同樣支援快速年月選擇功能
-              </p>
+              <p className="text-sm text-gray-500 mt-1">日期時間模式下同樣支援快速年月選擇功能</p>
             </div>
           </div>
         </CodeExample>
