@@ -71,6 +71,10 @@ export interface LayoutProps extends React.HTMLAttributes<HTMLDivElement> {
    */
   responsiveAside?: boolean;
   /**
+   * 是否啟用桌面版側邊欄收合功能（大螢幕可收合）
+   */
+  collapsibleDesktop?: boolean;
+  /**
    * 手機版選單按鈕的 CSS 類別
    */
   mobileMenuButtonClassName?: string;
@@ -120,6 +124,7 @@ const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
       spacing = 0,
       fullHeight = true,
       responsiveAside = true,
+      collapsibleDesktop = false,
       mobileMenuButtonClassName,
       ...props
     },
@@ -128,37 +133,59 @@ const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
     // 內部狀態管理手機版側邊欄
     const [mobileAsideOpen, setMobileAsideOpen] = useState(false);
 
-    // 預設選單按鈕
+    // 桌面版側邊欄收合狀態（預設展開）
+    const [desktopAsideCollapsed, setDesktopAsideCollapsed] = useState(false);
+
+    // 處理按鈕點擊事件（根據螢幕尺寸切換對應的側邊欄狀態）
+    const handleToggleAside = () => {
+      // 使用 matchMedia 判斷當前是否為大螢幕（lg 以上，1024px）
+      const isLargeScreen = window.matchMedia('(min-width: 1024px)').matches;
+
+      if (isLargeScreen && collapsibleDesktop) {
+        // 大螢幕且啟用桌面版收合：切換桌面版側邊欄
+        setDesktopAsideCollapsed(!desktopAsideCollapsed);
+      } else if (!isLargeScreen && responsiveAside) {
+        // 小螢幕且啟用響應式：切換手機版側邊欄
+        setMobileAsideOpen(!mobileAsideOpen);
+      }
+    };
+
+    // 判斷當前側邊欄是否展開（根據螢幕尺寸）
+    const isAsideOpen = () => {
+      const isLargeScreen = window.matchMedia('(min-width: 1024px)').matches;
+      if (isLargeScreen && collapsibleDesktop) {
+        return !desktopAsideCollapsed;
+      }
+      return mobileAsideOpen;
+    };
+
+    // 共用選單按鈕（手機版和桌面版共用，統一使用漢堡選單樣式）
     const defaultMenuButton = (
       <button
-        onClick={() => setMobileAsideOpen(!mobileAsideOpen)}
+        onClick={handleToggleAside}
         className={cn(
-          'lg:hidden ml-1 px-2 py-1 text-current focus:outline-none transition-colors duration-200 flex items-center justify-center',
+          'ml-1 px-2 py-1 text-current focus:outline-none items-center justify-center hover:bg-black hover:bg-opacity-5 rounded',
+          // 小螢幕：只有在 responsiveAside 為 true 時顯示
+          responsiveAside ? 'flex lg:hidden' : 'hidden',
+          // 大螢幕：只有在 collapsibleDesktop 為 true 時顯示
+          collapsibleDesktop && 'lg:flex',
         )}
-        aria-label={mobileAsideOpen ? '關閉選單' : '開啟選單'}
+        aria-label={isAsideOpen() ? '關閉選單' : '開啟選單'}
       >
         <svg
-          className="h-6 w-6"
+          className="h-6 w-6 lg:h-5 lg:w-5"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
           aria-hidden="true"
         >
-          {mobileAsideOpen ? (
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M6 18L18 6M6 6l12 12"
-            />
-          ) : (
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          )}
+          {/* 統一使用漢堡選單圖示（三條線） */}
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M4 6h16M4 12h16M4 18h16"
+          />
         </svg>
       </button>
     );
@@ -168,11 +195,9 @@ const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
       return (
         header && (
           <header className={headerClasses}>
-            {aside && responsiveAside ? (
-              <div className="flex w-full h-full">
-                <div
-                  className={cn('lg:hidden flex items-center h-full', mobileMenuButtonClassName)}
-                >
+            {aside && (responsiveAside || collapsibleDesktop) ? (
+              <div className="flex w-full h-full items-center">
+                <div className={cn('flex items-center h-full', mobileMenuButtonClassName)}>
                   {defaultMenuButton}
                 </div>
                 {header}
@@ -214,8 +239,12 @@ const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
       stickyAside && 'sticky overflow-y-auto',
       // 非 sticky 的高度
       !stickyAside && (asideHeight === 'full' ? 'h-screen overflow-y-auto' : 'h-auto'),
-      // 響應式處理
+      // 響應式處理：小螢幕隱藏
       responsiveAside && 'hidden lg:block',
+      // 桌面版收合處理：大螢幕根據收合狀態顯示/隱藏（僅在啟用時）
+      collapsibleDesktop && desktopAsideCollapsed && 'lg:hidden',
+      // 收合動畫（僅在啟用桌面版收合時）
+      collapsibleDesktop && 'lg:transition-all lg:duration-300 lg:ease-in-out',
       spacing > 0 && `p-${spacing}`,
     );
 
@@ -395,9 +424,9 @@ const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
 
             {/* 右側內容區域 */}
             <div className="flex flex-col flex-1 min-w-0">
-              {/* 手機版選單按鈕（當沒有 header 時） */}
-              {!header && aside && responsiveAside && (
-                <div className="lg:hidden p-4 border-b">{defaultMenuButton}</div>
+              {/* 選單按鈕（當沒有 header 時） */}
+              {!header && aside && (responsiveAside || collapsibleDesktop) && (
+                <div className="p-4 border-b">{defaultMenuButton}</div>
               )}
               {/* 標題區域 */}
               {renderHeader()}
@@ -411,9 +440,9 @@ const Layout = React.forwardRef<HTMLDivElement, LayoutProps>(
         ) : (
           /* 標準佈局：aside 在 content 區域內 */
           <>
-            {/* 手機版選單按鈕（當沒有 header 時） */}
-            {!header && aside && responsiveAside && (
-              <div className="lg:hidden p-4 border-b">{defaultMenuButton}</div>
+            {/* 選單按鈕（當沒有 header 時） */}
+            {!header && aside && (responsiveAside || collapsibleDesktop) && (
+              <div className="p-4 border-b">{defaultMenuButton}</div>
             )}
 
             {/* 標題區域 */}

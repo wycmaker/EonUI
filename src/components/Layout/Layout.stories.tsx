@@ -317,6 +317,115 @@ const AsideHeightShowcase = () => {
   );
 };
 
+// 側邊欄收合功能展示組件
+const CollapsibleAsideShowcase = () => {
+  return (
+    <div className="space-y-8">
+      <div>
+        <h3 className="text-lg font-semibold mb-4 text-gray-700">小螢幕收合功能（responsiveAside）</h3>
+        <p className="text-sm text-gray-600 mb-4">
+          💡 啟用 <code>responsiveAside</code> 後，小螢幕（&lt;1024px）上側邊欄預設收合，點擊按鈕可展開。
+        </p>
+        <div
+          className="border rounded-lg overflow-hidden"
+          style={{ height: '400px' }}
+        >
+          <Layout
+            header={<DemoHeader title="小螢幕收合示範" />}
+            aside={<DemoAside title="導航選單" />}
+            main={<DemoMain content="在小螢幕上，側邊欄預設收合，點擊按鈕可展開" />}
+            responsiveAside={true}
+            spacing={0}
+          />
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold mb-4 text-gray-700">全寬度可收合側邊欄</h3>
+        <p className="text-sm text-gray-600 mb-4">
+          💡 <strong>完整功能：</strong>同時啟用 <code>responsiveAside</code> 和 <code>collapsibleDesktop</code> 後，側邊欄在所有螢幕尺寸都可以收合！
+          <br />
+          • <strong>小螢幕（&lt;1024px）：</strong>預設收合，點擊按鈕可展開
+          <br />
+          • <strong>大螢幕（≥1024px）：</strong>預設展開，點擊按鈕可收合
+          <br />
+          • 共用同一個按鈕，根據螢幕尺寸自動切換功能
+        </p>
+        <div
+          className="border rounded-lg overflow-hidden"
+          style={{ height: '500px' }}
+        >
+          <Layout
+            header={<DemoHeader title="全寬度可收合側邊欄" />}
+            aside={<DemoAside title="導航選單" />}
+            main={
+              <DemoMain content="點擊標題列左側的按鈕來收合/展開側邊欄。在大螢幕上預設展開，小螢幕上預設收合。" />
+            }
+            footer={<DemoFooter />}
+            responsiveAside={true}
+            collapsibleDesktop={true}
+            spacing={0}
+          />
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold mb-4 text-gray-700">右側邊欄收合</h3>
+        <p className="text-sm text-gray-600 mb-4">
+          💡 右側邊欄也支援收合功能，需要同時啟用 <code>responsiveAside</code> 和 <code>collapsibleDesktop</code>。
+        </p>
+        <div
+          className="border rounded-lg overflow-hidden"
+          style={{ height: '400px' }}
+        >
+          <Layout
+            header={<DemoHeader title="右側邊欄收合" />}
+            aside={<DemoAside title="右側選單" />}
+            asidePosition="right"
+            main={<DemoMain content="右側邊欄同樣支援收合功能" />}
+            responsiveAside={true}
+            collapsibleDesktop={true}
+            spacing={0}
+          />
+        </div>
+      </div>
+
+      <div>
+        <h3 className="text-lg font-semibold mb-4 text-gray-700">固定側邊欄 + 收合功能</h3>
+        <p className="text-sm text-gray-600 mb-4">
+          💡 收合功能可以與 <code>stickyAside</code> 一起使用，提供更好的使用體驗。
+        </p>
+        <div
+          className="border rounded-lg overflow-hidden"
+          style={{ height: '500px' }}
+        >
+          <Layout
+            header={<DemoHeader title="固定側邊欄 + 收合" />}
+            aside={<DemoAside title="固定側邊欄" />}
+            stickyAside={true}
+            main={
+              <div className="p-6">
+                <h2 className="text-2xl font-bold mb-4">滾動測試</h2>
+                {Array.from({ length: 15 }, (_, i) => (
+                  <p
+                    key={i}
+                    className="mb-4 text-gray-700"
+                  >
+                    這是第 {i + 1} 段內容。側邊欄會固定在左側，並且可以收合。
+                  </p>
+                ))}
+              </div>
+            }
+            responsiveAside={true}
+            collapsibleDesktop={true}
+            spacing={0}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // 手機版響應式展示組件
 const MobileResponsiveShowcase = () => {
   return (
@@ -324,8 +433,8 @@ const MobileResponsiveShowcase = () => {
       <div>
         <h3 className="text-lg font-semibold mb-4 text-gray-700">響應式側邊欄（縮小視窗測試）</h3>
         <p className="text-sm text-gray-600 mb-4">
-          💡 提示：縮小瀏覽器視窗寬度到手機尺寸，會看到選單按鈕出現在標題列左側。
-          側邊欄狀態由組件內部自動管理。
+          💡 提示：縮小瀏覽器視窗寬度到手機尺寸（&lt;1024px），會看到選單按鈕出現在標題列左側。
+          側邊欄狀態由組件內部自動管理。現在所有尺寸都可以收合！
         </p>
         <div
           className="border rounded-lg overflow-hidden"
@@ -620,6 +729,65 @@ const LayoutDocs = () => {
         </div>
       </div>
 
+      {/* 側邊欄收合功能 */}
+      <div className="component-docs-section">
+        <CodeExample
+          title="🔄 側邊欄收合功能範例"
+          description="啟用 responsiveAside 和 collapsibleDesktop 後，側邊欄在所有螢幕尺寸都可以收合，共用同一個按鈕："
+          code={`// 啟用響應式側邊欄（小螢幕可收合）
+<Layout
+  header={<Header />}
+  aside={<Aside />}
+  main={<MainContent />}
+  responsiveAside={true}  // 啟用小螢幕收合功能
+/>
+
+// 啟用桌面版收合功能（大螢幕可收合）
+<Layout
+  header={<Header />}
+  aside={<Aside />}
+  main={<MainContent />}
+  responsiveAside={true}      // 啟用小螢幕收合
+  collapsibleDesktop={true}   // 啟用桌面版收合
+/>
+
+// 收合功能特點：
+// - responsiveAside：小螢幕（<1024px）預設收合，點擊按鈕展開
+// - collapsibleDesktop：大螢幕（≥1024px）預設展開，點擊按鈕收合
+// - 共用同一個按鈕，根據螢幕尺寸自動切換功能
+// - 按鈕統一使用漢堡選單樣式`}
+        >
+          <CollapsibleAsideShowcase />
+        </CodeExample>
+
+        <div className="component-docs-info-card">
+          <strong>收合功能特色：</strong>
+          <ul>
+            <li>
+              <strong>全寬度支援：</strong>所有螢幕尺寸都可以收合側邊欄
+            </li>
+            <li>
+              <strong>智能按鈕：</strong>共用同一個按鈕，根據螢幕尺寸自動切換功能
+            </li>
+            <li>
+              <strong>預設行為：</strong>小螢幕預設收合，大螢幕預設展開
+            </li>
+            <li>
+              <strong>動態圖示：</strong>按鈕圖示會根據狀態和側邊欄位置自動變化
+            </li>
+            <li>
+              <strong>平滑動畫：</strong>收合/展開時有平滑的過渡動畫
+            </li>
+            <li>
+              <strong>狀態獨立：</strong>手機版和桌面版的收合狀態互不干擾
+            </li>
+            <li>
+              <strong>兼容性：</strong>可與 stickyAside、asideHeight 等功能一起使用
+            </li>
+          </ul>
+        </div>
+      </div>
+
       {/* 響應式設計 */}
       <div className="component-docs-section">
         <CodeExample
@@ -630,20 +798,7 @@ const LayoutDocs = () => {
   header={<Header />}
   aside={<Aside />}
   footer={<Footer />}
-  // 在小螢幕上自動隱藏側邊欄
-  // 可以通過 showMobileSidebar 控制顯示
->
-  <Main />
-</Layout>
-
-// 手動控制手機版側邊欄
-const [showSidebar, setShowSidebar] = useState(false);
-
-<Layout
-  header={<Header onMenuClick={() => setShowSidebar(!showSidebar)} />}
-  aside={<Aside />}
-  showMobileSidebar={showSidebar}
-  onMobileSidebarClose={() => setShowSidebar(false)}
+  responsiveAside={true}  // 啟用響應式和收合功能
 >
   <Main />
 </Layout>`}
@@ -658,19 +813,19 @@ const [showSidebar, setShowSidebar] = useState(false);
               <strong>自動隱藏側邊欄：</strong>在小螢幕（&lt;1024px）上自動隱藏側邊欄
             </li>
             <li>
-              <strong>手機版選單按鈕：</strong>自動在 header 中顯示選單按鈕
+              <strong>共用選單按鈕：</strong>所有尺寸共用同一個按鈕，自動切換功能
             </li>
             <li>
               <strong>滑出式側邊欄：</strong>手機版側邊欄從側邊滑出，支援觸控操作
             </li>
             <li>
-              <strong>遮罩背景：</strong>側邊欄開啟時顯示半透明遮罩
+              <strong>遮罩背景：</strong>手機版側邊欄開啟時顯示半透明遮罩
             </li>
             <li>
-              <strong>自訂選單按鈕：</strong>可透過 mobileMenuButton 屬性自訂按鈕樣式
+              <strong>自訂按鈕樣式：</strong>可透過 mobileMenuButtonClassName 屬性自訂按鈕樣式
             </li>
             <li>
-              <strong>狀態控制：</strong>支援受控和非受控模式管理側邊欄狀態
+              <strong>狀態管理：</strong>組件內部自動管理側邊欄狀態
             </li>
           </ul>
         </div>
@@ -957,6 +1112,14 @@ const meta: Meta<typeof Layout> = {
         defaultValue: { summary: 'true' },
       },
     },
+    collapsibleDesktop: {
+      control: { type: 'boolean' },
+      description: '是否啟用桌面版側邊欄收合功能（大螢幕可收合，預設展開）',
+      table: {
+        type: { summary: 'boolean' },
+        defaultValue: { summary: 'false' },
+      },
+    },
     mobileMenuButtonClassName: {
       control: { type: 'text' },
       description: '手機版選單按鈕的 CSS 類別，用於自定義樣式',
@@ -988,6 +1151,7 @@ export const Docs: Story = {
     spacing: 0,
     fullHeight: true,
     responsiveAside: true,
+    collapsibleDesktop: false,
   },
   render: (args) => (
     <div style={{ height: '600px' }}>
